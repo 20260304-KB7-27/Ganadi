@@ -1,0 +1,14 @@
+{
+    "budget": [
+        {
+            "budgetId": "1",
+            "amount": "450000",
+            "targetMonth": "2026-03"
+        },
+        {
+            "budgetId": "2",
+            "amount": "500000",
+            "targetMonth": "2026-04"
+        }
+    ]
+}

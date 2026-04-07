@@ -1,0 +1,22 @@
+{
+    "fixed-cost": [
+        {
+            "fixedCostId": "1",
+            "type": "income",
+            "amount": "500000",
+            "memo": "월급",
+            "cycle": "monthly",
+            "day": "4",
+            "categoryId": "4"
+        },
+        {
+            "fixedCostId": "2",
+            "type": "payment",
+            "amount": "22000",
+            "memo": "통신요금",
+            "cycle": "monthly",
+            "day": "6",
+            "categoryId": "5"
+        }
+    ]
+}
