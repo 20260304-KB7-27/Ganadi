@@ -1,0 +1,24 @@
+{
+    "icons": [
+        {
+            "iconId": "1",
+            "value": "cafe"
+        },
+        {
+            "iconId": "2",
+            "value": "fare"
+        },
+        {
+            "iconId": "3",
+            "value": "hospital"
+        }
+    ],
+    "colors": [
+        { "colorId": "1", "value": "#FF5733" },
+        { "colorId": "2", "value": "#33FF57" },
+        { "colorId": "3", "value": "#33A1FF" },
+        { "colorId": "4", "value": "#F1C40F" },
+        { "colorId": "5", "value": "#9B59B6" },
+        { "colorId": "6", "value": "#34495E" }
+    ]
+}
