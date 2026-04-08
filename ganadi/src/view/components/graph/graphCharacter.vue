@@ -45,17 +45,18 @@ const characterImage = computed(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
 }
 
-.level-test {
+.level-text {
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .character-image {
-    width: 90px;
-    height: 90px;
+    width: 92px;
+    height: 92px;
     object-fit: contain;
 }
 </style>
