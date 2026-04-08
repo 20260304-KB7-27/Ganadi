@@ -1,10 +1,7 @@
 <template>
     <div class="chart-wrapper">
-        <div class="donut-chart">
-            <div
-                class="donut-fill"
-                :style="{ background: conicGradientStyle }"
-            ></div>
+        <div class="chart-box">
+            <Doughnut :data="chartData" :options="chartOptions" />
             <GraphCharacter :level="level"></GraphCharacter>
         </div>
     </div>
@@ -12,15 +9,15 @@
 
 <script setup>
 import { computed } from 'vue';
+import { Doughnut } from 'vue-chartjs';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import GraphCharacter from './graphCharacter.vue';
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const props = defineProps({
-    chartData: {
+    items: {
         type: Array,
-        required: true,
-    },
-    goalRate: {
-        type: Number,
         required: true,
     },
     level: {
@@ -29,21 +26,39 @@ const props = defineProps({
     },
 });
 
-const conicGradientStyle = computed(() => {
-    if (!props.chartData.length) {
-        return '#ddd 0deg 360deg';
-    }
+const chartData = computed(() => ({
+    labels: props.items.map((item) => item.name),
+    datasets: [
+        {
+            data: props.items.map((item) => item.amount),
+            backgroundColor: props.items.map((item) => item.color),
+            borderWidth: 0,
+            hoverOffset: 6,
+        },
+    ],
+}));
 
-    let currentDeg = 0;
-    const segments = props.chartData.map((item) => {
-        const start = currentDeg;
-        const deg = (item.percent / 100) * 360;
-        currentDeg += deg;
-        return `${item.color} ${start}deg ${currentDeg}deg`;
-    });
-
-    return `conic-gradient(${segments.join(', ')})`;
-});
+const chartOptions = computed(() => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '68%', // 도넛 두께 조절
+    plugins: {
+        legend: {
+            display: false,
+        },
+        tooltip: {
+            callbacks: {
+                label: (context) => {
+                    const label = context.label || '';
+                    const value = Number(context.raw || 0).toLocaleString(
+                        'ko-KR',
+                    );
+                    return `${label}: ${value}원`;
+                },
+            },
+        },
+    },
+}));
 </script>
 
 <style scoped>
@@ -53,24 +68,9 @@ const conicGradientStyle = computed(() => {
     margin-bottom: 28px;
 }
 
-.donut-char {
+.chart-box {
     position: relative;
     width: 280px;
     height: 280px;
-}
-
-.donut-fill {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: relative;
-}
-
-.donut-fill::after {
-    content: '';
-    position: absolute;
-    inset: 40px;
-    background: #efefef;
-    border-radius: 50%;
 }
 </style>
