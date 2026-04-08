@@ -36,6 +36,7 @@ const formattedAmount = computed(() => {
     background: #fff;
     border-radius: 16px;
     padding: 12px 14px;
+    box-sizing: border-box;
 }
 
 .left-area {

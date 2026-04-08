@@ -2,7 +2,7 @@ export const graphMockData = {
     totalExpense: 37000,
     monthlyGoal: 500000,
     goalRate: 7,
-    characterLevel: 1,
+    characterLevel: 2,
     categorySummary: [
         {
             categoryId: '2',
