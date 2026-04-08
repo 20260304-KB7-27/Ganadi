@@ -1,4 +1,6 @@
-[
-  { "id": 1, "text": "Vue 공부", "done": false },
-  { "id": 2, "text": "운동하기", "done": true }
-]
+{
+  "test": [
+    { "id": 1, "text": "Vue 공부", "done": false },
+    { "id": 2, "text": "운동하기", "done": true }
+  ]
+}

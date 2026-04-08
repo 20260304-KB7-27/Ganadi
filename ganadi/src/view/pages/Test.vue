@@ -1,39 +1,42 @@
-<!-- src/views/TodoView.vue -->
+<!-- src/view/pages/Test.vue -->
 <template>
   <div>
     <h2>Todo List</h2>
 
-    <!-- 입력 -->
     <input v-model="newTodoText" placeholder="할 일 입력" />
     <button @click="handleAddTodo">추가</button>
 
-    <!-- 로딩 -->
-    <p v-if="loading">로딩중...</p>
+    <p v-if="store.loading">로딩중...</p>
 
-    <!-- 리스트 -->
     <ul>
-      <li v-for="todo in todos" :key="todo.id">
+      <li v-for="todo in store.todos" :key="todo.id">
         <span
-          @click="handleToggleTodo(todo.id)"
+          @click="store.toggleTodo(todo)"
           :style="{ textDecoration: todo.done ? 'line-through' : 'none' }"
         >
           {{ todo.text }}
         </span>
-        <button @click="handleDeleteTodo(todo.id)">삭제</button>
+        <button @click="store.deleteTodo(todo.id)">삭제</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { useTodoViewModel } from '@viewmodel/viewModel';
+import { ref, onMounted } from 'vue';
+import { useTodoStore } from '@/stores/test';
 
-const {
-  todos,
-  newTodoText,
-  loading,
-  handleAddTodo,
-  handleToggleTodo,
-  handleDeleteTodo,
-} = useTodoViewModel();
+const store = useTodoStore();
+const newTodoText = ref('');
+
+onMounted(() => {
+  store.getTodos();
+});
+
+const handleAddTodo = () => {
+  if (!newTodoText.value.trim()) return;
+
+  store.addTodo(newTodoText.value);
+  newTodoText.value = '';
+};
 </script>
