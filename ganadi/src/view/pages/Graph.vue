@@ -3,7 +3,6 @@
         <GraphHeader :total-expense="graphData.totalExpense" />
         <GraphChart
             :chart-data="graphData.categorySummary"
-            :goal-rate="graphData.goalRate"
             :level="graphData.characterLevel"
         />
         <GraphCategoryList :items="graphData.categorySummary" />
@@ -23,7 +22,6 @@ const graphData = graphMockData;
 .graph-page {
     min-height: 100vh;
     padding: 16px 16px 90px;
-
     display: flex;
     flex-direction: column;
 }
