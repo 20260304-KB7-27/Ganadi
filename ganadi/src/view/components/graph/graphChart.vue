@@ -33,7 +33,7 @@ const chartData = computed(() => ({
             data: props.items.map((item) => item.amount),
             backgroundColor: props.items.map((item) => item.color),
             borderWidth: 0,
-            hoverOffset: 6,
+            hoverOffset: 0,
         },
     ],
 }));
@@ -41,21 +41,24 @@ const chartData = computed(() => ({
 const chartOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '68%', // 도넛 두께 조절
+    cutout: '60%', // 도넛 두께 조절
     plugins: {
         legend: {
             display: false,
         },
+        // tooltip: {
+        //     callbacks: {
+        //         label: (context) => {
+        //             const label = context.label || '';
+        //             const value = Number(context.raw || 0).toLocaleString(
+        //                 'ko-KR',
+        //             );
+        //             return `${label}: ${value}원`;
+        //         },
+        //     },
+        // },
         tooltip: {
-            callbacks: {
-                label: (context) => {
-                    const label = context.label || '';
-                    const value = Number(context.raw || 0).toLocaleString(
-                        'ko-KR',
-                    );
-                    return `${label}: ${value}원`;
-                },
-            },
+            enabled: false,
         },
     },
 }));
