@@ -2,7 +2,7 @@
     <div class="category-item">
         <div class="left-area">
             <div class="icon-box" :style="{ backgroundColor: item.color }">
-                {{ item.icon }}
+                <i :class="item.icon"></i>
             </div>
             <span class="name">{{ item.name }}</span>
         </div>
@@ -56,6 +56,11 @@ const formattedAmount = computed(() => {
     font-weight: 700;
 }
 
+.icon-box i {
+    font-size: 18px;
+    color: #111;
+}
+
 .name {
     font-size: 18px;
     font-weight: 500;
@@ -63,7 +68,7 @@ const formattedAmount = computed(() => {
 
 .amount {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .right-area {

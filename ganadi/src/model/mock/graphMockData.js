@@ -7,7 +7,7 @@ export const graphMockData = {
         {
             categoryId: '2',
             name: '식비',
-            icon: 'fare',
+            icon: 'bi bi-egg-fried',
             color: '#33A1FF',
             amount: 24000,
             percent: 65,
@@ -15,7 +15,7 @@ export const graphMockData = {
         {
             categoryId: '3',
             name: '병원',
-            icon: 'cafe',
+            icon: 'bi bi-hospital',
             color: '#FF5733',
             amount: 13000,
             percent: 35,
