@@ -73,16 +73,16 @@
         </div>
       </div>
       <div class="modal-footer">
-            <button class="complete-btn" @click="addCategory">완료</button>
-        </div>
+        <button class="complete-btn" @click="addCategory">완료</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import categories from '@/model/data/category.json';
-import presets from '@/model/data/preset_options.json';
+import categories from '@/data/category.json';
+import presets from '@/data/preset_options.json';
 
 const categoryList = ref([]);
 const categoryName = ref('');
@@ -145,9 +145,7 @@ const addCategory = () => {
 
   categoryList.value.push(newCategory);
 
-  
-//   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
-
+  //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
   closeModal();
 };
