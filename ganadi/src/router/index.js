@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const Home = () => import('@/view/pages/Home.vue');
 const Graph = () => import('@/view/pages/Graph.vue');
-const Setting = () => import('@/view/pages/Setting.vue');-
+const Setting = () => import('@/view/pages/Setting.vue');
 
 
 const router = createRouter({
