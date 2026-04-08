@@ -1,0 +1,28 @@
+{
+    "transactions": [
+        {
+            "transactionId": "1",
+            "amount": "20000",
+            "date": "2026-04-03",
+            "type": "payment",
+            "categoryId": "2",
+            "memo": "치킨"
+        },
+        {
+            "transactionId": "2",
+            "amount": "13000",
+            "date": "2026-04-06",
+            "type": "payment",
+            "categoryId": "3",
+            "memo": "병원비"
+        },
+        {
+            "transactionId": "3",
+            "amount": "4000",
+            "date": "2026-04-07",
+            "type": "payment",
+            "categoryId": "2",
+            "memo": "칼국수"
+        }
+    ]
+}

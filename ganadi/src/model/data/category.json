@@ -1,0 +1,33 @@
+{
+    "category": [
+        {
+            "categoryId": "1",
+            "name": "교통",
+            "type": "payment",
+            "iconId": "3",
+            "colorId": "2"
+        },
+        {
+            "categoryId": "2",
+            "name": "식비",
+            "type": "payment",
+            "iconId": "2",
+            "colorId": "3"
+        },
+        {
+            "categoryId": "3",
+            "name": "병원",
+            "type": "payment",
+            "iconId": "1",
+            "colorId": "1"
+        },
+        {
+            "categoryId": "4",
+            "name": "월급",
+            "type": "income",
+            "iconId": "4",
+            "colorId": "4"
+        }
+
+    ]
+}
