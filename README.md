@@ -42,6 +42,13 @@ npm install axios -> http 라이브러리 사용
 npm install  
 npm run dev
 
+새로운 터미널
+cd ganadi
+cd ganadi
+npm install -g json-server
+json-server --watch .\src\data\test.json --port 3000
+json-server --watch db.json --port 3000
+
 # ✅ 커밋 컨벤션
 
 feat: 새로운 기능 추가  
