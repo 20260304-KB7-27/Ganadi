@@ -16,6 +16,9 @@
         <li class="nav-item">
           <router-link class="nav-link" to="/setting">설정</router-link>
         </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/input">추가</router-link>
+        </li>
       </ul>
     </div>
   </nav>
