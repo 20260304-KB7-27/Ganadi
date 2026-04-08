@@ -39,6 +39,7 @@ o Select experimental features to include in your project: (↑/↓ to navigate,
 cd ganadi  
 npm install bootstrap@5 -> bootstrap 라이브러리 사용  
 npm install axios -> http 라이브러리 사용  
+npm install bootstrap-icons
 npm install  
 npm run dev
 
