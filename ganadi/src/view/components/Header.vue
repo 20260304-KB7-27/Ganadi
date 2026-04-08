@@ -1,42 +1,90 @@
 <template>
-  <nav class="navbar navbar-expand-md bg-dark navbar-dark mt-2">
-    <span class="navbar-brand">이날치(LeeNalChi)</span>
+  <header class="header-row">
+    <button @click="emit('prev-month')">◀</button>
 
-    <button class="navbar-toggler" type="button" @click="changeIsNavShow">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div :class="navClass">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link class="nav-link" to="/">홈</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/graph">통계</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/setting">설정</router-link>
-        </li>
-      </ul>
+    <span class="navbar-brand">{{ month }}월</span>
+    <div class="header-money">
+      <div class="money-item">
+        <span>수입</span>
+        <span :style="{ color: '#25FF5F' }">{{ income }}원</span>
+      </div>
+      <div class="money-item money-item--underline">
+        <span>지출</span>
+        <span :style="{ color: 'red' }">{{ expense }}원</span>
+      </div>
+      <div class="money-item">
+        <span>잔액</span>
+        <span>{{ balance }}원</span>
+      </div>
     </div>
-  </nav>
+
+    <button @click="emit('next-month')">▶</button>
+  </header>
 </template>
 
-<script>
-import { reactive, computed } from 'vue';
-export default {
-  setup() {
-    const state = reactive({ isNavShow: false });
-    const navClass = computed(() =>
-      state.isNavShow
-        ? 'collapse navbar-collapse show'
-        : 'collapse navbar-collapse',
-    );
-    const changeIsNavShow = () => {
-      state.isNavShow = !state.isNavShow;
-    };
-    return { state, changeIsNavShow, navClass };
-  },
-};
+<script setup>
+import { ref, computed } from 'vue';
+
+defineProps({
+  month: Number,
+  expense: Number,
+  income: Number,
+  balance: Number,
+});
+
+const emit = defineEmits(['prev-month', 'next-month']);
+
+
 </script>
 
-<style></style>
+<style>
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: large
+}
+
+.header-money {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.money-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.money-item--underline {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
+button {
+  display: inline;
+  border: none;
+  background: none;
+  color: rgb(177, 177, 177);
+  cursor: pointer;
+}
+
+button:first-child {
+  margin-right: 3%;
+}
+
+button:last-child {
+  margin-left: 3%;
+}
+
+button:hover {
+  color: #000;
+}
+</style>
