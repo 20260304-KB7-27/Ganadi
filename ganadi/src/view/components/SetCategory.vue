@@ -24,7 +24,7 @@
     <div class="overlay-modal" v-if="isModalOpen">
       <div class="modal-header">
         <span class="tag">카테고리 추가</span>
-        <button class="close-btn" @click="isModalOpen = false">X</button>
+        <button class="close-btn" @click="closeModal">X</button>
       </div>
 
       <div class="input-section">
@@ -72,13 +72,15 @@
           <i :class="`bi bi-${icon.value}`"></i>
         </div>
       </div>
+      <div class="modal-footer">
+            <button class="complete-btn" @click="addCategory">완료</button>
+        </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import categories from '@/model/data/category.json';
 import presets from '@/model/data/preset_options.json';
 
@@ -101,7 +103,7 @@ const loadCategory = async () => {
     // ]);
 
     // const categories = resCategory.data;
-    console.log(categories);
+    // console.log(categories);
     // const icons = resPreset.data.icons;  // 이렇게 하는거 맞나?
     // const colors = resPreset.data.colors;
     iconList.value = presets.icons;
@@ -124,6 +126,38 @@ const loadCategory = async () => {
   } catch (e) {
     console.error('카테고리 불러오기 실패 : ', e);
   }
+};
+
+const addCategory = () => {
+  isModalOpen.value = false;
+  if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
+    alert('이름, 색상, 아이콘을 모두 선택해주세요!');
+    return;
+  }
+
+  const newCategory = {
+    categoryId: categoryList.value.length + 1,
+    name: categoryName.value,
+    iconId: selectedIcon.value.iconId,
+    colorId: selectedColor.value.colorId,
+    type: 'payment',
+  };
+
+  categoryList.value.push(newCategory);
+
+  
+//   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
+
+
+  closeModal();
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  categoryName.value = '';
+  selectedColor.value = '';
+  selectedIcon.value = '';
+  activeTab.value = 'color';
 };
 
 onMounted(() => {
