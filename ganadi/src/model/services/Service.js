@@ -1,5 +1,5 @@
 // services/todoService.js
-import todosData from '../data/test.json';
+import todosData from '@model/data/test.json';
 
 // 깊은 복사 (원본 보호)
 let todos = [...todosData];

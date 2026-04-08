@@ -5,7 +5,7 @@ import {
   addTodo,
   toggleTodo,
   deleteTodo,
-} from '@/services/todoService';
+} from '@model/services/Service.js';
 
 export function useTodoViewModel() {
   const todos = ref([]);
