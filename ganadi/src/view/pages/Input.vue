@@ -87,59 +87,22 @@
           ⌫
         </button>
       </div>
-
       <button class="save-btn" @click="handleSave">저장하기</button>
     </section>
-
-    <Transition name="fade">
-      <div
-        v-if="isCategoryPopupOpen"
-        class="popup-overlay"
-        @click.self="isCategoryPopupOpen = false"
-      >
-        <div class="popup-content">
-          <div class="popup-header">
-            <span class="badge">전체 카테고리</span>
-            <button class="close-x" @click="isCategoryPopupOpen = false">
-              ✕
-            </button>
-          </div>
-          <div class="category-selection-grid">
-            <button
-              v-for="cat in filteredCategories"
-              :key="cat.categoryId"
-              class="popup-cat-item"
-              @click="
-                selectCategory(cat.categoryId);
-                isCategoryPopupOpen = false;
-              "
-            >
-              <div
-                class="cat-circle"
-                :style="{ backgroundColor: getColor(cat.colorId) + '22' }"
-              >
-                <i :class="['bi', getIcon(cat.iconId)]"></i>
-              </div>
-              <span class="cat-name">{{ cat.name }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import categoryData from '@/data/category.json';
-import presetData from '@/data/preset_options.json';
+import axios from 'axios'; // ⭐️ axios 추가
 
 const router = useRouter();
 
-const categoriesJSON = categoryData.category;
-const iconsJSON = presetData.icons;
-const colorsJSON = presetData.colors;
+// ⭐️ 서버에서 받아올 데이터를 담을 반응형 변수
+const categories = ref([]);
+const icons = ref([]);
+const colors = ref([]);
 
 const transactionType = ref('payment');
 const today = new Date().toISOString().split('T')[0];
@@ -150,8 +113,24 @@ const isTyping = ref(true);
 const selectedCategoryId = ref(null);
 const isCategoryPopupOpen = ref(false);
 
+// ⭐️ 서버 데이터 로드 함수
+const fetchInitialData = async () => {
+  try {
+    const [resCat, resIcon, resColor] = await Promise.all([
+      axios.get('http://localhost:3000/category'),
+      axios.get('http://localhost:3000/icons'),
+      axios.get('http://localhost:3000/colors'),
+    ]);
+    categories.value = resCat.data;
+    icons.value = resIcon.data;
+    colors.value = resColor.data;
+  } catch (err) {
+    console.error('데이터 로드 실패:', err);
+  }
+};
+
 const filteredCategories = computed(() => {
-  return categoriesJSON.filter((cat) => cat.type === transactionType.value);
+  return categories.value.filter((cat) => cat.type === transactionType.value);
 });
 
 const formattedAmount = computed(() => {
@@ -159,21 +138,26 @@ const formattedAmount = computed(() => {
   return Number(amount.value).toLocaleString();
 });
 
-// JSON의 iconId를 바탕으로 부트스트랩 클래스명을 반환하는 번역기
+// ⭐️ db.json의 icons 배열을 참조하여 부트스트랩 클래스로 변환
 const getIcon = (iconId) => {
-  // 아이콘 ID와 부트스트랩 클래스를 매칭합니다.
+  const iconObj = icons.value.find((i) => i.iconId === String(iconId));
+  const iconValue = iconObj ? iconObj.value : '';
+
   const iconMap = {
-    1: 'bi-cup-hot', // 카페
-    2: 'bi-bus-front', // 교통
-    3: 'bi-hospital', // 병원
-    4: 'bi-fork-knife', // 식비 (egg-fried 대신 범용적인 포크나이프로 변경)
+    cafe: 'bi-cup-hot',
+    fare: 'bi-bus-front',
+    hospital: 'bi-hospital',
+    salary: 'bi-coin', // 예시 추가
   };
-  // 문자열로 변환하여 매핑하고, 없으면 기본 물음표 아이콘을 띄웁니다.
-  return iconMap[String(iconId)] || 'bi-question-circle';
+  return iconMap[iconValue] || 'bi-question-circle';
 };
 
-const getColor = (id) =>
-  colorsJSON.find((c) => c.colorId === id)?.value || '#ccc';
+// ⭐️ db.json의 colors 배열에서 색상값 찾기
+const getColor = (colorId) => {
+  return (
+    colors.value.find((c) => c.colorId === String(colorId))?.value || '#ccc'
+  );
+};
 
 const selectCategory = (categoryId) => {
   selectedCategoryId.value = categoryId;
@@ -190,41 +174,51 @@ const handleKeyClick = (key) => {
   } else if (amount.value.length < 11) {
     amount.value += key;
   }
-
-  // ⭐️ 실제 저장 로직
-  const handleSave = () => {
-    // 1. 필수 입력값 검사 (유효성 검사)
-    if (amount.value === '0') {
-      alert('금액을 입력해주세요!');
-      return;
-    }
-    if (transactionType.value === 'payment' && !selectedCategoryId.value) {
-      alert('카테고리를 선택해주세요!');
-      return;
-    }
-
-    // 2. 저장할 새 데이터 객체 생성
-    const newTransaction = {
-      transactionId: Date.now().toString(), // 현재 시간으로 고유 ID 생성
-      amount: Number(amount.value), // 숫자 형태로 변환하여 저장
-      date: date.value,
-      type: transactionType.value,
-      categoryId: selectedCategoryId.value,
-      memo: memo.value,
-    };
-
-    // 3. 브라우저 로컬 스토리지에 저장 (기존 데이터 보존)
-    const existingData = JSON.parse(localStorage.getItem('transactions')) || [];
-    existingData.push(newTransaction);
-    localStorage.setItem('transactions', JSON.stringify(existingData));
-
-    // 4. 저장 완료 처리 및 화면 이동
-    alert('성공적으로 저장되었습니다!');
-
-    // 저장 후 메인 화면으로 돌아가기 (원치 않으시면 아래 줄을 지워주세요)
-    router.push('/');
-  };
 };
+
+const handleKeyDown = (event) => {
+  if (/^[0-9]$/.test(event.key)) handleKeyClick(event.key);
+  else if (event.key === 'Backspace') handleKeyClick('BACK');
+  else if (event.key === 'Enter') handleSave();
+};
+
+// ⭐️ 서버(json-server)에 저장하는 로직
+const handleSave = async () => {
+  if (amount.value === '0') {
+    alert('금액을 입력해주세요!');
+    return;
+  }
+  if (transactionType.value === 'payment' && !selectedCategoryId.value) {
+    alert('카테고리를 선택해주세요!');
+    return;
+  }
+
+  const newTransaction = {
+    amount: String(amount.value), // db.json 형식에 맞춰 문자열로 저장
+    date: date.value,
+    type: transactionType.value,
+    categoryId: selectedCategoryId.value,
+    memo: memo.value,
+  };
+
+  try {
+    // ⭐️ axios.post로 db.json에 실제 데이터 추가
+    await axios.post('http://localhost:3000/transactions', newTransaction);
+    alert('성공적으로 서버에 저장되었습니다!');
+    router.push('/');
+  } catch (err) {
+    alert('저장에 실패했습니다. 서버가 켜져있는지 확인해주세요.');
+  }
+};
+
+onMounted(() => {
+  fetchInitialData(); // ⭐️ 시작 시 서버 데이터 가져오기
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
 </script>
 
 <style scoped>

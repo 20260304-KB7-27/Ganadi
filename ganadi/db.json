@@ -3,46 +3,50 @@
     {
       "budgetId": "1",
       "amount": "450000",
-      "targetMonth": "2026-03"
+      "targetMonth": "2026-03",
+      "id": "ojy0O_NVtzU"
     },
     {
       "budgetId": "2",
       "amount": "500000",
-      "targetMonth": "2026-04"
+      "targetMonth": "2026-04",
+      "id": "W5ShMalFCnI"
     }
   ],
-
   "category": [
     {
       "categoryId": "1",
       "name": "교통",
       "type": "payment",
       "iconId": "3",
-      "colorId": "2"
+      "colorId": "2",
+      "id": "zBQLEJtCiVY"
     },
     {
       "categoryId": "2",
       "name": "식비",
       "type": "payment",
       "iconId": "2",
-      "colorId": "3"
+      "colorId": "3",
+      "id": "bHE-t34kvwA"
     },
     {
       "categoryId": "3",
       "name": "병원",
       "type": "payment",
       "iconId": "1",
-      "colorId": "1"
+      "colorId": "1",
+      "id": "QyXvKzBfO5s"
     },
     {
       "categoryId": "4",
       "name": "월급",
       "type": "income",
       "iconId": "4",
-      "colorId": "4"
+      "colorId": "4",
+      "id": "a_65S9MYBA4"
     }
   ],
-
   "fixed-cost": [
     {
       "fixedCostId": "1",
@@ -51,7 +55,8 @@
       "memo": "월급",
       "cycle": "monthly",
       "day": "4",
-      "categoryId": "4"
+      "categoryId": "4",
+      "id": "K0uRFDxtDXc"
     },
     {
       "fixedCostId": "2",
@@ -60,33 +65,59 @@
       "memo": "통신요금",
       "cycle": "monthly",
       "day": "6",
-      "categoryId": "5"
+      "categoryId": "5",
+      "id": "sk4JgwV2x74"
     }
   ],
-
   "icons": [
     {
       "iconId": "1",
-      "value": "cafe"
+      "value": "cafe",
+      "id": "CQXoTW2XuIg"
     },
     {
       "iconId": "2",
-      "value": "fare"
+      "value": "fare",
+      "id": "rD-zod4nDb8"
     },
     {
       "iconId": "3",
-      "value": "hospital"
+      "value": "hospital",
+      "id": "quQgXJrMLWQ"
     }
   ],
   "colors": [
-    { "colorId": "1", "value": "#FF5733" },
-    { "colorId": "2", "value": "#33FF57" },
-    { "colorId": "3", "value": "#33A1FF" },
-    { "colorId": "4", "value": "#F1C40F" },
-    { "colorId": "5", "value": "#9B59B6" },
-    { "colorId": "6", "value": "#34495E" }
+    {
+      "colorId": "1",
+      "value": "#FF5733",
+      "id": "QwoNq9eyFjE"
+    },
+    {
+      "colorId": "2",
+      "value": "#33FF57",
+      "id": "-fJ3xC5Uxf4"
+    },
+    {
+      "colorId": "3",
+      "value": "#33A1FF",
+      "id": "bV9wNK-zsbY"
+    },
+    {
+      "colorId": "4",
+      "value": "#F1C40F",
+      "id": "b7Kmt5mBCVQ"
+    },
+    {
+      "colorId": "5",
+      "value": "#9B59B6",
+      "id": "UjqPm_fWrHI"
+    },
+    {
+      "colorId": "6",
+      "value": "#34495E",
+      "id": "2oqifoC00zA"
+    }
   ],
-
   "transactions": [
     {
       "transactionId": "1",
@@ -94,7 +125,8 @@
       "date": "2026-04-03",
       "type": "payment",
       "categoryId": "2",
-      "memo": "치킨"
+      "memo": "치킨",
+      "id": "Od473s7F9KQ"
     },
     {
       "transactionId": "2",
@@ -102,7 +134,8 @@
       "date": "2026-04-06",
       "type": "payment",
       "categoryId": "3",
-      "memo": "병원비"
+      "memo": "병원비",
+      "id": "CURmuyDkkww"
     },
     {
       "transactionId": "3",
@@ -110,7 +143,17 @@
       "date": "2026-04-07",
       "type": "payment",
       "categoryId": "2",
-      "memo": "칼국수"
+      "memo": "칼국수",
+      "id": "iw8x4Y9jx6w"
+    },
+    {
+      "amount": "50000",
+      "date": "2026-04-08",
+      "type": "payment",
+      "categoryId": "3",
+      "memo": "커피",
+      "id": "vhvfOLWxkD0"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
