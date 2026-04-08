@@ -52,7 +52,6 @@ const formattedAmount = computed(() => {
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 20px;
     font-weight: 700;
 }
 
@@ -64,5 +63,11 @@ const formattedAmount = computed(() => {
 .amount {
     font-size: 18px;
     font-weight: 600;
+}
+
+.right-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 </style>
