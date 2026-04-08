@@ -1,0 +1,116 @@
+{
+  "budget": [
+    {
+      "budgetId": "1",
+      "amount": "450000",
+      "targetMonth": "2026-03"
+    },
+    {
+      "budgetId": "2",
+      "amount": "500000",
+      "targetMonth": "2026-04"
+    }
+  ],
+
+  "category": [
+    {
+      "categoryId": "1",
+      "name": "교통",
+      "type": "payment",
+      "iconId": "3",
+      "colorId": "2"
+    },
+    {
+      "categoryId": "2",
+      "name": "식비",
+      "type": "payment",
+      "iconId": "2",
+      "colorId": "3"
+    },
+    {
+      "categoryId": "3",
+      "name": "병원",
+      "type": "payment",
+      "iconId": "1",
+      "colorId": "1"
+    },
+    {
+      "categoryId": "4",
+      "name": "월급",
+      "type": "income",
+      "iconId": "4",
+      "colorId": "4"
+    }
+  ],
+
+  "fixed-cost": [
+    {
+      "fixedCostId": "1",
+      "type": "income",
+      "amount": "500000",
+      "memo": "월급",
+      "cycle": "monthly",
+      "day": "4",
+      "categoryId": "4"
+    },
+    {
+      "fixedCostId": "2",
+      "type": "payment",
+      "amount": "22000",
+      "memo": "통신요금",
+      "cycle": "monthly",
+      "day": "6",
+      "categoryId": "5"
+    }
+  ],
+
+  "icons": [
+    {
+      "iconId": "1",
+      "value": "cafe"
+    },
+    {
+      "iconId": "2",
+      "value": "fare"
+    },
+    {
+      "iconId": "3",
+      "value": "hospital"
+    }
+  ],
+  "colors": [
+    { "colorId": "1", "value": "#FF5733" },
+    { "colorId": "2", "value": "#33FF57" },
+    { "colorId": "3", "value": "#33A1FF" },
+    { "colorId": "4", "value": "#F1C40F" },
+    { "colorId": "5", "value": "#9B59B6" },
+    { "colorId": "6", "value": "#34495E" }
+  ],
+
+  "transactions": [
+    {
+      "transactionId": "1",
+      "amount": "20000",
+      "date": "2026-04-03",
+      "type": "payment",
+      "categoryId": "2",
+      "memo": "치킨"
+    },
+    {
+      "transactionId": "2",
+      "amount": "13000",
+      "date": "2026-04-06",
+      "type": "payment",
+      "categoryId": "3",
+      "memo": "병원비"
+    },
+    {
+      "transactionId": "3",
+      "amount": "4000",
+      "date": "2026-04-07",
+      "type": "payment",
+      "categoryId": "2",
+      "memo": "칼국수"
+    }
+  ]
+}
