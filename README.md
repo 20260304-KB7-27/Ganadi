@@ -40,6 +40,7 @@ cd ganadi
 npm install bootstrap@5 -> bootstrap 라이브러리 사용  
 npm install axios -> http 라이브러리 사용  
 npm install bootstrap-icons
+npm i vue-chartjs chart.js
 npm i --save vue-simple-calendar
 npm install  
 npm run dev
