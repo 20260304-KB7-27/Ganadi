@@ -2,7 +2,7 @@
     <div class="graph-page">
         <GraphHeader :total-expense="graphData.totalExpense" />
         <GraphChart
-            :chart-data="graphData.categorySummary"
+            :items="graphData.categorySummary"
             :level="graphData.characterLevel"
         />
         <GraphCategoryList :items="graphData.categorySummary" />
