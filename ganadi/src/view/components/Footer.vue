@@ -1,42 +1,80 @@
 <template>
-  <nav class="navbar navbar-expand-md bg-dark navbar-dark mt-2">
-    <span class="navbar-brand">이날치(LeeNalChi)</span>
-
-    <button class="navbar-toggler" type="button" @click="changeIsNavShow">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div :class="navClass">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link class="nav-link" to="/">홈</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/graph">통계</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/setting">설정</router-link>
-        </li>
-      </ul>
-    </div>
+  <nav class="footer">
+    <ul class="menu">
+      <li v-for="menu in menus" :key="menu.path">
+        <router-link :to="menu.path" class="menu-item" active-class="active">
+          <span class="label">{{ menu.name }}</span>
+        </router-link>
+      </li>
+    </ul>
   </nav>
 </template>
 
-<script>
-import { reactive, computed } from 'vue';
-export default {
-  setup() {
-    const state = reactive({ isNavShow: false });
-    const navClass = computed(() =>
-      state.isNavShow
-        ? 'collapse navbar-collapse show'
-        : 'collapse navbar-collapse',
-    );
-    const changeIsNavShow = () => {
-      state.isNavShow = !state.isNavShow;
-    };
-    return { state, changeIsNavShow, navClass };
-  },
-};
+<script setup>
+const menus = [
+  { name: '홈', path: '/' },
+  { name: '통계', path: '/graph' },
+  { name: '설정', path: '/setting' },
+];
 </script>
 
-<style></style>
+<style scoped>
+/* ===== 기본 (모바일: 하단 탭바) ===== */
+.footer {
+  background: #222;
+  color: white;
+  border-top: 1px solid #333;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #bbb;
+  font-size: 12px;
+}
+
+.menu-item.active {
+  color: #fff;
+  font-weight: bold;
+}
+
+.label {
+  margin-top: 4px;
+}
+
+/* ===== PC: 사이드바 형태 ===== */
+@media (min-width: 768px) {
+  .footer {
+    height: 100%;
+    border-top: none;
+    border-left: 1px solid #333;
+    padding: 20px 10px;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .menu-item {
+    flex-direction: row;
+    font-size: 14px;
+  }
+
+  .label {
+    margin: 0;
+  }
+}
+</style>
