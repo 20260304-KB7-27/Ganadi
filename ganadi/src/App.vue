@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <Header></Header>
-
     <RouterView></RouterView>
+
+    <Footer></Footer>
   </div>
 </template>
 
 <script setup>
 import { RouterView, RouterLink } from 'vue-router';
 
-import Header from '@/view/components/Header.vue';
+import Footer from '@/view/components/Footer.vue';
 </script>
 
 <style></style>
