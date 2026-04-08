@@ -40,6 +40,8 @@ cd ganadi
 npm install bootstrap@5 -> bootstrap 라이브러리 사용  
 npm install axios -> http 라이브러리 사용  
 npm install bootstrap-icons
+npm i vue-chartjs chart.js
+npm i --save vue-simple-calendar
 npm install  
 npm run dev
 
@@ -47,7 +49,6 @@ npm run dev
 cd ganadi
 cd ganadi
 npm install -g json-server
-json-server --watch .\src\data\test.json --port 3000
 json-server --watch db.json --port 3000
 
 # ✅ 커밋 컨벤션
