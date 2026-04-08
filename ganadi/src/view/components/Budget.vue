@@ -11,7 +11,7 @@
 
 <script setup>
     import { ref } from 'vue';
-    const targetMonth = ref(''); // 이번 달
+    const targetMonth = ref('4'); // 이번 달
     const goalAmount = ref('');
 </script>
 
