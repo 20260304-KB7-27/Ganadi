@@ -1,45 +1,97 @@
 <template>
-  <nav class="navbar navbar-expand-md bg-dark navbar-dark mt-2">
-    <span class="navbar-brand">이날치(LeeNalChi)</span>
-
-    <button class="navbar-toggler" type="button" @click="changeIsNavShow">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div :class="navClass">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link class="nav-link" to="/">홈</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/graph">통계</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/setting">설정</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/input">추가</router-link>
-        </li>
-      </ul>
-    </div>
+  <nav class="footer">
+    <ul class="menu">
+      <li v-for="menu in menus" :key="menu.path">
+        <router-link :to="menu.path" class="menu-item" active-class="active">
+          <i :class="['bi', menu.icon, 'icon']"></i>
+          <span class="label">{{ menu.name }}</span>
+        </router-link>
+      </li>
+    </ul>
   </nav>
 </template>
 
-<script>
-import { reactive, computed } from 'vue';
-export default {
-  setup() {
-    const state = reactive({ isNavShow: false });
-    const navClass = computed(() =>
-      state.isNavShow
-        ? 'collapse navbar-collapse show'
-        : 'collapse navbar-collapse',
-    );
-    const changeIsNavShow = () => {
-      state.isNavShow = !state.isNavShow;
-    };
-    return { state, changeIsNavShow, navClass };
-  },
-};
+<script setup>
+const menus = [
+  { name: '홈', path: '/', icon: 'bi-house' },
+  { name: '통계', path: '/graph', icon: 'bi-bar-chart' },
+  { name: '설정', path: '/setting', icon: 'bi-gear' },
+];
 </script>
 
-<style></style>
+<style scoped>
+.footer {
+  background: #dcdcdc;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 14px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #555;
+  font-size: 12px;
+}
+
+.icon {
+  font-size: 26px;
+  color: #333;
+}
+
+.menu-item.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.menu-item.active .icon {
+  color: #000;
+  transform: scale(1.15);
+}
+
+.label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    height: 100%;
+    border-top: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px 12px;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .menu-item {
+    flex-direction: row;
+    gap: 16px;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .icon {
+    font-size: 22px;
+  }
+
+  .label {
+    display: inline;
+    font-size: 16px;
+    margin: 0;
+  }
+}
+</style>
