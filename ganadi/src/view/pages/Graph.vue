@@ -1,10 +1,10 @@
 <template>
   <div class="card card -body">
-    <h2>Video</h2>
+    <h2>Graph</h2>
   </div>
 </template>
 <script>
 export default {
-  name: 'Video',
+  name: 'Graph',
 };
 </script>
