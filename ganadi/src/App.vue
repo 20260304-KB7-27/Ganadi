@@ -47,10 +47,5 @@ import Footer from '@/view/components/Footer.vue';
     /* grid-template-areas: 'content footer '; 오른쪽 */
     /* grid-template-columns: 1fr 220px; */
   }
-
-  .footer-area {
-    border-left: 1px solid #eee;
-    border-left: none;
-  }
 }
 </style>

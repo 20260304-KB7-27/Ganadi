@@ -20,13 +20,9 @@ const menus = [
 </script>
 
 <style scoped>
-/* =========================
-   📱 모바일 (기본: 하단 탭바)
-   ========================= */
 .footer {
-  background: #222;
-  color: white;
-  border-top: 1px solid #333;
+  background: #dcdcdc;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .menu {
@@ -44,39 +40,34 @@ const menus = [
   align-items: center;
   gap: 4px;
   text-decoration: none;
-  color: #bbb;
+  color: #555;
   font-size: 12px;
 }
 
-/* 아이콘 */
 .icon {
   font-size: 26px;
+  color: #333;
 }
 
-/* 활성 상태 */
 .menu-item.active {
-  color: #fff;
-  font-weight: bold;
+  color: #000;
+  font-weight: 600;
 }
 
 .menu-item.active .icon {
+  color: #000;
   transform: scale(1.15);
 }
 
-/* 텍스트 */
 .label {
   display: none;
 }
 
-/* =========================
-   💻 PC (사이드바)
-   ========================= */
 @media (min-width: 768px) {
   .footer {
     height: 100%;
     border-top: none;
-    border-left: none;
-    border-right: 1px solid #333;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
     padding: 20px 12px;
   }
 
@@ -88,17 +79,18 @@ const menus = [
 
   .menu-item {
     flex-direction: row;
-    gap: 30px;
-    font-size: 14px;
+    gap: 16px;
+    font-size: 16px;
+    color: #555;
   }
 
   .icon {
-    font-size: 35px;
+    font-size: 22px;
   }
 
   .label {
     display: inline;
-    font-size: 35px;
+    font-size: 16px;
     margin: 0;
   }
 }
