@@ -60,14 +60,14 @@
             }"
             @click="selectCategory(cat.categoryId)"
           >
-            {{ getIcon(cat.iconId) }}
+            <i :class="['bi', getIcon(cat.iconId)]"></i>
           </button>
 
           <button
             class="category-icon add-btn"
             @click="isCategoryPopupOpen = true"
           >
-            ➕
+            <i class="bi bi-plus-lg"></i>
           </button>
         </div>
       </div>
@@ -118,7 +118,7 @@
                 class="cat-circle"
                 :style="{ backgroundColor: getColor(cat.colorId) + '22' }"
               >
-                {{ getIcon(cat.iconId) }}
+                <i :class="['bi', getIcon(cat.iconId)]"></i>
               </div>
               <span class="cat-name">{{ cat.name }}</span>
             </button>
@@ -131,11 +131,11 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router'; // 화면 이동을 위해 추가
-import categoryData from '@/model/data/category.json';
-import presetData from '@/model/data/preset_options.json';
+import { useRouter } from 'vue-router';
+import categoryData from '@/data/category.json';
+import presetData from '@/data/preset_options.json';
 
-const router = useRouter(); // 라우터 사용 설정
+const router = useRouter();
 
 const categoriesJSON = categoryData.category;
 const iconsJSON = presetData.icons;
@@ -159,7 +159,19 @@ const formattedAmount = computed(() => {
   return Number(amount.value).toLocaleString();
 });
 
-const getIcon = (id) => iconsJSON.find((i) => i.iconId === id)?.value || '❓';
+// JSON의 iconId를 바탕으로 부트스트랩 클래스명을 반환하는 번역기
+const getIcon = (iconId) => {
+  // 아이콘 ID와 부트스트랩 클래스를 매칭합니다.
+  const iconMap = {
+    1: 'bi-cup-hot', // 카페
+    2: 'bi-bus-front', // 교통
+    3: 'bi-hospital', // 병원
+    4: 'bi-fork-knife', // 식비 (egg-fried 대신 범용적인 포크나이프로 변경)
+  };
+  // 문자열로 변환하여 매핑하고, 없으면 기본 물음표 아이콘을 띄웁니다.
+  return iconMap[String(iconId)] || 'bi-question-circle';
+};
+
 const getColor = (id) =>
   colorsJSON.find((c) => c.colorId === id)?.value || '#ccc';
 
@@ -178,53 +190,54 @@ const handleKeyClick = (key) => {
   } else if (amount.value.length < 11) {
     amount.value += key;
   }
+
+  //   // ⭐️ 실제 저장 로직
+  //   const handleSave = () => {
+  //     // 1. 필수 입력값 검사 (유효성 검사)
+  //     if (amount.value === '0') {
+  //       alert('금액을 입력해주세요!');
+  //       return;
+  //     }
+  //     if (transactionType.value === 'payment' && !selectedCategoryId.value) {
+  //       alert('카테고리를 선택해주세요!');
+  //       return;
+  //     }
+
+  //     // 2. 저장할 새 데이터 객체 생성
+  //     const newTransaction = {
+  //       transactionId: Date.now().toString(), // 현재 시간으로 고유 ID 생성
+  //       amount: Number(amount.value), // 숫자 형태로 변환하여 저장
+  //       date: date.value,
+  //       type: transactionType.value,
+  //       categoryId: selectedCategoryId.value,
+  //       memo: memo.value,
+  //     };
+
+  //     // 3. 브라우저 로컬 스토리지에 저장 (기존 데이터 보존)
+  //     const existingData = JSON.parse(localStorage.getItem('transactions')) || [];
+  //     existingData.push(newTransaction);
+  //     localStorage.setItem('transactions', JSON.stringify(existingData));
+
+  //     // 4. 저장 완료 처리 및 화면 이동
+  //     alert('성공적으로 저장되었습니다!');
+
+  //     // 저장 후 메인 화면으로 돌아가기 (원치 않으시면 아래 줄을 지워주세요)
+  //     router.push('/');
+  //   };
 };
-
-// // ⭐️ 실제 저장 로직
-// const handleSave = () => {
-//   // 1. 필수 입력값 검사 (유효성 검사)
-//   if (amount.value === '0') {
-//     alert('금액을 입력해주세요!');
-//     return;
-//   }
-//   if (transactionType.value === 'payment' && !selectedCategoryId.value) {
-//     alert('카테고리를 선택해주세요!');
-//     return;
-//   }
-
-//   // 2. 저장할 새 데이터 객체 생성
-//   const newTransaction = {
-//     transactionId: Date.now().toString(), // 현재 시간으로 고유 ID 생성
-//     amount: Number(amount.value), // 숫자 형태로 변환하여 저장
-//     date: date.value,
-//     type: transactionType.value,
-//     categoryId: selectedCategoryId.value,
-//     memo: memo.value,
-//   };
-
-//   // 3. 브라우저 로컬 스토리지에 저장 (기존 데이터 보존)
-//   const existingData = JSON.parse(localStorage.getItem('transactions')) || [];
-//   existingData.push(newTransaction);
-//   localStorage.setItem('transactions', JSON.stringify(existingData));
-
-//   // 4. 저장 완료 처리 및 화면 이동
-//   alert('성공적으로 저장되었습니다!');
-
-//   // 저장 후 메인 화면으로 돌아가기 (원치 않으시면 아래 줄을 지워주세요)
-//   router.push('/');
-// };
 </script>
 
 <style scoped>
-/* [기존 레이아웃] */
+/* 기존 스타일 그대로 유지 */
 .record-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f5f5f5;
   max-width: 480px;
   margin: 0 auto;
   position: relative;
+  overflow-y: auto;
 }
 .input-form {
   flex: 1;
@@ -363,7 +376,6 @@ const handleKeyClick = (key) => {
   cursor: pointer;
 }
 
-/* ⭐️ 추가된 저장 버튼 스타일 */
 .save-btn {
   width: 100%;
   padding: 16px;
@@ -398,7 +410,6 @@ const handleKeyClick = (key) => {
   height: 28px;
 }
 
-/* 팝업 스타일 */
 .popup-overlay {
   position: fixed;
   top: 0;
