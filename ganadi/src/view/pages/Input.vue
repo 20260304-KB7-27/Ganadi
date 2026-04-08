@@ -191,39 +191,39 @@ const handleKeyClick = (key) => {
     amount.value += key;
   }
 
-  //   // ⭐️ 실제 저장 로직
-  //   const handleSave = () => {
-  //     // 1. 필수 입력값 검사 (유효성 검사)
-  //     if (amount.value === '0') {
-  //       alert('금액을 입력해주세요!');
-  //       return;
-  //     }
-  //     if (transactionType.value === 'payment' && !selectedCategoryId.value) {
-  //       alert('카테고리를 선택해주세요!');
-  //       return;
-  //     }
+  // ⭐️ 실제 저장 로직
+  const handleSave = () => {
+    // 1. 필수 입력값 검사 (유효성 검사)
+    if (amount.value === '0') {
+      alert('금액을 입력해주세요!');
+      return;
+    }
+    if (transactionType.value === 'payment' && !selectedCategoryId.value) {
+      alert('카테고리를 선택해주세요!');
+      return;
+    }
 
-  //     // 2. 저장할 새 데이터 객체 생성
-  //     const newTransaction = {
-  //       transactionId: Date.now().toString(), // 현재 시간으로 고유 ID 생성
-  //       amount: Number(amount.value), // 숫자 형태로 변환하여 저장
-  //       date: date.value,
-  //       type: transactionType.value,
-  //       categoryId: selectedCategoryId.value,
-  //       memo: memo.value,
-  //     };
+    // 2. 저장할 새 데이터 객체 생성
+    const newTransaction = {
+      transactionId: Date.now().toString(), // 현재 시간으로 고유 ID 생성
+      amount: Number(amount.value), // 숫자 형태로 변환하여 저장
+      date: date.value,
+      type: transactionType.value,
+      categoryId: selectedCategoryId.value,
+      memo: memo.value,
+    };
 
-  //     // 3. 브라우저 로컬 스토리지에 저장 (기존 데이터 보존)
-  //     const existingData = JSON.parse(localStorage.getItem('transactions')) || [];
-  //     existingData.push(newTransaction);
-  //     localStorage.setItem('transactions', JSON.stringify(existingData));
+    // 3. 브라우저 로컬 스토리지에 저장 (기존 데이터 보존)
+    const existingData = JSON.parse(localStorage.getItem('transactions')) || [];
+    existingData.push(newTransaction);
+    localStorage.setItem('transactions', JSON.stringify(existingData));
 
-  //     // 4. 저장 완료 처리 및 화면 이동
-  //     alert('성공적으로 저장되었습니다!');
+    // 4. 저장 완료 처리 및 화면 이동
+    alert('성공적으로 저장되었습니다!');
 
-  //     // 저장 후 메인 화면으로 돌아가기 (원치 않으시면 아래 줄을 지워주세요)
-  //     router.push('/');
-  //   };
+    // 저장 후 메인 화면으로 돌아가기 (원치 않으시면 아래 줄을 지워주세요)
+    router.push('/');
+  };
 };
 </script>
 
