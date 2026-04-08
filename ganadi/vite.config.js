@@ -10,7 +10,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@model': fileURLToPath(new URL('./src/model', import.meta.url)),
+      // '@model': fileURLToPath(new URL('./src/model', import.meta.url)),
+      // '@viewmodel': fileURLToPath(new URL('./src/viewmodel', import.meta.url)),
+      // '@view': fileURLToPath(new URL('./src/view', import.meta.url)),
     },
   },
 });
