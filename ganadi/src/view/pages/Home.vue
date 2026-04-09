@@ -164,6 +164,7 @@ background-color: white;
   position: relative;
 }
 
+/* 데일리 수입/지출 내역과 그리드 너비 */
 .account-calendar .cv-item {
   background: transparent !important;
   border: none !important;
@@ -188,5 +189,15 @@ padding: 10px !important;
 
 }
 
+/* 선택된 달이 아닌 나머지 달의 날짜를 회색으로 */
+.account-calendar .cv-day.outside {
+  opacity: 0.5;
+}
+/* 오늘 날짜 표시 */
+.account-calendar .cv-day.today {
+  background-color: #efefef;
+  color: red;
+  font-weight: bold;
+}
 
 </style>
