@@ -137,10 +137,13 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import categoryData from '@/data/category.json';
+import presetData from '@/data/preset_options.json';
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 const isMemoActive = ref(false);
 
 // ⭐️ 서버에서 받아올 데이터를 담을 반응형 변수
@@ -150,7 +153,7 @@ const colors = ref([]);
 
 const transactionType = ref('expense');
 const today = new Date().toISOString().split('T')[0];
-const date = ref(today);
+const date = ref(route.query.date || today);
 const memo = ref('');
 const amount = ref('0');
 const isTyping = ref(false);
