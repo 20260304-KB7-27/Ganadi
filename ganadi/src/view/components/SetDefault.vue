@@ -47,7 +47,7 @@
         <label class="section-label">지정 날짜</label>
         <div class="date-selector-wrapper">
           <div class="date-display" @click="isDateListOpen = !isDateListOpen">
-            매월 <span>{{ selectedDay ? selectedDay : '___' }}</span> 일
+            매월 <span>{{ selectedDay ? selectedDay : '   ' }}</span> 일
           </div>
 
           <div v-if="isDateListOpen" class="date-list-popup">
@@ -112,15 +112,15 @@ const selectedDay = ref(null);
 const openModal = () => {
   isModalOpen.value = true;
   categoryList.value = categories.value.map(cat => {
-    // 각 카테고리의 iconId와 일치하는 아이콘 객체 찾기
+    
     const matchedIcon = icons.value.find(i => String(i.iconId) === String(cat.iconId));
-    // 각 카테고리의 colorId와 일치하는 컬러 객체 찾기
+    
     const matchedColor = colors.value.find(c => String(c.colorId) === String(cat.colorId));
 
     return {
-      ...cat, // 기존 id, name 등 유지
-      iconType: matchedIcon ? matchedIcon.value : 'question', // 아이콘 value(예: 'youtube')
-      iconColor: matchedColor ? matchedColor.value : '#cccccc' // 컬러 value(예: '#FF5733')
+      ...cat,
+      iconType: matchedIcon ? matchedIcon.value : 'question', 
+      iconColor: matchedColor ? matchedColor.value : '#cccccc' 
     };
   });
 };
@@ -212,6 +212,33 @@ onMounted(fetchFixedCosts);
   margin: 0;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;           
+  margin-bottom: 20px;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  padding: 2px 10px;
+}
+
+.close-btn {
+  background: none;              /* 배경 제거 */
+  border: none;                  /* 테두리 제거 */
+  font-size: 28px;               /* 크기 키우기 */
+  font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
+  font-weight: 300;              /* 선 두께 조절 */
+  cursor: pointer;
+  line-height: 1;                /* 높이 조절 */
+  padding: 0;
+}
+.close-btn:hover {
+  color: #888;
+}
+
 .add-btn {
   background: none;
   border: none;
@@ -295,6 +322,24 @@ onMounted(fetchFixedCosts);
   width: 85%;
   max-width: 400px;
   border: 1px solid #000;
+}
+
+.modal-tag {
+  background-color: #e0e0e0;     /* 목업과 같은 연한 회색 */
+  padding: 5px 15px;             /* 안쪽 여백 */
+  border-radius: 20px;           /* 알약 모양으로 둥글게 */
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.complete-btn {
+  border-radius: 15px;
+}
+
+.date-selector-wrapper {
+  position: relative; 
+  width: 100%;
 }
 
 .date-display {
