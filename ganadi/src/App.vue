@@ -14,7 +14,26 @@
 import { RouterView } from 'vue-router';
 import Footer from '@/view/components/Footer.vue';
 </script>
-<style scoped>
+<style>
+/* =========================
+   📱 스크롤바 숨기기 (전역)
+   ========================= */
+
+/* 크롬, 사파리 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 파이어폭스 */
+* {
+  scrollbar-width: none;
+}
+
+/* IE, Edge */
+body {
+  -ms-overflow-style: none;
+}
+
 /* =========================
    📱 전체 레이아웃
    ========================= */
