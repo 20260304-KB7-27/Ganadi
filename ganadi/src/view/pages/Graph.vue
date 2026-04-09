@@ -1,6 +1,12 @@
 <template>
   <div class="card card -body">
     <div class="graph-page">
+      <GraphMonthSelector
+        :selected-year="selectedYear"
+        :selected-month="selectedMonth"
+        @prev-month="goToPrevMonth"
+        @next-month="goToNextMonth"
+      />
       <GraphHeader :total-expense="graphData.totalExpense" />
       <GraphChart
         :items="graphData.categorySummary"
@@ -12,7 +18,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import GraphMonthSelector from '../components/graph/graphMonthSelector.vue';
 import GraphHeader from '../components/graph/graphHeader.vue';
 import GraphCategoryList from '../components/graph/graphCategoryList.vue';
 import GraphChart from '../components/graph/graphChart.vue';
@@ -22,6 +29,12 @@ import { adaptGraphData } from '@/utils/graphAdapter';
 
 // const graphData = graphMockData;
 
+const now = new Date();
+const selectedYear = ref(now.getFullYear());
+const selectedMonth = ref(now.getMonth() + 1);
+
+const rawData = ref(null);
+
 const graphData = ref({
   totalExpense: 0,
   monthlyGoal: 0,
@@ -30,13 +43,44 @@ const graphData = ref({
   categorySummary: [],
 });
 
+const updateGraphData = () => {
+  if (!rawData.value) return;
+
+  graphData.value = adaptGraphData(rawData.value, {
+    year: selectedYear.value,
+    month: selectedMonth.value,
+  });
+};
+
+const goToPrevMonth = () => {
+  if (selectedMonth.value === 1) {
+    selectedYear.value -= 1;
+    selectedMonth.value = 12;
+  } else {
+    selectedMonth.value -= 1;
+  }
+};
+
+const goToNextMonth = () => {
+  if (selectedMonth.value === 12) {
+    selectedYear.value += 1;
+    selectedMonth.value = 1;
+  } else {
+    selectedMonth.value += 1;
+  }
+};
+
 onMounted(async () => {
   try {
-    const rawData = await getGraphRawData();
-    graphData.value = adaptGraphData(rawData);
+    rawData.value = await getGraphRawData();
+    updateGraphData();
   } catch (error) {
     console.log(`그래프 데이터 불러오기 실패: `, error);
   }
+});
+
+watch([selectedYear, selectedMonth], () => {
+  updateGraphData();
 });
 </script>
 
