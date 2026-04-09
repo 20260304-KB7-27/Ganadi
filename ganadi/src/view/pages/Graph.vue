@@ -4,6 +4,7 @@
             <GraphMonthSelector
                 :selected-year="selectedYear"
                 :selected-month="selectedMonth"
+                :is-current-month="isCurrentMonth"
                 @prev-month="goToPrevMonth"
                 @next-month="goToNextMonth"
             />
@@ -18,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useCharacterStore } from '@/stores/characterStore';
 
 import GraphMonthSelector from '../components/graph/graphMonthSelector.vue';
@@ -35,6 +36,9 @@ import { adaptGraphData } from '@/utils/graphAdapter';
 
 const characterStore = useCharacterStore();
 const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth() + 1;
+
 const selectedYear = ref(now.getFullYear());
 const selectedMonth = ref(now.getMonth() + 1);
 
@@ -68,6 +72,14 @@ const goToPrevMonth = () => {
 };
 
 const goToNextMonth = () => {
+    // 미래의 달로는 못 넘어가게
+    if (
+        selectedYear.value === currentYear &&
+        selectedMonth.value === currentMonth
+    ) {
+        return;
+    }
+
     if (selectedMonth.value === 12) {
         selectedYear.value += 1;
         selectedMonth.value = 1;
@@ -75,6 +87,13 @@ const goToNextMonth = () => {
         selectedMonth.value += 1;
     }
 };
+
+const isCurrentMonth = computed(() => {
+    return (
+        selectedYear.value === currentYear &&
+        selectedMonth.value === currentMonth
+    );
+});
 
 onMounted(async () => {
     try {
