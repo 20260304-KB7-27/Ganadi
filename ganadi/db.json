@@ -73,17 +73,27 @@
     {
       "iconId": "1",
       "value": "cup-hot",
-      "id": "BBfBZBMeVOs"
+      "id": "BBfBZBMeVOa"
     },
     {
       "iconId": "2",
       "value": "egg-fried",
-      "id": "nHL1q0Jyz2M"
+      "id": "BBfBZBMeVOs"
     },
     {
       "iconId": "3",
       "value": "hospital",
       "id": "x5Tt21DfGlI"
+    },
+    {
+      "iconId": "4",
+      "value": "fork-knife",
+      "id": "x5Tt21DfGlZ"
+    },
+    {
+      "iconId": "5",
+      "value": "youtube",
+      "id": "x5Tt21DfGEI"
     }
   ],
   "colors": [
@@ -145,6 +155,32 @@
       "categoryId": "2",
       "memo": "칼국수",
       "id": "zQ-1TLsL0_c"
+    },
+    {
+      "transactionId": "4",
+      "amount": "15000",
+      "date": "2026-03-10",
+      "type": "expense",
+      "categoryId": "2",
+      "memo": "파스타",
+      "id": "zQ-1TLsL0_a"
+    },
+    {
+      "transactionId": "5",
+      "amount": "50000",
+      "date": "2026-03-12",
+      "type": "expense",
+      "categoryId": "1",
+      "memo": "버스",
+      "id": "zQ-1TLsL0_b"
+    }
+  ],
+
+  "character": [
+    {
+      "id": "1",
+      "level": "4",
+      "lastEvaluatedMonth": "2026-04"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

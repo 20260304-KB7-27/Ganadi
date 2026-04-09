@@ -1,8 +1,12 @@
 <template>
     <div class="chart-wrapper">
         <div class="chart-box">
-            <Doughnut :data="chartData" :options="chartOptions" />
-            <GraphCharacter :level="level"></GraphCharacter>
+            <div class="chart-layer">
+                <Doughnut :data="chartData" :options="chartOptions" />
+            </div>
+            <div class="character-layer">
+                <GraphCharacter :level="level" />
+            </div>
         </div>
     </div>
 </template>
@@ -26,17 +30,36 @@ const props = defineProps({
     },
 });
 
-const chartData = computed(() => ({
-    labels: props.items.map((item) => item.name),
-    datasets: [
-        {
-            data: props.items.map((item) => item.amount),
-            backgroundColor: props.items.map((item) => item.color),
-            borderWidth: 0,
-            hoverOffset: 0,
-        },
-    ],
-}));
+const safeItems = computed(() => props.items || []);
+
+const isEmptyData = computed(() => safeItems.value.length === 0);
+
+const chartData = computed(() => {
+    if (isEmptyData.value) {
+        return {
+            labels: ['empty'],
+            datasets: [
+                {
+                    data: [1],
+                    backgroundColor: ['#d9d9d9'],
+                    borderWidth: 0,
+                    hoverOffset: 0,
+                },
+            ],
+        };
+    }
+    return {
+        labels: safeItems.value.map((item) => item.name),
+        datasets: [
+            {
+                data: safeItems.value.map((item) => item.amount),
+                backgroundColor: safeItems.value.map((item) => item.color),
+                borderWidth: 0,
+                hoverOffset: 0,
+            },
+        ],
+    };
+});
 
 const chartOptions = computed(() => ({
     responsive: true,
@@ -75,5 +98,17 @@ const chartOptions = computed(() => ({
     position: relative;
     width: 280px;
     height: 280px;
+}
+
+.character-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.chart-layer {
+    position: relative;
+    z-index: 1;
 }
 </style>

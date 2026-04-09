@@ -1,6 +1,6 @@
 <template>
-  <div class="set-group">
-    <h2>카테고리 추가</h2>
+  <div class="set-group header-box">
+    <h5>카테고리 추가</h5>
   </div>
   <div class="category-container">
     <div
@@ -9,7 +9,7 @@
       class="category-card"
       :style="{ borderColor: item.iconColor }"
     >
-      <div class="icon-circcle" :style="{ backgroundColor: item.iconColor }">
+      <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
       </div>
     </div>
@@ -203,5 +203,18 @@ onMounted(() => {
 .selected {
   outline: 3px solid #6c5ce7; /* 선택 시 강조 테두리 */
   transform: scale(1.1);
+}
+
+
+.header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e0e0e0; /* 목업의 연한 회색 */
+  border: 1px solid #111;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 </style>
