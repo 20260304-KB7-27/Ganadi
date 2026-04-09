@@ -68,7 +68,7 @@ export const adaptGraphData = ({
             return {
                 categoryId,
                 name: categoryInfo?.name || '기타',
-                icon: iconInfo?.value || 'fa-solid fa-coins',
+                iconType: iconInfo?.value || 'coin',
                 color: colorInfo?.value || '#d9d9d9',
                 amount,
                 percent:
