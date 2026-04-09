@@ -69,15 +69,16 @@
       "id": "I8vek5_JWsw"
     }
   ],
+
   "icons": [
     {
       "iconId": "1",
-      "value": "cafe",
+      "value": "cup-hot",
       "id": "BBfBZBMeVOs"
     },
     {
       "iconId": "2",
-      "value": "fare",
+      "value": "egg-fried",
       "id": "nHL1q0Jyz2M"
     },
     {
