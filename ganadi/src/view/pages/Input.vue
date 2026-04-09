@@ -117,7 +117,7 @@
           >
             <div
               class="cat-circle"
-              :style="{ backgroundColor: getColor(cat.colorId) /*+ '22'*/ }"
+              :style="{ backgroundColor: getColor(cat.colorId) }"
             >
               <i :class="`bi ${getIcon(cat.iconId)}`"></i>
             </div>
