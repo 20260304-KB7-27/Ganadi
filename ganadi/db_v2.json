@@ -67,15 +67,19 @@
     "icons": [
         {
             "iconId": "1",
-            "value": "cafe"
+            "value": "fa-solid fa-mug-saucer"
         },
         {
             "iconId": "2",
-            "value": "fare"
+            "value": "fa-solid fa-utensils"
         },
         {
             "iconId": "3",
-            "value": "hospital"
+            "value": "fa-solid fa-hospital"
+        },
+        {
+            "iconId": "4",
+            "value": "fa-solid fa-money-bill"
         }
     ],
 
