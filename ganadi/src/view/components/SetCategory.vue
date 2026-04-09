@@ -174,7 +174,30 @@ onMounted(() => {
   margin-top: 10px;
   min-height: 200px; /* 최소 높이 설정 */
 }
-
+.tag {
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  padding: 2px 10px;
+}
+.close-btn {
+  background: none;              /* 배경 제거 */
+  border: none;                  /* 테두리 제거 */
+  font-size: 28px;               /* 크기 키우기 */
+  font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
+  font-weight: 300;              /* 선 두께 조절 */
+  cursor: pointer;
+  line-height: 1;                /* 높이 조절 */
+  padding: 0;
+}
+.close-btn:hover {
+  color: #888;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;           
+  margin-bottom: 20px;
+}
 /* 아이템들을 가로로 나열 */
 .selection-grid {
   display: grid;
