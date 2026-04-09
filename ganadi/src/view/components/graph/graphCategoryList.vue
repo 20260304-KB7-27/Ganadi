@@ -1,6 +1,10 @@
 <template>
     <div class="category-list-wrapper">
-        <div class="category-list">
+        <div v-if="items.length === 0" class="empty-message">
+            해당 월의 지출 내역이 없습니다.
+        </div>
+
+        <div v-else class="category-list">
             <GraphCategoryItem
                 v-for="item in items"
                 :key="item.categoryId"
@@ -33,5 +37,12 @@ defineProps({
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.empty-message {
+    text-align: center;
+    color: #666;
+    padding: 40px 0;
+    font-size: 16px;
 }
 </style>

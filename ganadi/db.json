@@ -147,6 +147,24 @@
       "categoryId": "2",
       "memo": "칼국수",
       "id": "zQ-1TLsL0_c"
+    },
+    {
+      "transactionId": "4",
+      "amount": "15000",
+      "date": "2026-03-10",
+      "type": "expense",
+      "categoryId": "2",
+      "memo": "파스타",
+      "id": "zQ-1TLsL0_a"
+    },
+    {
+      "transactionId": "5",
+      "amount": "50000",
+      "date": "2026-03-12",
+      "type": "expense",
+      "categoryId": "1",
+      "memo": "버스",
+      "id": "zQ-1TLsL0_b"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
