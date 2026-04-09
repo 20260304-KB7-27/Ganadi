@@ -7,7 +7,7 @@
      :expense="expense" :income="income" :balance="balance" ></Header>
 
     <ProgressBar bgcolor="#C0FFBE" :completedRate="completed_rate" :goalMoney="goal_money" />
-    <CalendarView :items="items" :show-date="showDate" />
+    <CalendarView :items="items" :show-date="showDate" class="account-calendar" />
 
     <RouterLink to="/input" class="add-button">
       <img src="@/assets/images/home_image/add.png" alt="plus" class="plus-image"/>  
@@ -76,19 +76,21 @@ export default {
 
       if (dayData.income > 0) {
         transactionItems.push({
-          id: date,
+          id: Date.now(),
           startDate: date,
           endDate: date,
           title: "+" + dayData.income.toLocaleString(),
+          classes: ["income-item"],
         });
       }
 
       if (dayData.expense > 0) {
         transactionItems.push({
-          id: date,
+          id: Date.now(),
           startDate: date,
           endDate: date,
           title: "-"+dayData.expense.toLocaleString(),
+           classes: ["expense-item"],
         });
       }
     });
@@ -135,8 +137,8 @@ export default {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
 background-color: white;
   border: black 1px solid;
@@ -154,11 +156,37 @@ background-color: white;
 }
 
 .plus-image {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
 }
 
 .card-body {
   position: relative;
 }
+
+.account-calendar .cv-item {
+  background: transparent !important;
+  border: none !important;
+padding: 10px !important;
+}
+
+.account-calendar .cv-item.income-item {
+    color: rgb(30, 255, 0);
+    font-size: small;
+}
+.account-calendar .cv-item.expense-item {
+    color: rgb(255, 0, 0);
+    font-size: small;
+}
+
+.account-calendar .cv-day {
+  min-height: 0px !important;
+  padding: 4px !important;
+} 
+.account-calendar .cv-week {
+  min-height: 80px !important;
+
+}
+
+
 </style>
