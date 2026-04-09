@@ -8,14 +8,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <span class="tag">고정 지출 추가</span>
-        <button class="close-x" @click="closeModal">X</button>
+        <button class="close-btn" @click="closeModal">X</button>
       </div>
 
       <div class="selection-section">
         <label class="section-label">카테고리 선택</label>
-        <div class="category-grid">
+        <div class="category-scroll-container">
           <div
-            v-for="cat in categories"
+            v-for="cat in categoryList"
             :key="cat.categoryId"
             class="cat-item"
             :class="{
@@ -29,7 +29,7 @@
             >
               <i :class="`bi bi-${cat.iconType}`"></i>
             </div>
-            <span class="cat-name">{{ cat.name }}</span>
+            <span class="cat-name">{{ cat.categoryName }}</span>
           </div>
         </div>
       </div>
@@ -96,9 +96,11 @@ import { ref, onMounted, computed } from 'vue';
 import db from '/db.json';
 
 const fixedCosts = ref([]);
-const categories = ref([]);
+const categories = ref([]);  //db에서 가져온 파일
+const categoryList = ref([]);
 const icons = ref([]);
 const colors = ref([]);
+
 
 const isModalOpen = ref(false);
 const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
@@ -109,6 +111,18 @@ const selectedDay = ref(null);
 
 const openModal = () => {
   isModalOpen.value = true;
+  categoryList.value = categories.value.map(cat => {
+    // 각 카테고리의 iconId와 일치하는 아이콘 객체 찾기
+    const matchedIcon = icons.value.find(i => String(i.iconId) === String(cat.iconId));
+    // 각 카테고리의 colorId와 일치하는 컬러 객체 찾기
+    const matchedColor = colors.value.find(c => String(c.colorId) === String(cat.colorId));
+
+    return {
+      ...cat, // 기존 id, name 등 유지
+      iconType: matchedIcon ? matchedIcon.value : 'question', // 아이콘 value(예: 'youtube')
+      iconColor: matchedColor ? matchedColor.value : '#cccccc' // 컬러 value(예: '#FF5733')
+    };
+  });
 };
 
 const fetchFixedCosts = () => {
@@ -319,9 +333,40 @@ onMounted(fetchFixedCosts);
   background-color: #f0f0f0;
 }
 
+.cat-item {
+  flex: 0 0 auto; /* 크기가 줄어들거나 늘어나지 않게 고정 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.category-scroll-container {
+  display: flex; /* 가로로 나열 */
+  gap: 15px; /* 아이템 사이 간격 */
+  overflow-x: auto; /* 가로로 넘치면 스크롤 생성 */
+  padding: 10px 5px; /* 선택 효과가 잘리지 않게 여백 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+
+  /* 스크롤바 디자인 (선택 사항) */
+  scrollbar-width: thin; /* 파이어폭스 */
+}
+/* 스크롤바 커스텀 (Chrome, Safari) */
+.category-scroll-container::-webkit-scrollbar {
+  height: 4px;
+}
+.category-scroll-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.cat-name {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #666;
+}
 /* 카테고리 선택 시 파란색 테두리 하이라이트 */
 .cat-item.selected .icon-circle {
-  outline: 3px solid #007bff;
-  transform: scale(1.1);
+  border: 3px solid #007bff; /* 파란색 테두리 */
+  transform: scale(1.05); /* 살짝 커지는 효과 */
+  transition: all 0.2s;
 }
 </style>
