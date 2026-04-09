@@ -54,16 +54,10 @@
             :key="cat.categoryId"
             class="category-icon"
             :class="{ active: selectedCategoryId === cat.categoryId }"
-            :style="{
-              backgroundColor: getColor(cat.colorId),
-              borderColor:
-                selectedCategoryId === cat.categoryId
-                  ? getColor(cat.colorId)
-                  : 'transparent',
-            }"
+            :style="{ backgroundColor: getColor(cat.colorId) }"
             @click="selectCategory(cat.categoryId)"
           >
-            <i :class="['bi', getIcon(cat.iconId)]"></i>
+            <i :class="`bi ${getIcon(cat.iconId)}`"></i>
           </button>
 
           <button
@@ -125,7 +119,7 @@
               class="cat-circle"
               :style="{ backgroundColor: getColor(cat.colorId) /*+ '22'*/ }"
             >
-              <i :class="['bi', getIcon(cat.iconId)]"></i>
+              <i :class="`bi ${getIcon(cat.iconId)}`"></i>
             </div>
             <span class="cat-name">{{ cat.name }}</span>
           </button>
@@ -136,20 +130,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
 const isMemoActive = ref(false);
 
-// ⭐️ 서버에서 받아올 데이터를 담을 반응형 변수
+// 서버에서 받아올 데이터를 담을 반응형 변수
 const categories = ref([]);
 const icons = ref([]);
 const colors = ref([]);
 
 const transactionType = ref('expense');
-const today = new Date().toISOString().split('T')[0];
+const today = new Date().toISOString().split('T')[0]; //오늘날짜
 const date = ref(today);
 const memo = ref('');
 const amount = ref('0');
@@ -157,7 +151,7 @@ const isTyping = ref(false);
 const selectedCategoryId = ref(null);
 const isCategoryPopupOpen = ref(false);
 
-// ⭐️ 서버 데이터 로드 함수
+// 서버 데이터 로드 함수
 const fetchInitialData = async () => {
   try {
     const [resCat, resIcon, resColor] = await Promise.all([
@@ -182,21 +176,13 @@ const formattedAmount = computed(() => {
   return Number(amount.value).toLocaleString();
 });
 
-// ⭐️ db.json의 icons 배열을 참조하여 부트스트랩 클래스로 변환
+// db.json의 icons 배열을 참조하여 부트스트랩 클래스로 변환
 const getIcon = (iconId) => {
   const iconObj = icons.value.find((i) => i.iconId === String(iconId));
-  const iconValue = iconObj ? iconObj.value : '';
-
-  const iconMap = {
-    cafe: 'bi-cup-hot',
-    fare: 'bi-bus-front',
-    hospital: 'bi-hospital',
-    salary: 'bi-coin',
-  };
-  return iconMap[iconValue] || 'bi-question-circle';
+  return iconObj ? `bi-${iconObj.value}` : 'bi-question-circle';
 };
 
-// ⭐️ db.json의 colors 배열에서 색상값 찾기
+// db.json의 colors 배열에서 색상값 찾기
 const getColor = (colorId) => {
   return (
     colors.value.find((c) => c.colorId === String(colorId))?.value || '#ccc'
@@ -227,18 +213,12 @@ const handleKeyDown = (event) => {
   else if (event.key === 'Enter') handleSave();
 };
 
-// [취소 버튼용] 화면만 깨끗하게 비우기
 const handleCancel = () => {
-  if (confirm('작성 중인 내용을 모두 지우시겠습니까?')) {
-    amount.value = '0';
-    memo.value = '';
-    selectedCategoryId.value = null;
-    date.value = new Date().toISOString().split('T')[0];
-    // 화면 이동 없이 이 자리에 그대로 남습니다.
+  if (confirm('작성을 취소하고 메인 화면으로 돌아가시겠습니까?')) {
+    router.push('/');
   }
 };
 
-// [저장 버튼용] 저장 후 메인으로 슝!
 const handleSave = async () => {
   if (amount.value === '0') {
     alert('금액을 입력해주세요!');
@@ -263,17 +243,12 @@ const handleSave = async () => {
 };
 
 onMounted(() => {
-  fetchInitialData(); // ⭐️ 시작 시 서버 데이터 가져오기
+  fetchInitialData(); // 시작 시 서버 데이터 가져오기
   window.addEventListener('keydown', handleKeyDown);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown);
 });
 </script>
 
 <style scoped>
-/* 기존 스타일 그대로 유지 */
 .record-page {
   display: flex;
   flex-direction: column;
@@ -467,24 +442,6 @@ onUnmounted(() => {
   transform: translateY(2px);
 }
 
-.bottom-nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 12px 0;
-  background: #f9f9f9;
-  border-top: 1px solid #ddd;
-}
-.nav-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.nav-icon img {
-  width: 28px;
-  height: 28px;
-}
-
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -556,14 +513,5 @@ onUnmounted(() => {
   font-size: 12px;
   color: #555;
   font-weight: bold;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
