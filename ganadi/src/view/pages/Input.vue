@@ -32,11 +32,13 @@
         <input
           type="text"
           v-model="memo"
+          @focus="isMemoActive = true"
+          @blur="isMemoActive = false"
           placeholder="상세내역을 입력해주세요"
         />
       </div>
 
-      <div class="input-box amount-box">
+      <div class="input-box amount-box" @click.stop="isTyping = true">
         <span class="currency">₩</span>
         <div class="amount-wrapper">
           <span class="amount-text">{{ formattedAmount }}</span>
@@ -53,6 +55,7 @@
             class="category-icon"
             :class="{ active: selectedCategoryId === cat.categoryId }"
             :style="{
+              backgroundColor: getColor(cat.colorId),
               borderColor:
                 selectedCategoryId === cat.categoryId
                   ? getColor(cat.colorId)
@@ -87,17 +90,58 @@
           ⌫
         </button>
       </div>
-      <button class="save-btn" @click="handleSave">저장하기</button>
+      <div class="button-group">
+        <button type="button" class="delete-btn" @click="handleCancel">
+          취소
+        </button>
+        <button type="button" class="save-btn" @click="handleSave">저장</button>
+      </div>
     </section>
+
+    <div
+      v-if="isCategoryPopupOpen"
+      class="popup-overlay"
+      @click.self="isCategoryPopupOpen = false"
+    >
+      <div class="popup-content">
+        <div class="popup-header">
+          <span class="badge">카테고리 선택</span>
+          <button class="close-x" @click="isCategoryPopupOpen = false">
+            ✕
+          </button>
+        </div>
+
+        <div class="category-selection-grid">
+          <button
+            v-for="cat in categories"
+            :key="cat.categoryId"
+            class="popup-cat-item"
+            @click="
+              selectCategory(cat.categoryId);
+              isCategoryPopupOpen = false;
+            "
+          >
+            <div
+              class="cat-circle"
+              :style="{ backgroundColor: getColor(cat.colorId) /*+ '22'*/ }"
+            >
+              <i :class="['bi', getIcon(cat.iconId)]"></i>
+            </div>
+            <span class="cat-name">{{ cat.name }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios'; // ⭐️ axios 추가
+import axios from 'axios';
 
 const router = useRouter();
+const isMemoActive = ref(false);
 
 // ⭐️ 서버에서 받아올 데이터를 담을 반응형 변수
 const categories = ref([]);
@@ -109,7 +153,7 @@ const today = new Date().toISOString().split('T')[0];
 const date = ref(today);
 const memo = ref('');
 const amount = ref('0');
-const isTyping = ref(true);
+const isTyping = ref(false);
 const selectedCategoryId = ref(null);
 const isCategoryPopupOpen = ref(false);
 
@@ -164,6 +208,7 @@ const selectCategory = (categoryId) => {
 };
 
 const handleKeyClick = (key) => {
+  if (isMemoActive.value) return;
   if (key === 'BACK') {
     amount.value = amount.value.length > 1 ? amount.value.slice(0, -1) : '0';
     return;
@@ -182,19 +227,26 @@ const handleKeyDown = (event) => {
   else if (event.key === 'Enter') handleSave();
 };
 
-// ⭐️ 서버(json-server)에 저장하는 로직
+// [취소 버튼용] 화면만 깨끗하게 비우기
+const handleCancel = () => {
+  if (confirm('작성 중인 내용을 모두 지우시겠습니까?')) {
+    amount.value = '0';
+    memo.value = '';
+    selectedCategoryId.value = null;
+    date.value = new Date().toISOString().split('T')[0];
+    // 화면 이동 없이 이 자리에 그대로 남습니다.
+  }
+};
+
+// [저장 버튼용] 저장 후 메인으로 슝!
 const handleSave = async () => {
   if (amount.value === '0') {
     alert('금액을 입력해주세요!');
     return;
   }
-  if (transactionType.value === 'payment' && !selectedCategoryId.value) {
-    alert('카테고리를 선택해주세요!');
-    return;
-  }
 
   const newTransaction = {
-    amount: String(amount.value), // db.json 형식에 맞춰 문자열로 저장
+    amount: String(amount.value),
     date: date.value,
     type: transactionType.value,
     categoryId: selectedCategoryId.value,
@@ -202,12 +254,11 @@ const handleSave = async () => {
   };
 
   try {
-    // ⭐️ axios.post로 db.json에 실제 데이터 추가
     await axios.post('http://localhost:3000/transactions', newTransaction);
-    alert('성공적으로 서버에 저장되었습니다!');
-    router.push('/');
+    alert('저장완료!');
+    router.push('/'); // 메인으로 이동
   } catch (err) {
-    alert('저장에 실패했습니다. 서버가 켜져있는지 확인해주세요.');
+    alert('저장 실패!');
   }
 };
 
@@ -346,8 +397,17 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
 }
+.category-icon:active {
+  transform: scale(0.92) translateY(2px);
+  filter: brightness(0.9);
+}
+
 .category-icon.active {
-  border-color: #10b981;
+  border-color: black !important;
+  border-width: 3px !important;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  z-index: 2;
 }
 
 .custom-keypad {
@@ -370,20 +430,40 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.delete-btn,
 .save-btn {
-  width: 100%;
+  flex: 1;
   padding: 16px;
-  background-color: #333;
-  color: white;
   font-size: 18px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+}
+
+.delete-btn {
+  background-color: #e5e7eb;
+  color: #4b5563;
+}
+.delete-btn:active {
+  background-color: #d1d5db;
+  transform: translateY(2px);
+}
+
+.save-btn {
+  background-color: #333;
+  color: white;
 }
 .save-btn:active {
   background-color: #555;
+  transform: translateY(2px);
 }
 
 .bottom-nav {

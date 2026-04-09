@@ -4,13 +4,13 @@
       "budgetId": "1",
       "amount": "450000",
       "targetMonth": "2026-03",
-      "id": "ojy0O_NVtzU"
+      "id": "ZkbMAKH-rrg"
     },
     {
       "budgetId": "2",
       "amount": "500000",
       "targetMonth": "2026-04",
-      "id": "W5ShMalFCnI"
+      "id": "yz9UKTii9xA"
     }
   ],
   "category": [
@@ -20,7 +20,7 @@
       "type": "payment",
       "iconId": "3",
       "colorId": "2",
-      "id": "zBQLEJtCiVY"
+      "id": "2A7Kl2pQdNs"
     },
     {
       "categoryId": "2",
@@ -28,7 +28,7 @@
       "type": "payment",
       "iconId": "2",
       "colorId": "3",
-      "id": "bHE-t34kvwA"
+      "id": "qveIErcv3V4"
     },
     {
       "categoryId": "3",
@@ -36,7 +36,7 @@
       "type": "payment",
       "iconId": "1",
       "colorId": "1",
-      "id": "QyXvKzBfO5s"
+      "id": "lu3t65Ema54"
     },
     {
       "categoryId": "4",
@@ -44,7 +44,7 @@
       "type": "income",
       "iconId": "4",
       "colorId": "4",
-      "id": "a_65S9MYBA4"
+      "id": "Y4BotAZKMMU"
     }
   ],
   "fixed-cost": [
@@ -56,7 +56,7 @@
       "cycle": "monthly",
       "day": "4",
       "categoryId": "4",
-      "id": "K0uRFDxtDXc"
+      "id": "X0kHXTqRL5M"
     },
     {
       "fixedCostId": "2",
@@ -66,56 +66,56 @@
       "cycle": "monthly",
       "day": "6",
       "categoryId": "5",
-      "id": "sk4JgwV2x74"
+      "id": "I8vek5_JWsw"
     }
   ],
   "icons": [
     {
       "iconId": "1",
       "value": "cafe",
-      "id": "CQXoTW2XuIg"
+      "id": "BBfBZBMeVOs"
     },
     {
       "iconId": "2",
       "value": "fare",
-      "id": "rD-zod4nDb8"
+      "id": "nHL1q0Jyz2M"
     },
     {
       "iconId": "3",
       "value": "hospital",
-      "id": "quQgXJrMLWQ"
+      "id": "x5Tt21DfGlI"
     }
   ],
   "colors": [
     {
       "colorId": "1",
       "value": "#FF5733",
-      "id": "QwoNq9eyFjE"
+      "id": "dpw5sSB8dhU"
     },
     {
       "colorId": "2",
       "value": "#33FF57",
-      "id": "-fJ3xC5Uxf4"
+      "id": "AmbT46yuSpo"
     },
     {
       "colorId": "3",
       "value": "#33A1FF",
-      "id": "bV9wNK-zsbY"
+      "id": "L1I4uz9oX_4"
     },
     {
       "colorId": "4",
       "value": "#F1C40F",
-      "id": "b7Kmt5mBCVQ"
+      "id": "No82q9nTDg0"
     },
     {
       "colorId": "5",
       "value": "#9B59B6",
-      "id": "UjqPm_fWrHI"
+      "id": "LFZeo8Aagrs"
     },
     {
       "colorId": "6",
       "value": "#34495E",
-      "id": "2oqifoC00zA"
+      "id": "ftZ5Mqf6M_g"
     }
   ],
   "transactions": [
@@ -126,7 +126,7 @@
       "type": "payment",
       "categoryId": "2",
       "memo": "치킨",
-      "id": "Od473s7F9KQ"
+      "id": "ZSR68FZl8TU"
     },
     {
       "transactionId": "2",
@@ -135,7 +135,7 @@
       "type": "payment",
       "categoryId": "3",
       "memo": "병원비",
-      "id": "CURmuyDkkww"
+      "id": "B_lZTfr4ciM"
     },
     {
       "transactionId": "3",
@@ -144,15 +144,7 @@
       "type": "payment",
       "categoryId": "2",
       "memo": "칼국수",
-      "id": "iw8x4Y9jx6w"
-    },
-    {
-      "amount": "50000",
-      "date": "2026-04-08",
-      "type": "payment",
-      "categoryId": "3",
-      "memo": "커피",
-      "id": "vhvfOLWxkD0"
+      "id": "zQ-1TLsL0_c"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
