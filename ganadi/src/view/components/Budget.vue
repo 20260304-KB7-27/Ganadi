@@ -1,6 +1,6 @@
 <template>
-  <div class="set-group">
-    <h2>{{ targetMonth }}월 목표지출 설정</h2>
+  <div class="set-group header-box">
+    <h5>{{ targetMonth }}월 목표지출 설정</h5>
   </div>
 
   <div class="budget-row">
@@ -21,6 +21,18 @@ const updateBudget = () => {
 </script>
 
 <style scoped>
+.header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e0e0e0; /* 목업의 연한 회색 */
+  border: 1px solid #111;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
 .set-group {
   display: flex;
   justify-content: space-between;
