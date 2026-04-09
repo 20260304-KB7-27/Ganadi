@@ -260,6 +260,7 @@ const handleKeyClick = (key) => {
   border-radius: 4px;
   background: white;
   cursor: pointer;
+  white-space: nowrap;
 }
 .income-active {
   background-color: #4ade80;
