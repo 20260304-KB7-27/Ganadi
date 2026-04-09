@@ -1,50 +1,94 @@
 <template>
   <div class="set-group header-box">
     <h5>default값 설정</h5>
-    <button class="add-btn">+</button>
+    <button class="add-btn" @click="openModal">+</button>
+  </div>
+
+  <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="tag">고정 지출 추가</span>
+        <button class="close-x" @click="closeModal">X</button>
+      </div>
+
+      <div class="selection-section">
+        <label class="section-label">카테고리 선택</label>
+        <div class="category-grid">
+          <div
+            v-for="cat in categories"
+            :key="cat.categoryId"
+            class="cat-item"
+            :class="{
+              selected: selectedCategory?.categoryId === cat.categoryId,
+            }"
+            @click="selectedCategory = cat"
+          >
+            <div
+              class="icon-circle"
+              :style="{ backgroundColor: cat.iconColor }"
+            >
+              <i :class="`bi bi-${cat.iconType}`"></i>
+            </div>
+            <span class="cat-name">{{ cat.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="selection-section">
+        <label class="section-label">가격</label>
+        <div class="input-box">
+          <input type="number" v-model="amount" placeholder="0" />
+          <span class="unit">원</span>
+          <i class="bi bi-pencil"></i>
+        </div>
+      </div>
+
+      <div class="selection-section">
+        <label class="section-label">지정 날짜</label>
+        <div class="date-selector-wrapper">
+          <div class="date-display" @click="isDateListOpen = !isDateListOpen">
+            매월 <span>{{ selectedDay ? selectedDay : '___' }}</span> 일
+          </div>
+
+          <div v-if="isDateListOpen" class="date-list-popup">
+            <div
+              v-for="day in 31"
+              :key="day"
+              class="date-option"
+              @click="selectDay(day)"
+            >
+              {{ day }}일
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="complete-btn" @click="saveDefault">완료</button>
+    </div>
   </div>
 
   <ul class="fixed-list">
-    <li v-for="item in displayList" :key="item.fixedCostId" class="fixed-item-card">
-      <!--  -->
+    <li
+      v-for="item in displayList"
+      :key="item.fixedCostId"
+      class="fixed-item-card"
+    >
       <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
       </div>
-      <!--  -->
+
       <div class="amount-text">
         <span v-if="item.type === 'payment'">-{{ format(item.amount) }}원</span>
         <span v-else>{{ format(item.amount) }}원</span>
       </div>
 
-      <div class="date-text">
-        매월 {{ item.day }}일
-      </div>
+      <div class="date-text">매월 {{ item.day }}일</div>
 
-      <button class="remove-btn" @click="removeItem(item.fixedCostId)">-</button>
-
+      <button class="remove-btn" @click="removeItem(item.fixedCostId)">
+        -
+      </button>
     </li>
-
-
   </ul>
-
-
-  <!-- <div class="set-group">
-    <h2>default값 설정</h2>
-    <button>+</button>
-  </div>
-
-  <ul>
-    <li v-for="item in fixedCosts" :key="item.fixedCostId" class="fixed-items">
-      <span>💳</span>
-
-      <span v-if="item.type === 'payment'"> -{{ format(item.amount) }}원 </span>
-      <span v-else> {{ format(item.amount) }}원 </span>
-
-      <span>매월 {{ item.day }}일</span>
-
-      <button @click="removeItem(item.fixedCostId)">-</button>
-    </li>
-  </ul> -->
 </template>
 
 <script setup>
@@ -56,6 +100,17 @@ const categories = ref([]);
 const icons = ref([]);
 const colors = ref([]);
 
+const isModalOpen = ref(false);
+const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
+
+const amount = ref('');
+const selectedCategory = ref(null);
+const selectedDay = ref(null);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
 const fetchFixedCosts = () => {
   fixedCosts.value = db['fixed-cost'];
   categories.value = db['category'];
@@ -63,9 +118,25 @@ const fetchFixedCosts = () => {
   colors.value = db['colors'];
 };
 
+const selectDay = (day) => {
+  selectedDay.value = day;
+  isDateListOpen.value = false; // 선택 후 닫기
+};
+
+// 모달 닫기 및 초기화
+const closeModal = () => {
+  isModalOpen.value = false;
+  amount.value = '';
+  selectedCategory.value = null;
+  selectedDay.value = null;
+  isDateListOpen.value = false;
+};
+
 const displayList = computed(() => {
   return fixedCosts.value.map((item) => {
-    const matchedCategory = categories.value.find(c => c.categoryId === item.categoryId);
+    const matchedCategory = categories.value.find(
+      (c) => c.categoryId === item.categoryId,
+    );
     console.log(matchedCategory);
     console.log(categories.value);
 
@@ -73,14 +144,18 @@ const displayList = computed(() => {
     let matchedColor = null;
 
     if (matchedCategory) {
-      matchedIcon = icons.value?.find(i => i.iconId === matchedCategory.iconId);
-      matchedColor = colors.value?.find(c => c.colorId === matchedCategory.colorId);
+      matchedIcon = icons.value?.find(
+        (i) => i.iconId === matchedCategory.iconId,
+      );
+      matchedColor = colors.value?.find(
+        (c) => c.colorId === matchedCategory.colorId,
+      );
     }
 
     return {
-      ...item, 
-      iconType: matchedIcon ? matchedIcon.value : 'bag', 
-      iconColor: matchedColor ? matchedColor.value : '#e0e0e0'
+      ...item,
+      iconType: matchedIcon ? matchedIcon.value : 'bag',
+      iconColor: matchedColor ? matchedColor.value : '#e0e0e0',
     };
   });
 });
@@ -103,7 +178,6 @@ onMounted(fetchFixedCosts);
   padding-left: 0;
   margin: 0;
 }
-
 
 /* --- 헤더 박스 디자인 --- */
 .header-box {
@@ -162,7 +236,7 @@ onMounted(fetchFixedCosts);
 
 /* 금액 텍스트 (flex-grow: 1을 줘서 우측 요소들을 밀어냅니다) */
 .amount-text {
-  flex-grow: 1; 
+  flex-grow: 1;
   font-size: 20px;
   font-weight: 500;
 }
@@ -184,5 +258,70 @@ onMounted(fetchFixedCosts);
   line-height: 1;
   padding: 0;
   color: #111;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* 다른 요소보다 위에 */
+}
+
+/* 실제 팝업 박스 */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 85%;
+  max-width: 400px;
+  border: 1px solid #000;
+}
+
+.date-display {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.date-display span {
+  border-bottom: 2px solid #000;
+  padding: 0 10px;
+  margin: 0 5px;
+}
+
+/* 날짜 팝업 리스트 (스크롤 가능하게) */
+.date-list-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px; /* 목업처럼 높이 제한 */
+  overflow-y: auto; /* 스크롤 생기게 */
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 0 0 8px 8px;
+  z-index: 10;
+}
+
+.date-option {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+.date-option:hover {
+  background-color: #f0f0f0;
+}
+
+/* 카테고리 선택 시 파란색 테두리 하이라이트 */
+.cat-item.selected .icon-circle {
+  outline: 3px solid #007bff;
+  transform: scale(1.1);
 }
 </style>
