@@ -91,8 +91,8 @@
     {
       "transactionId": "1",
       "amount": "20000",
-      "date": "2026-04-03",
-      "type": "payment",
+      "date": "2026-04-06",
+      "type": "expense",
       "categoryId": "2",
       "memo": "치킨"
     },
@@ -100,15 +100,15 @@
       "transactionId": "2",
       "amount": "13000",
       "date": "2026-04-06",
-      "type": "payment",
+      "type": "expense",
       "categoryId": "3",
       "memo": "병원비"
     },
     {
       "transactionId": "3",
       "amount": "4000",
-      "date": "2026-04-07",
-      "type": "payment",
+      "date": "2026-04-06",
+      "type": "income",
       "categoryId": "2",
       "memo": "칼국수"
     }
