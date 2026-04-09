@@ -25,6 +25,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
 export default {
   name: 'DailyDetail',
@@ -41,11 +42,11 @@ export default {
     onMounted(async () => {
       try {
         const [transRes, catRes] = await Promise.all([
-          fetch('http://localhost:3000/transactions'),
-          fetch('http://localhost:3000/category')
+          axios.get('/api/transactions'),
+          axios.get('/api/category')
         ]);
-        transactions.value = await transRes.json();
-        categories.value = await catRes.json();
+        transactions.value = transRes.data;
+        categories.value = catRes.data;
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -124,8 +125,6 @@ export default {
   padding-left: 20%;
   padding-right: 5%;
 }
-
-
 
 .no-data {
   text-align: center;
