@@ -135,7 +135,6 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const route = useRoute();
 const isMemoActive = ref(false);
 
 // 서버에서 받아올 데이터를 담을 반응형 변수
