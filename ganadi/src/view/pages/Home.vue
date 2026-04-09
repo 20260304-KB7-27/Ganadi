@@ -26,7 +26,8 @@
         </div>
       </template>
     </CalendarView>
-
+    <!-- 상세내역 -->
+    <DailyDetail :selectedDate="selectedDate" />
     <RouterLink
       :to="{ path: '/input', query: { date: selectedDate } }"
       class="add-button"
@@ -46,6 +47,8 @@ import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
+import DailyDetail from '../components/DailyDetail.vue';
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -53,6 +56,7 @@ export default {
     CalendarView,
     ProgressBar,
     Header,
+    DailyDetail,
   },
 
   setup() {
@@ -79,8 +83,8 @@ export default {
     };
     onMounted(async () => {
       try {
-        const response = await fetch('http://localhost:3000/transactions');
-        const transactions = await response.json();
+        const response = await axios.get('/api/transactions');
+        const transactions = response.data;
 
         const grouped = {};
 
