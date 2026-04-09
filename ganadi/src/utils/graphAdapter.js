@@ -1,89 +1,87 @@
 const getCurrentMonthString = () => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 };
 
-const getCurrentMonthPaymentTransactions = (transactions) => {
-    const currentMonth = getCurrentMonthString();
+const getCurrentMonthExpenseTransactions = (transactions) => {
+  const currentMonth = getCurrentMonthString();
 
-    return transactions.filter((item) => {
-        return item.type === 'payment' && item.date.startsWith(currentMonth);
-    });
+  return transactions.filter((item) => {
+    return item.type === 'expense' && item.date.startsWith(currentMonth);
+  });
 };
 
 const getCurrentMonthBudget = (budgetList) => {
-    const currentMonth = getCurrentMonthString();
-    return budgetList.find((item) => item.targetMonth);
+  const currentMonth = getCurrentMonthString();
+  return budgetList.find((item) => item.targetMonth);
 };
 
 export const adaptGraphData = ({
-    transactions,
-    category,
-    icons,
-    colors,
-    budget,
+  transactions,
+  category,
+  icons,
+  colors,
+  budget,
 }) => {
-    const currentMonthTransactions =
-        getCurrentMonthPaymentTransactions(transactions);
+  const currentMonthTransactions =
+    getCurrentMonthExpenseTransactions(transactions);
 
-    const totalExpense = currentMonthTransactions.reduce((sum, item) => {
-        return sum + Number(item.amount);
-    }, 0);
+  const totalExpense = currentMonthTransactions.reduce((sum, item) => {
+    return sum + Number(item.amount);
+  }, 0);
 
-    const currentBudget = getCurrentMonthBudget(budget);
-    const monthlyGoal = currentBudget ? Number(currentBudget.amount) : 0;
+  const currentBudget = getCurrentMonthBudget(budget);
+  const monthlyGoal = currentBudget ? Number(currentBudget.amount) : 0;
 
-    const goalRate =
-        monthlyGoal === 0 ? 0 : Math.round((totalExpense / monthlyGoal) * 100);
+  const goalRate =
+    monthlyGoal === 0 ? 0 : Math.round((totalExpense / monthlyGoal) * 100);
 
-    const groupedByCategory = {};
+  const groupedByCategory = {};
 
-    currentMonthTransactions.forEach((item) => {
-        const key = item.categoryId;
+  currentMonthTransactions.forEach((item) => {
+    const key = item.categoryId;
 
-        if (!groupedByCategory[key]) {
-            groupedByCategory[key] = 0;
-        }
+    if (!groupedByCategory[key]) {
+      groupedByCategory[key] = 0;
+    }
 
-        groupedByCategory[key] += Number(item.amount);
-    });
+    groupedByCategory[key] += Number(item.amount);
+  });
 
-    const categorySummary = Object.entries(groupedByCategory)
-        .map(([categoryId, amount]) => {
-            const categoryInfo = category.find(
-                (item) => String(item.categoryId) === String(categoryId),
-            );
+  const categorySummary = Object.entries(groupedByCategory)
+    .map(([categoryId, amount]) => {
+      const categoryInfo = category.find(
+        (item) => String(item.categoryId) === String(categoryId),
+      );
 
-            const iconInfo = icons.find(
-                (item) => String(item.iconId) === String(categoryInfo?.iconId),
-            );
+      const iconInfo = icons.find(
+        (item) => String(item.iconId) === String(categoryInfo?.iconId),
+      );
 
-            const colorInfo = colors.find(
-                (item) => item.colorId === categoryInfo?.colorId,
-            );
+      const colorInfo = colors.find(
+        (item) => item.colorId === categoryInfo?.colorId,
+      );
 
-            console.log(categoryInfo);
-            console.log(iconInfo);
+      console.log(categoryInfo);
+      console.log(iconInfo);
 
-            return {
-                categoryId,
-                name: categoryInfo?.name || '기타',
-                iconType: iconInfo?.value || 'coin',
-                color: colorInfo?.value || '#d9d9d9',
-                amount,
-                percent:
-                    totalExpense === 0
-                        ? 0
-                        : Math.round((amount / totalExpense) * 100),
-            };
-        })
-        .sort((a, b) => b.amount - a.amount);
+      return {
+        categoryId,
+        name: categoryInfo?.name || '기타',
+        iconType: iconInfo?.value || 'coin',
+        color: colorInfo?.value || '#d9d9d9',
+        amount,
+        percent:
+          totalExpense === 0 ? 0 : Math.round((amount / totalExpense) * 100),
+      };
+    })
+    .sort((a, b) => b.amount - a.amount);
 
-    return {
-        totalExpense,
-        monthlyGoal,
-        goalRate,
-        characterLevel: 2,
-        categorySummary,
-    };
+  return {
+    totalExpense,
+    monthlyGoal,
+    goalRate,
+    characterLevel: 2,
+    categorySummary,
+  };
 };
