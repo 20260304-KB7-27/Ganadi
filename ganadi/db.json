@@ -69,7 +69,6 @@
       "id": "I8vek5_JWsw"
     }
   ],
-
   "icons": [
     {
       "iconId": "1",
@@ -97,7 +96,6 @@
       "id": "x5Tt21DfGEI"
     }
   ],
-
   "colors": [
     {
       "colorId": "1",
@@ -175,6 +173,14 @@
       "categoryId": "1",
       "memo": "버스",
       "id": "zQ-1TLsL0_b"
+    }
+  ],
+
+  "character": [
+    {
+      "id": "1",
+      "level": "4",
+      "lastEvaluatedMonth": "2026-04"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
