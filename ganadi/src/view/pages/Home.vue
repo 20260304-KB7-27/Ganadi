@@ -14,20 +14,24 @@
       :completedRate="completed_rate"
       :goalMoney="goal_money"
     />
-    <CalendarView :items="items" :show-date="showDate" />
+    <CalendarView
+      :items="items"
+      :show-date="showDate"
+      class="account-calendar"
+    />
 
-    <button class="add-button">
+    <RouterLink to="/input" class="add-button">
       <img
         src="@/assets/images/home_image/add.png"
         alt="plus"
         class="plus-image"
       />
-    </button>
+    </RouterLink>
   </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
@@ -56,14 +60,63 @@ export default {
 
     const showDate = ref(new Date());
 
-    const items = ref([
-      {
-        id: '1',
-        startDate: '2026-04-08',
-        endDate: '2026-04-09',
-        title: '오늘 일정',
-      },
-    ]);
+    const items = ref([]);
+
+    onMounted(async () => {
+      try {
+        const response = await fetch('http://localhost:3000/transactions');
+        const transactions = await response.json();
+
+        const grouped = {};
+
+        transactions.forEach((transaction) => {
+          const date = transaction.date;
+
+          if (!grouped[date]) {
+            grouped[date] = {
+              income: 0,
+              expense: 0,
+            };
+          }
+
+          if (transaction.type === 'income') {
+            grouped[date].income += Number(transaction.amount);
+          } else if (transaction.type === 'expense') {
+            grouped[date].expense += Number(transaction.amount);
+          }
+        });
+
+        const transactionItems = [];
+
+        Object.keys(grouped).forEach((date) => {
+          const dayData = grouped[date];
+
+          if (dayData.income > 0) {
+            transactionItems.push({
+              id: Date.now(),
+              startDate: date,
+              endDate: date,
+              title: '+' + dayData.income.toLocaleString(),
+              classes: ['income-item'],
+            });
+          }
+
+          if (dayData.expense > 0) {
+            transactionItems.push({
+              id: Date.now(),
+              startDate: date,
+              endDate: date,
+              title: '-' + dayData.expense.toLocaleString(),
+              classes: ['expense-item'],
+            });
+          }
+        });
+
+        items.value = transactionItems;
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    });
 
     const currentMonth = computed(() => {
       return showDate.value.getMonth() + 1; // 월은 0부터 시작하므로 +1
@@ -101,8 +154,8 @@ export default {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-color: white;
   border: black 1px solid;
@@ -120,11 +173,46 @@ export default {
 }
 
 .plus-image {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
 }
 
 .card-body {
   position: relative;
+}
+
+/* 데일리 수입/지출 내역과 그리드 너비 */
+.account-calendar .cv-item {
+  background: transparent !important;
+  border: none !important;
+  padding: 10px !important;
+}
+
+.account-calendar .cv-item.income-item {
+  color: rgb(30, 255, 0);
+  font-size: small;
+}
+.account-calendar .cv-item.expense-item {
+  color: rgb(255, 0, 0);
+  font-size: small;
+}
+
+.account-calendar .cv-day {
+  min-height: 0px !important;
+  padding: 4px !important;
+}
+.account-calendar .cv-week {
+  min-height: 80px !important;
+}
+
+/* 선택된 달이 아닌 나머지 달의 날짜를 회색으로 */
+.account-calendar .cv-day.outside {
+  opacity: 0.5;
+}
+/* 오늘 날짜 표시 */
+.account-calendar .cv-day.today {
+  background-color: #efefef;
+  color: red;
+  font-weight: bold;
 }
 </style>

@@ -2,7 +2,7 @@
     <div class="category-item">
         <div class="left-area">
             <div class="icon-box" :style="{ backgroundColor: item.color }">
-                <i :class="item.icon"></i>
+                <i :class="`bi bi-${item.iconType}`"></i>
             </div>
             <span class="name">{{ item.name }}</span>
         </div>

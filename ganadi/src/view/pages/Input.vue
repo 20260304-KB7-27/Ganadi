@@ -191,7 +191,7 @@ const getIcon = (iconId) => {
     cafe: 'bi-cup-hot',
     fare: 'bi-bus-front',
     hospital: 'bi-hospital',
-    salary: 'bi-coin', // 예시 추가
+    salary: 'bi-coin',
   };
   return iconMap[iconValue] || 'bi-question-circle';
 };
@@ -305,6 +305,7 @@ onUnmounted(() => {
   border-radius: 4px;
   background: white;
   cursor: pointer;
+  white-space: nowrap;
 }
 .income-active {
   background-color: #4ade80;
