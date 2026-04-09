@@ -3,7 +3,13 @@
     <ul class="menu">
       <li v-for="menu in menus" :key="menu.path">
         <router-link :to="menu.path" class="menu-item" active-class="active">
-          <i :class="['bi', menu.icon, 'icon']"></i>
+          <i
+            :class="[
+              'bi',
+              isActive(menu.path) ? menu.activeIcon : menu.icon,
+              'icon',
+            ]"
+          ></i>
           <span class="label">{{ menu.name }}</span>
         </router-link>
       </li>
@@ -12,12 +18,36 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
 const menus = [
-  { name: '홈', path: '/', icon: 'bi-house' },
-  { name: '통계', path: '/graph', icon: 'bi-bar-chart' },
-  { name: '설정', path: '/setting', icon: 'bi-gear' },
-  { name: '추가', path: '/input', icon: 'bi-plus' },
+  { name: '홈', path: '/', icon: 'bi-house', activeIcon: 'bi-house-fill' },
+  {
+    name: '통계',
+    path: '/graph',
+    icon: 'bi-bar-chart',
+    activeIcon: 'bi-bar-chart-fill',
+  },
+  {
+    name: '설정',
+    path: '/setting',
+    icon: 'bi-gear',
+    activeIcon: 'bi-gear-fill',
+  },
+  // {
+  //   name: '추가',
+  //   path: '/input',
+  //   icon: 'bi-plus',
+  //   activeIcon: 'bi-plus-circle-fill',
+  // },
 ];
+
+// 활성 메뉴 체크 (하위 경로 대응)
+const isActive = (path) => {
+  return route.path === path || route.path.startsWith(path + '/');
+};
 </script>
 
 <style scoped>
@@ -48,6 +78,7 @@ const menus = [
 .icon {
   font-size: 26px;
   color: #333;
+  transition: all 0.2s ease;
 }
 
 .menu-item.active {
@@ -64,6 +95,9 @@ const menus = [
   display: none;
 }
 
+/* =========================
+   💻 PC 버전
+   ========================= */
 @media (min-width: 768px) {
   .footer {
     height: 100%;
