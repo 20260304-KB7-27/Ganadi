@@ -15,9 +15,9 @@
           <button
             :class="[
               'toggle-btn',
-              { 'expense-active': transactionType === 'payment' },
+              { 'expense-active': transactionType === 'expense' },
             ]"
-            @click="transactionType = 'payment'"
+            @click="transactionType = 'expense'"
           >
             출금
           </button>
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="category-box" v-if="transactionType === 'payment'">
+      <div class="category-box" v-if="transactionType === 'expense'">
         <span class="category-title">카테고리 선택</span>
         <div class="category-list">
           <button
@@ -130,20 +130,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRouter,useRoute  } from 'vue-router';
 import categoryData from '@/data/category.json';
 import presetData from '@/data/preset_options.json';
+import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
+const isMemoActive = ref(false);
 
 const categoriesJSON = categoryData.category;
 const iconsJSON = presetData.icons;
 const colorsJSON = presetData.colors;
 
-const transactionType = ref('payment');
+const transactionType = ref('expense');
 const today = new Date().toISOString().split('T')[0];
-const date = ref(today);
+const date = ref(route.query.date || today);
 const memo = ref('');
 const amount = ref('0');
 const isTyping = ref(true);

@@ -63,7 +63,6 @@
       "categoryId": "5"
     }
   ],
-
   "icons": [
     {
       "iconId": "1",
@@ -78,7 +77,6 @@
       "value": "hospital"
     }
   ],
-
   "colors": [
     { "colorId": "1", "value": "#FF5733" },
     { "colorId": "2", "value": "#33FF57" },
