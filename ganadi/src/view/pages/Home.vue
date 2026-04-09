@@ -26,7 +26,8 @@
         </div>
       </template>
     </CalendarView>
-
+    <!-- 상세내역 -->
+    <DailyDetail :selectedDate="selectedDate" />
     <RouterLink
       :to="{ path: '/input', query: { date: selectedDate } }"
       class="add-button"
@@ -46,6 +47,7 @@ import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
+import DailyDetail from '../components/DailyDetail.vue';
 
 export default {
   name: 'Home',
@@ -53,6 +55,7 @@ export default {
     CalendarView,
     ProgressBar,
     Header,
+    DailyDetail,
   },
 
   setup() {
