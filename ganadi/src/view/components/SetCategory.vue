@@ -140,7 +140,7 @@ const addCategory = () => {
     name: categoryName.value,
     iconId: selectedIcon.value.iconId,
     colorId: selectedColor.value.colorId,
-    type: 'payment',
+    type: 'expense',
   };
 
   categoryList.value.push(newCategory);
