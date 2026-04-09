@@ -6,7 +6,11 @@
 
         <div class="month-text">{{ selectedYear }}년 {{ selectedMonth }}월</div>
 
-        <button class="nav-btn" @click="$emit('next-month')">
+        <button
+            class="nav-btn"
+            @click="$emit('next-month')"
+            :disabled="isCurrentMonth"
+        >
             <i class="bi bi-chevron-right"></i>
         </button>
     </div>
@@ -20,6 +24,10 @@ defineProps({
     },
     selectedMonth: {
         type: Number,
+        required: true,
+    },
+    isCurrentMonth: {
+        type: Boolean,
         required: true,
     },
 });
@@ -43,6 +51,11 @@ defineEmits(['prev-month', 'next-month']);
     border-radius: 50%;
     background-color: white;
     cursor: pointer;
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .month-text {

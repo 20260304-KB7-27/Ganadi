@@ -1,6 +1,6 @@
 <template>
-  <div class="set-group">
-    <h2>카테고리 추가</h2>
+  <div class="set-group header-box">
+    <h5>카테고리 추가</h5>
   </div>
   <div class="category-container">
     <div
@@ -9,7 +9,7 @@
       class="category-card"
       :style="{ borderColor: item.iconColor }"
     >
-      <div class="icon-circcle" :style="{ backgroundColor: item.iconColor }">
+      <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
       </div>
     </div>
@@ -20,8 +20,8 @@
     </div>
   </div>
 
-  <div class="main-screen-overlay">
-    <div class="overlay-modal" v-if="isModalOpen">
+  <div class="main-screen-overlay" v-if="isModalOpen">
+    <div class="overlay-modal">
       <div class="modal-header">
         <span class="tag">카테고리 추가</span>
         <button class="close-btn" @click="closeModal">X</button>
@@ -59,9 +59,8 @@
             @click="selectedColor = color"
           ></div>
         </div>
-      </div>
 
-      <div v-if="activeTab === 'icon'" class="selection-grid">
+        <div v-if="activeTab === 'icon'" class="selection-grid">
         <div
           v-for="icon in iconList"
           :key="icon.iconId"
@@ -72,6 +71,9 @@
           <i :class="`bi bi-${icon.value}`"></i>
         </div>
       </div>
+      </div>
+
+      
       <div class="modal-footer">
         <button class="complete-btn" @click="addCategory">완료</button>
       </div>
@@ -203,5 +205,115 @@ onMounted(() => {
 .selected {
   outline: 3px solid #6c5ce7; /* 선택 시 강조 테두리 */
   transform: scale(1.1);
+}
+
+
+.header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e0e0e0; /* 목업의 연한 회색 */
+  border: 1px solid #111;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.main-screen-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* 실제 모달 박스 */
+.overlay-modal {
+  background: white;
+  width: 85%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px solid #000;
+}
+
+/* 이름 입력 섹션 */
+.input-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+.input-section input {
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+/* 탭 버튼 디자인 (목업 스타일) */
+.tab-buttons {
+  display: flex;
+  background: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.tab-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tab-buttons button.active {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.v-divider {
+  width: 1px;
+  background: #ccc;
+  margin: 8px 0;
+}
+
+/* 그리드 내용 영역 */
+.grid-content-area {
+  background-color: #d9d9d9; /* 조금 더 짙은 회색 */
+  padding: 20px;
+  border-radius: 12px;
+  min-height: 180px;
+  max-height: 250px;
+  overflow-y: auto; /* 아이콘이 많아지면 스크롤 */
+}
+
+/* 카테고리 추가 목록 (메인 화면의 아이콘들) */
+.category-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+}
+
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.plus-design {
+  border: 2px dashed #999;
+  background: none;
+  color: #999;
+  cursor: pointer;
 }
 </style>

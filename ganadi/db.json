@@ -18,33 +18,57 @@
       "categoryId": "1",
       "name": "교통",
       "type": "expense",
-      "iconId": "3",
-      "colorId": "2",
+      "iconId": "1",
+      "colorId": "1",
       "id": "2A7Kl2pQdNs"
     },
     {
       "categoryId": "2",
-      "name": "식비",
+      "name": "카페",
       "type": "expense",
       "iconId": "2",
-      "colorId": "3",
+      "colorId": "2",
       "id": "qveIErcv3V4"
     },
     {
       "categoryId": "3",
-      "name": "병원",
+      "name": "식비",
       "type": "expense",
-      "iconId": "1",
-      "colorId": "1",
+      "iconId": "3",
+      "colorId": "3",
       "id": "lu3t65Ema54"
     },
     {
       "categoryId": "4",
-      "name": "월급",
-      "type": "income",
+      "name": "병원",
+      "type": "expense",
       "iconId": "4",
       "colorId": "4",
       "id": "Y4BotAZKMMU"
+    },
+    {
+      "categoryId": "5",
+      "name": "외식",
+      "type": "expense",
+      "iconId": "5",
+      "colorId": "5",
+      "id": "Y4BotZZKMMU"
+    },
+    {
+      "categoryId": "6",
+      "name": "OTT",
+      "type": "expense",
+      "iconId": "6",
+      "colorId": "6",
+      "id": "Y4BotAZKMMU"
+    },
+    {
+      "categoryId": "99",
+      "name": "월급",
+      "type": "income",
+      "iconId": "99",
+      "colorId": "7",
+      "id": "Y5BotAZKMMU"
     }
   ],
   "fixed-cost": [
@@ -55,7 +79,7 @@
       "memo": "월급",
       "cycle": "monthly",
       "day": "4",
-      "categoryId": "4",
+      "categoryId": "7",
       "id": "X0kHXTqRL5M"
     },
     {
@@ -65,39 +89,47 @@
       "memo": "통신요금",
       "cycle": "monthly",
       "day": "6",
-      "categoryId": "5",
+      "categoryId": "8",
       "id": "I8vek5_JWsw"
     }
   ],
-
   "icons": [
     {
       "iconId": "1",
+      "value": "bus-front",
+      "id": "BBcBZBMeVOa"
+    },
+    {
+      "iconId": "2",
       "value": "cup-hot",
       "id": "BBfBZBMeVOa"
     },
     {
-      "iconId": "2",
+      "iconId": "3",
       "value": "egg-fried",
       "id": "BBfBZBMeVOs"
     },
     {
-      "iconId": "3",
+      "iconId": "4",
       "value": "hospital",
       "id": "x5Tt21DfGlI"
     },
     {
-      "iconId": "4",
+      "iconId": "5",
       "value": "fork-knife",
       "id": "x5Tt21DfGlZ"
     },
     {
-      "iconId": "5",
+      "iconId": "6",
       "value": "youtube",
+      "id": "x5Tt21DfGEI"
+    },
+    {
+      "iconId": "99",
+      "value": "coin",
       "id": "x5Tt21DfGEI"
     }
   ],
-
   "colors": [
     {
       "colorId": "1",
@@ -128,6 +160,11 @@
       "colorId": "6",
       "value": "#34495E",
       "id": "ftZ5Mqf6M_g"
+    },
+    {
+      "colorId": "7",
+      "value": "#4379E5",
+      "id": "ftZ5Mqf6M_g"
     }
   ],
   "transactions": [
@@ -136,7 +173,7 @@
       "amount": "20000",
       "date": "2026-04-06",
       "type": "expense",
-      "categoryId": "2",
+      "categoryId": "5",
       "memo": "치킨",
       "id": "ZSR68FZl8TU"
     },
@@ -145,7 +182,7 @@
       "amount": "13000",
       "date": "2026-04-06",
       "type": "expense",
-      "categoryId": "3",
+      "categoryId": "4",
       "memo": "병원비",
       "id": "B_lZTfr4ciM"
     },
@@ -154,7 +191,7 @@
       "amount": "4000",
       "date": "2026-04-06",
       "type": "income",
-      "categoryId": "2",
+      "categoryId": "5",
       "memo": "칼국수",
       "id": "zQ-1TLsL0_c"
     },
@@ -163,7 +200,7 @@
       "amount": "15000",
       "date": "2026-03-10",
       "type": "expense",
-      "categoryId": "2",
+      "categoryId": "5",
       "memo": "파스타",
       "id": "zQ-1TLsL0_a"
     },
