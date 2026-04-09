@@ -3,46 +3,50 @@
     {
       "budgetId": "1",
       "amount": "450000",
-      "targetMonth": "2026-03"
+      "targetMonth": "2026-03",
+      "id": "ZkbMAKH-rrg"
     },
     {
       "budgetId": "2",
       "amount": "500000",
-      "targetMonth": "2026-04"
+      "targetMonth": "2026-04",
+      "id": "yz9UKTii9xA"
     }
   ],
-
   "category": [
     {
       "categoryId": "1",
       "name": "교통",
-      "type": "payment",
+      "type": "expense",
       "iconId": "3",
-      "colorId": "2"
+      "colorId": "2",
+      "id": "2A7Kl2pQdNs"
     },
     {
       "categoryId": "2",
       "name": "식비",
-      "type": "payment",
+      "type": "expense",
       "iconId": "2",
-      "colorId": "3"
+      "colorId": "3",
+      "id": "qveIErcv3V4"
     },
     {
       "categoryId": "3",
       "name": "병원",
-      "type": "payment",
+      "type": "expense",
       "iconId": "1",
-      "colorId": "1"
+      "colorId": "1",
+      "id": "lu3t65Ema54"
     },
     {
       "categoryId": "4",
       "name": "월급",
       "type": "income",
       "iconId": "4",
-      "colorId": "4"
+      "colorId": "4",
+      "id": "Y4BotAZKMMU"
     }
   ],
-
   "fixed-cost": [
     {
       "fixedCostId": "1",
@@ -51,66 +55,127 @@
       "memo": "월급",
       "cycle": "monthly",
       "day": "4",
-      "categoryId": "4"
+      "categoryId": "4",
+      "id": "X0kHXTqRL5M"
     },
     {
       "fixedCostId": "2",
-      "type": "payment",
+      "type": "expense",
       "amount": "22000",
       "memo": "통신요금",
       "cycle": "monthly",
       "day": "6",
-      "categoryId": "5"
+      "categoryId": "5",
+      "id": "I8vek5_JWsw"
     }
   ],
 
   "icons": [
     {
       "iconId": "1",
-      "value": "fork-knife"
+      "value": "cup-hot",
+      "id": "BBfBZBMeVOa"
     },
     {
       "iconId": "2",
-      "value": "youtube"
+      "value": "egg-fried",
+      "id": "BBfBZBMeVOs"
     },
     {
       "iconId": "3",
-      "value": "hospital"
+      "value": "hospital",
+      "id": "x5Tt21DfGlI"
+    },
+    {
+      "iconId": "4",
+      "value": "fork-knife",
+      "id": "x5Tt21DfGlZ"
+    },
+    {
+      "iconId": "5",
+      "value": "youtube",
+      "id": "x5Tt21DfGEI"
     }
   ],
-  "colors": [
-    { "colorId": "1", "value": "#FF5733" },
-    { "colorId": "2", "value": "#33FF57" },
-    { "colorId": "3", "value": "#33A1FF" },
-    { "colorId": "4", "value": "#F1C40F" },
-    { "colorId": "5", "value": "#9B59B6" },
-    { "colorId": "6", "value": "#34495E" }
-  ],
 
+  "colors": [
+    {
+      "colorId": "1",
+      "value": "#FF5733",
+      "id": "dpw5sSB8dhU"
+    },
+    {
+      "colorId": "2",
+      "value": "#33FF57",
+      "id": "AmbT46yuSpo"
+    },
+    {
+      "colorId": "3",
+      "value": "#33A1FF",
+      "id": "L1I4uz9oX_4"
+    },
+    {
+      "colorId": "4",
+      "value": "#F1C40F",
+      "id": "No82q9nTDg0"
+    },
+    {
+      "colorId": "5",
+      "value": "#9B59B6",
+      "id": "LFZeo8Aagrs"
+    },
+    {
+      "colorId": "6",
+      "value": "#34495E",
+      "id": "ftZ5Mqf6M_g"
+    }
+  ],
   "transactions": [
     {
       "transactionId": "1",
       "amount": "20000",
-      "date": "2026-04-03",
-      "type": "payment",
+      "date": "2026-04-06",
+      "type": "expense",
       "categoryId": "2",
-      "memo": "치킨"
+      "memo": "치킨",
+      "id": "ZSR68FZl8TU"
     },
     {
       "transactionId": "2",
       "amount": "13000",
       "date": "2026-04-06",
-      "type": "payment",
+      "type": "expense",
       "categoryId": "3",
-      "memo": "병원비"
+      "memo": "병원비",
+      "id": "B_lZTfr4ciM"
     },
     {
       "transactionId": "3",
       "amount": "4000",
-      "date": "2026-04-07",
-      "type": "payment",
+      "date": "2026-04-06",
+      "type": "income",
       "categoryId": "2",
-      "memo": "칼국수"
+      "memo": "칼국수",
+      "id": "zQ-1TLsL0_c"
+    },
+    {
+      "transactionId": "4",
+      "amount": "15000",
+      "date": "2026-03-10",
+      "type": "expense",
+      "categoryId": "2",
+      "memo": "파스타",
+      "id": "zQ-1TLsL0_a"
+    },
+    {
+      "transactionId": "5",
+      "amount": "50000",
+      "date": "2026-03-12",
+      "type": "expense",
+      "categoryId": "1",
+      "memo": "버스",
+      "id": "zQ-1TLsL0_b"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
