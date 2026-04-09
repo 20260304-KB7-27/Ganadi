@@ -14,9 +14,10 @@
 import { RouterView } from 'vue-router';
 import Footer from '@/view/components/Footer.vue';
 </script>
-
 <style scoped>
-/* 전체 레이아웃 */
+/* =========================
+   📱 전체 레이아웃
+   ========================= */
 .layout {
   display: grid;
   grid-template-areas:
@@ -30,11 +31,21 @@ import Footer from '@/view/components/Footer.vue';
 .content {
   grid-area: content;
   padding: 16px;
+
+  /* 👇 footer 고정 대비 (가려짐 방지) */
+  padding-bottom: 80px;
 }
 
-/* Footer 영역 */
+/* =========================
+   📱 모바일: 하단 고정 footer
+   ========================= */
 .footer-area {
-  grid-area: footer;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 1000;
 }
 
 /* =========================
@@ -44,8 +55,23 @@ import Footer from '@/view/components/Footer.vue';
   .layout {
     grid-template-areas: 'footer content';
     grid-template-columns: 220px 1fr;
-    /* grid-template-areas: 'content footer '; 오른쪽 */
-    /* grid-template-columns: 1fr 220px; */
   }
+
+  /* 사이드바 고정 */
+  .footer-area {
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    left: 0;
+
+    width: 220px;
+    height: 100vh;
+  }
+
+  /* 콘텐츠 밀어주기 */
+  /* .content {
+    margin-left: 220px;
+    padding-bottom: 16px;
+  } */
 }
 </style>
