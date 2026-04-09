@@ -16,7 +16,6 @@ const menus = [
   { name: '홈', path: '/', icon: 'bi-house' },
   { name: '통계', path: '/graph', icon: 'bi-bar-chart' },
   { name: '설정', path: '/setting', icon: 'bi-gear' },
-  
   { name: '추가', path: '/input', icon: 'bi-plus' },
 ];
 </script>
