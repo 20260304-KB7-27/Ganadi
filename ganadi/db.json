@@ -177,5 +177,13 @@
       "id": "zQ-1TLsL0_b"
     }
   ],
+
+  "character": [
+    {
+      "id": "1",
+      "level": "4",
+      "lastEvaluatedMonth": "2026-04"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
