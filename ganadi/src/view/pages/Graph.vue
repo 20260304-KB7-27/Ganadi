@@ -1,11 +1,13 @@
 <template>
-    <div class="graph-page">
-        <GraphHeader :total-expense="graphData.totalExpense" />
-        <GraphChart
-            :items="graphData.categorySummary"
-            :level="graphData.characterLevel"
-        />
-        <GraphCategoryList :items="graphData.categorySummary" />
+    <div class="card card -body">
+        <div class="graph-page">
+            <GraphHeader :total-expense="graphData.totalExpense" />
+            <GraphChart
+                :items="graphData.categorySummary"
+                :level="graphData.characterLevel"
+            />
+            <GraphCategoryList :items="graphData.categorySummary" />
+        </div>
     </div>
 </template>
 
@@ -20,7 +22,7 @@ const graphData = graphMockData;
 
 <style scoped>
 .graph-page {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     padding: 16px 16px 90px;
     display: flex;
     flex-direction: column;
