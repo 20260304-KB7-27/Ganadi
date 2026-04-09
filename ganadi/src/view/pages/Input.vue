@@ -15,9 +15,9 @@
           <button
             :class="[
               'toggle-btn',
-              { 'expense-active': transactionType === 'payment' },
+              { 'expense-active': transactionType === 'expense' },
             ]"
-            @click="transactionType = 'payment'"
+            @click="transactionType = 'expense'"
           >
             출금
           </button>
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div class="category-box" v-if="transactionType === 'payment'">
+      <div class="category-box" v-if="transactionType === 'expense'">
         <span class="category-title">카테고리 선택</span>
         <div class="category-list">
           <button
@@ -148,7 +148,7 @@ const categories = ref([]);
 const icons = ref([]);
 const colors = ref([]);
 
-const transactionType = ref('payment');
+const transactionType = ref('expense');
 const today = new Date().toISOString().split('T')[0];
 const date = ref(today);
 const memo = ref('');

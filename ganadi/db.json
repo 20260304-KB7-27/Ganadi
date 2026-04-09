@@ -17,7 +17,7 @@
     {
       "categoryId": "1",
       "name": "교통",
-      "type": "payment",
+      "type": "expense",
       "iconId": "3",
       "colorId": "2",
       "id": "2A7Kl2pQdNs"
@@ -25,7 +25,7 @@
     {
       "categoryId": "2",
       "name": "식비",
-      "type": "payment",
+      "type": "expense",
       "iconId": "2",
       "colorId": "3",
       "id": "qveIErcv3V4"
@@ -33,7 +33,7 @@
     {
       "categoryId": "3",
       "name": "병원",
-      "type": "payment",
+      "type": "expense",
       "iconId": "1",
       "colorId": "1",
       "id": "lu3t65Ema54"
@@ -60,7 +60,7 @@
     },
     {
       "fixedCostId": "2",
-      "type": "payment",
+      "type": "expense",
       "amount": "22000",
       "memo": "통신요금",
       "cycle": "monthly",
@@ -69,15 +69,16 @@
       "id": "I8vek5_JWsw"
     }
   ],
+
   "icons": [
     {
       "iconId": "1",
-      "value": "cafe",
+      "value": "cup-hot",
       "id": "BBfBZBMeVOs"
     },
     {
       "iconId": "2",
-      "value": "fare",
+      "value": "egg-fried",
       "id": "nHL1q0Jyz2M"
     },
     {
