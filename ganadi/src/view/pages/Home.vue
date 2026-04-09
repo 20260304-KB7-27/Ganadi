@@ -14,13 +14,24 @@
       :completedRate="completed_rate"
       :goalMoney="goal_money"
     />
-    <CalendarView
-      :items="items"
-      :show-date="showDate"
-      class="account-calendar"
-    />
-
-    <RouterLink to="/input" class="add-button">
+    <CalendarView :items="items" :show-date="showDate" class="account-calendar">
+      <template #day-content="{ day }">
+        <div
+          class="day-cell"
+          :class="{ selected: selectedDate === formatDate(day) }"
+          @click="selectDate(formatDate(day))"
+        >
+          <!-- 날짜 숫자 -->
+          <div class="day-number">{{ day.getDate() }}</div>
+        </div>
+      </template>
+    </CalendarView>
+    <!-- 상세내역 -->
+    <DailyDetail :selectedDate="selectedDate" />
+    <RouterLink
+      :to="{ path: '/input', query: { date: selectedDate } }"
+      class="add-button"
+    >
       <img
         src="@/assets/images/home_image/add.png"
         alt="plus"
@@ -36,6 +47,8 @@ import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
+import DailyDetail from '../components/DailyDetail.vue';
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -43,6 +56,7 @@ export default {
     CalendarView,
     ProgressBar,
     Header,
+    DailyDetail,
   },
 
   setup() {
@@ -62,10 +76,15 @@ export default {
 
     const items = ref([]);
 
+    // 기본 선택 날짜: 오늘
+    const selectedDate = ref(new Date().toISOString().split('T')[0]);
+    const selectDate = (date) => {
+      selectedDate.value = date;
+    };
     onMounted(async () => {
       try {
-        const response = await fetch('http://localhost:3000/transactions');
-        const transactions = await response.json();
+        const response = await axios.get('/api/transactions');
+        const transactions = response.data;
 
         const grouped = {};
 
@@ -133,6 +152,13 @@ export default {
       const d = showDate.value;
       showDate.value = new Date(d.getFullYear(), d.getMonth() + 1, 1);
     };
+
+    const formatDate = (dateObj) => {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
     return {
       showDate,
       items,
@@ -144,6 +170,9 @@ export default {
       goal_money,
       goPreMonth,
       goNextMonth,
+      selectedDate,
+      selectDate,
+      formatDate,
     };
   },
 };
@@ -186,6 +215,8 @@ export default {
   background: transparent !important;
   border: none !important;
   padding: 10px !important;
+  /* 각 셀에서 hover 버벅이는 문제 해결 코드 */
+  pointer-events: none;
 }
 
 .account-calendar .cv-item.income-item {
@@ -197,22 +228,43 @@ export default {
   font-size: small;
 }
 
-.account-calendar .cv-day {
-  min-height: 0px !important;
-  padding: 4px !important;
-}
 .account-calendar .cv-week {
   min-height: 80px !important;
 }
 
-/* 선택된 달이 아닌 나머지 달의 날짜를 회색으로 */
-.account-calendar .cv-day.outside {
-  opacity: 0.5;
-}
 /* 오늘 날짜 표시 */
 .account-calendar .cv-day.today {
   background-color: #efefef;
   color: red;
   font-weight: bold;
+}
+
+/* 날짜 셀 커스텀 */
+.day-cell {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* hover 효과 */
+.day-cell:hover {
+  background-color: #fff0fd;
+}
+
+/* 선택된 날짜 */
+.day-cell.selected {
+  border: 3px solid #ffd8fa;
+  background-color: #fff0fd;
+}
+
+/* 날짜 숫자 */
+.day-number {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.account-calendar .cv-day-number {
+  display: none;
 }
 </style>
