@@ -1,36 +1,33 @@
-const getCurrentMonthString = () => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+const getTargetMonthString = (year, month) => {
+    return `${year}-${String(month).padStart(2, '0')}`;
 };
 
-const getCurrentMonthPaymentTransactions = (transactions) => {
-    const currentMonth = getCurrentMonthString();
-
+const getTargetMonthPaymentTransactions = (transactions, targetMonth) => {
     return transactions.filter((item) => {
-        return item.type === 'payment' && item.date.startsWith(currentMonth);
+        return item.type === 'payment' && item.date.startsWith(targetMonth);
     });
 };
 
-const getCurrentMonthBudget = (budgetList) => {
-    const currentMonth = getCurrentMonthString();
-    return budgetList.find((item) => item.targetMonth);
+const getTargetMonthBudget = (budgetList, targetMonth) => {
+    return budgetList.find((item) => item.targetMonth === targetMonth) || null;
 };
 
-export const adaptGraphData = ({
-    transactions,
-    category,
-    icons,
-    colors,
-    budget,
-}) => {
-    const currentMonthTransactions =
-        getCurrentMonthPaymentTransactions(transactions);
+export const adaptGraphData = (
+    { transactions, category, icons, colors, budget },
+    { year, month },
+) => {
+    const targetMonth = getTargetMonthString(year, month);
 
-    const totalExpense = currentMonthTransactions.reduce((sum, item) => {
+    const targetMonthTransactions = getTargetMonthPaymentTransactions(
+        transactions,
+        targetMonth,
+    );
+
+    const totalExpense = targetMonthTransactions.reduce((sum, item) => {
         return sum + Number(item.amount);
     }, 0);
 
-    const currentBudget = getCurrentMonthBudget(budget);
+    const currentBudget = getTargetMonthBudget(budget, targetMonth);
     const monthlyGoal = currentBudget ? Number(currentBudget.amount) : 0;
 
     const goalRate =
@@ -38,7 +35,7 @@ export const adaptGraphData = ({
 
     const groupedByCategory = {};
 
-    currentMonthTransactions.forEach((item) => {
+    targetMonthTransactions.forEach((item) => {
         const key = item.categoryId;
 
         if (!groupedByCategory[key]) {

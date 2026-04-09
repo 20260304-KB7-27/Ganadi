@@ -9,6 +9,11 @@
             "budgetId": "2",
             "amount": "500000",
             "targetMonth": "2026-04"
+        },
+        {
+            "budgetId": "3",
+            "amount": "480000",
+            "targetMonth": "2026-05"
         }
     ],
 
@@ -112,6 +117,22 @@
             "type": "payment",
             "categoryId": "2",
             "memo": "칼국수"
+        },
+        {
+            "transactionId": "4",
+            "amount": "15000",
+            "date": "2026-03-10",
+            "type": "payment",
+            "categoryId": "2",
+            "memo": "파스타"
+        },
+        {
+            "transactionId": "5",
+            "amount": "50000",
+            "date": "2026-03-12",
+            "type": "payment",
+            "categoryId": "1",
+            "memo": "버스"
         }
     ]
 }
