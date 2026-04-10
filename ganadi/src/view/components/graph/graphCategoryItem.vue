@@ -37,6 +37,7 @@ const formattedAmount = computed(() => {
     border-radius: 16px;
     padding: 12px 14px;
     box-sizing: border-box;
+    border: 1px solid #ddd;
 }
 
 .left-area {
@@ -49,6 +50,7 @@ const formattedAmount = computed(() => {
     width: 42px;
     height: 42px;
     border-radius: 50%;
+    border: 1px solid #ddd;
     display: flex;
     align-items: center;
     justify-content: center;
