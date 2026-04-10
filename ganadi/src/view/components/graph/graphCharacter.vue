@@ -1,7 +1,7 @@
 <template>
     <div class="character-center">
         <div class="text-box">
-            <p class="level-text">Lv{{ level }}</p>
+            <p class="level-text">Lv.{{ level }}</p>
             <p class="level-desc">{{ levelText }}</p>
         </div>
         <img
@@ -52,9 +52,6 @@ const levelText = computed(() => {
 
 <style scoped>
 .character-center {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -66,7 +63,7 @@ const levelText = computed(() => {
     transform: translateY(12px);
     display: flex;
     flex-direction: column;
-    align-items: center; /* 🔥 가로 가운데 정렬 핵심 */
+    align-items: center;
     text-align: center;
 }
 
@@ -87,5 +84,25 @@ const levelText = computed(() => {
     width: 92px;
     height: 92px;
     object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+    .text-box {
+        transform: translateY(18px);
+    }
+
+    .level-text {
+        font-size: 24px;
+    }
+
+    .level-desc {
+        font-size: 32px;
+        margin-bottom: 14px;
+    }
+
+    .character-image {
+        width: 130px;
+        height: 130px;
+    }
 }
 </style>

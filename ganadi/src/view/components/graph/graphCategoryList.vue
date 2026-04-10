@@ -30,8 +30,8 @@ defineProps({
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 12px 10px;
-    margin-top: 8px;
+    padding: 14px 12px;
+    min-height: 180px;
 }
 
 .category-list {
@@ -45,5 +45,17 @@ defineProps({
     color: #666;
     padding: 40px 0;
     font-size: 16px;
+}
+
+@media (min-width: 1024px) {
+    .category-list-wrapper {
+        min-height: 700px;
+        padding: 18px 18px;
+        border-radius: 18px;
+    }
+
+    .category-list {
+        gap: 18px;
+    }
 }
 </style>

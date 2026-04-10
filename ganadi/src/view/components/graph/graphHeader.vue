@@ -22,12 +22,15 @@ const formattedExpense = computed(() => {
 
 <style scoped>
 .graph-header {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .title {
+    margin: 0;
     font-size: 18px;
-    margin-bottom: 8px;
+    font-weight: 600;
 }
 
 .amount {
@@ -35,5 +38,15 @@ const formattedExpense = computed(() => {
     font-weight: 700;
     color: red;
     margin: 0;
+}
+
+@media (min-width: 1024px) {
+    .title {
+        font-size: 20px;
+    }
+
+    .amount {
+        font-size: 40px;
+    }
 }
 </style>
