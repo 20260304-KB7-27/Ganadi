@@ -27,8 +27,9 @@ defineProps({
 
 <style scoped>
 .category-list-wrapper {
-    background-color: #dcdcdc;
-    border-radius: 18px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 12px 10px;
     margin-top: 8px;
 }
