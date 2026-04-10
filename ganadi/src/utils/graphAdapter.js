@@ -104,3 +104,24 @@ export const getMonthlyExpense = (transactions, year, month) => {
 export const getMonthlyIncome = (transactions, year, month) => {
   return getMonthlyAmountByType(transactions, year, month, 'income');
 };
+
+// category + icons + colors 합치기
+export const getCategory = (categoryList, icons, colors) => {
+  return categoryList.map((cat) => {
+    const iconInfo = icons.find(
+      (item) => String(item.iconId) === String(cat.iconId)
+    );
+
+    const colorInfo = colors.find(
+      (item) => String(item.colorId) === String(cat.colorId)
+    );
+
+    return {
+      categoryId: cat.categoryId,
+      name: cat.name,
+      type: cat.type,
+      iconType: iconInfo?.value || 'coin',
+      color: colorInfo?.value || '#d9d9d9',
+    };
+  });
+};
