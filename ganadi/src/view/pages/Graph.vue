@@ -1,15 +1,15 @@
 <template>
     <div class="card card -body">
         <div class="graph-page">
+            <GraphMonthSelector
+                :selected-year="selectedYear"
+                :selected-month="selectedMonth"
+                :is-current-month="isCurrentMonth"
+                @prev-month="goToPrevMonth"
+                @next-month="goToNextMonth"
+            />
             <div class="graph-content">
                 <section class="graph-left">
-                    <GraphMonthSelector
-                        :selected-year="selectedYear"
-                        :selected-month="selectedMonth"
-                        :is-current-month="isCurrentMonth"
-                        @prev-month="goToPrevMonth"
-                        @next-month="goToNextMonth"
-                    />
                     <GraphHeader :total-expense="graphData.totalExpense" />
                     <GraphChart
                         :items="graphData.categorySummary"
@@ -171,6 +171,8 @@ watch([selectedYear, selectedMonth], () => {
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        margin-right: 40px;
     }
 }
 </style>

@@ -91,7 +91,7 @@ const chartOptions = computed(() => ({
 .chart-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: 4px;
+    margin-top: 15px;
 }
 
 .chart-box {
@@ -120,7 +120,7 @@ const chartOptions = computed(() => ({
 @media (min-width: 1024px) {
     .chart-wrapper {
         justify-content: center;
-        margin-top: 10px;
+        margin-top: 20px;
     }
 
     .chart-box {
