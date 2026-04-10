@@ -130,26 +130,17 @@
 </template>
 
 <script setup>
-<<<<<<< HEAD
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-=======
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
->>>>>>> 0f6b2c89ac48e9feb14e015a299a3f3be14b2ae9
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 const isMemoActive = ref(false);
 
 const transactionType = ref('expense');
-<<<<<<< HEAD
 const today = new Date().toISOString().split('T')[0];
 const date = ref(route.query.date || today);
-=======
-const today = new Date().toISOString().split('T')[0]; //오늘날짜
-const date = ref(today);
->>>>>>> 0f6b2c89ac48e9feb14e015a299a3f3be14b2ae9
 const memo = ref('');
 const amount = ref('0');
 const isTyping = ref(false);
