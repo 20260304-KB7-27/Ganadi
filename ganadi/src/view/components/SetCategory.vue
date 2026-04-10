@@ -61,19 +61,18 @@
         </div>
 
         <div v-if="activeTab === 'icon'" class="selection-grid">
-        <div
-          v-for="icon in iconList"
-          :key="icon.iconId"
-          class="icon-item"
-          :class="{ selected: selectedIcon === icon }"
-          @click="selectedIcon = icon"
-        >
-          <i :class="`bi bi-${icon.value}`"></i>
+          <div
+            v-for="icon in iconList"
+            :key="icon.iconId"
+            class="icon-item"
+            :class="{ selected: selectedIcon === icon }"
+            @click="selectedIcon = icon"
+          >
+            <i :class="`bi bi-${icon.value}`"></i>
+          </div>
         </div>
       </div>
-      </div>
 
-      
       <div class="modal-footer">
         <button class="complete-btn" @click="addCategory">완료</button>
       </div>
@@ -180,13 +179,13 @@ onMounted(() => {
   padding: 2px 10px;
 }
 .close-btn {
-  background: none;              /* 배경 제거 */
-  border: none;                  /* 테두리 제거 */
-  font-size: 28px;               /* 크기 키우기 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 28px; /* 크기 키우기 */
   font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
-  font-weight: 300;              /* 선 두께 조절 */
+  font-weight: 300; /* 선 두께 조절 */
   cursor: pointer;
-  line-height: 1;                /* 높이 조절 */
+  line-height: 1; /* 높이 조절 */
   padding: 0;
 }
 .close-btn:hover {
@@ -194,8 +193,8 @@ onMounted(() => {
 }
 .modal-header {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;           
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 /* 아이템들을 가로로 나열 */
@@ -230,7 +229,6 @@ onMounted(() => {
   transform: scale(1.1);
 }
 
-
 .header-box {
   display: flex;
   justify-content: space-between;
@@ -244,8 +242,10 @@ onMounted(() => {
 }
 .main-screen-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -281,7 +281,7 @@ onMounted(() => {
 /* 탭 버튼 디자인 (목업 스타일) */
 .tab-buttons {
   display: flex;
-  background: #e0e0e0;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 15px;
@@ -295,8 +295,8 @@ onMounted(() => {
   font-weight: bold;
 }
 .tab-buttons button.active {
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #d9d9d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .v-divider {
   width: 1px;
