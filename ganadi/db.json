@@ -69,9 +69,38 @@
       "iconId": "99",
       "colorId": "7",
       "id": "Y5BotAZKaosdMMU"
+    },
+    {
+      "categoryId": 8,
+      "name": "테스트",
+      "iconId": "99",
+      "colorId": "3",
+      "type": "expense",
+      "id": "LSPS-pKl"
     }
   ],
-  "fixed-cost": [],
+  "fixed-cost": [
+    {
+      "fixedCostId": "1",
+      "type": "income",
+      "amount": "500000",
+      "memo": "월급",
+      "cycle": "monthly",
+      "day": "4",
+      "categoryId": "7",
+      "id": "X0kHlXTqRL5M"
+    },
+    {
+      "fixedCostId": "2",
+      "type": "expense",
+      "amount": "22000",
+      "memo": "통신요금",
+      "cycle": "monthly",
+      "day": "6",
+      "categoryId": "8",
+      "id": "I8vekk5_JWsw"
+    }
+  ],
   "icons": [
     {
       "iconId": "1",
