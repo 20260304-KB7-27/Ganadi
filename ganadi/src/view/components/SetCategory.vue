@@ -61,19 +61,18 @@
         </div>
 
         <div v-if="activeTab === 'icon'" class="selection-grid">
-        <div
-          v-for="icon in iconList"
-          :key="icon.iconId"
-          class="icon-item"
-          :class="{ selected: selectedIcon === icon }"
-          @click="selectedIcon = icon"
-        >
-          <i :class="`bi bi-${icon.value}`"></i>
+          <div
+            v-for="icon in iconList"
+            :key="icon.iconId"
+            class="icon-item"
+            :class="{ selected: selectedIcon === icon }"
+            @click="selectedIcon = icon"
+          >
+            <i :class="`bi bi-${icon.value}`"></i>
+          </div>
         </div>
       </div>
-      </div>
 
-      
       <div class="modal-footer">
         <button class="complete-btn" @click="addCategory">완료</button>
       </div>
@@ -83,14 +82,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import categories from '@/data/category.json';
-import presets from '@/data/preset_options.json';
+import db from '/db.json';
+import axios from 'axios';
 
 const categoryList = ref([]);
 const categoryName = ref('');
 const iconList = ref([]);
 const colorList = ref([]);
 const activeTab = ref('color'); //color or icon
+const BASE_URL = 'http://localhost:3000';
 
 const isModalOpen = ref(false);
 
@@ -99,24 +99,22 @@ const selectedIcon = ref('');
 
 const loadCategory = async () => {
   try {
-    // const [resCategory, resPreset] = await Promise.all([
-    //   axios.get('@/src/model/data/category.json'),
-    //   axios.get('@/src/model/data/preset_options.json'),
-    // ]);
+    const [resCats, resIcons, resColors] = await Promise.all([
+      axios.get(`${BASE_URL}/category`),
+      axios.get(`${BASE_URL}/icons`),
+      axios.get(`${BASE_URL}/colors`)
+    ]);
 
-    // const categories = resCategory.data;
-    // console.log(categories);
-    // const icons = resPreset.data.icons;  // 이렇게 하는거 맞나?
-    // const colors = resPreset.data.colors;
-    iconList.value = presets.icons;
-    colorList.value = presets.colors;
+    const fetchedCategories = resCats.data;
+    iconList.value = resIcons.data;
+    colorList.value = resColors.data;
 
-    categoryList.value = categories.category.map((cat) => {
+    categoryList.value = fetchedCategories.map((cat) => {
       const matchedIcon = iconList.value.find(
-        (icon) => icon.iconId === cat.iconId,
+        (icon) => String(icon.iconId) === String(cat.iconId),
       );
       const matchedColor = colorList.value.find(
-        (color) => color.colorId === cat.colorId,
+        (color) => String(color.colorId) === String(cat.colorId),
       );
 
       return {
@@ -130,8 +128,9 @@ const loadCategory = async () => {
   }
 };
 
-const addCategory = () => {
-  isModalOpen.value = false;
+const addCategory = async () => {
+  try {
+    isModalOpen.value = false;
   if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
     alert('이름, 색상, 아이콘을 모두 선택해주세요!');
     return;
@@ -147,10 +146,19 @@ const addCategory = () => {
 
   categoryList.value.push(newCategory);
 
+  await axios.post(`${BASE_URL}/category`, newCategory);
+  await loadCategory();
   //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
+
   closeModal();
+  } catch (e) {
+    console.error("카테고리 추가 실패 : ", e);
+  }
+  
 };
+
+c
 
 const closeModal = () => {
   isModalOpen.value = false;
@@ -180,13 +188,13 @@ onMounted(() => {
   padding: 2px 10px;
 }
 .close-btn {
-  background: none;              /* 배경 제거 */
-  border: none;                  /* 테두리 제거 */
-  font-size: 28px;               /* 크기 키우기 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 28px; /* 크기 키우기 */
   font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
-  font-weight: 300;              /* 선 두께 조절 */
+  font-weight: 300; /* 선 두께 조절 */
   cursor: pointer;
-  line-height: 1;                /* 높이 조절 */
+  line-height: 1; /* 높이 조절 */
   padding: 0;
 }
 .close-btn:hover {
@@ -194,8 +202,8 @@ onMounted(() => {
 }
 .modal-header {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;           
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 /* 아이템들을 가로로 나열 */
@@ -230,7 +238,6 @@ onMounted(() => {
   transform: scale(1.1);
 }
 
-
 .header-box {
   display: flex;
   justify-content: space-between;
@@ -244,8 +251,10 @@ onMounted(() => {
 }
 .main-screen-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -281,7 +290,7 @@ onMounted(() => {
 /* 탭 버튼 디자인 (목업 스타일) */
 .tab-buttons {
   display: flex;
-  background: #e0e0e0;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 15px;
@@ -295,8 +304,8 @@ onMounted(() => {
   font-weight: bold;
 }
 .tab-buttons button.active {
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #d9d9d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .v-divider {
   width: 1px;
