@@ -26,22 +26,24 @@
         </div>
       </template>
     </CalendarView>
-    <!-- 상세내역 -->
-    <DailyDetail
-      :selectedDate="selectedDate"
-      :transactions="transactions"
-      :categoryData="categoryData"
-    />
-    <RouterLink
-      :to="{ path: '/input', query: { date: selectedDate } }"
-      class="add-button"
-    >
-      <img
-        src="@/assets/images/home_image/add.png"
-        alt="plus"
-        class="plus-image"
+    <div class="detail-section">
+      <RouterLink
+        :to="{ path: '/input', query: { date: selectedDate } }"
+        class="add-button"
+      >
+        <img
+          src="@/assets/images/home_image/add.png"
+          alt="plus"
+          class="plus-image"
+        />
+      </RouterLink>
+      <!-- 상세내역 -->
+      <DailyDetail
+        :selectedDate="selectedDate"
+        :transactions="transactions"
+        :categoryData="categoryData"
       />
-    </RouterLink>
+    </div>
   </div>
 </template>
 
@@ -239,6 +241,7 @@ export default {
 <style>
 .add-button {
   position: absolute;
+  top: 32px;
   bottom: 20px;
   right: 20px;
   width: 80px;
@@ -265,6 +268,9 @@ export default {
 }
 
 .card-body {
+  position: relative;
+}
+.detail-section {
   position: relative;
 }
 
@@ -312,7 +318,7 @@ export default {
 
 /* 선택된 날짜 */
 .day-cell.selected {
-  border: 3px solid #ffd8fa;
+  border: 2px solid #ffc5f7;
   background-color: #fff0fd;
 }
 
