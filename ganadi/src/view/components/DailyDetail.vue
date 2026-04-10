@@ -15,13 +15,20 @@
         }"
       >
         <div class="transaction-info">
-          <div class="category-name">
-            {{ getCategoryName(transaction.categoryId) }}
+          <div class="left-area">
+            <div
+              class="category-icon"
+              :style="{ backgroundColor: transaction.color }"
+            >
+              <i :class="`bi bi-${transaction.iconType}`"></i>
+            </div>
           </div>
-          <div class="memo">{{ transaction.memo }}</div>
+          <div class="memo">
+            {{ transaction.memo }}
+          </div>
         </div>
         <div class="amount">
-          {{ transaction.type === 'income' ? '+' : '-'
+          {{ transaction.type === "income" ? "+" : "-"
           }}{{ Number(transaction.amount).toLocaleString() }}
         </div>
       </div>
@@ -29,52 +36,40 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+<script setup>
+import { ref, computed, onMounted } from "vue";
 
-export default {
-  name: 'DailyDetail',
-  props: {
-    selectedDate: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  selectedDate: {
+    type: String,
+    required: true,
   },
-  setup(props) {
-    const transactions = ref([]);
-    const categories = ref([]);
+  transactions: {
+    type: Array,
+    required: true,
+  },
+  categoryData: {
+    type: Array,
+    required: true,
+  },
+});
 
-    onMounted(async () => {
-      try {
-        const [transRes, catRes] = await Promise.all([
-          axios.get('/api/transactions'),
-          axios.get('/api/category'),
-        ]);
-        transactions.value = transRes.data;
-        categories.value = catRes.data;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    });
-
-    const filteredTransactions = computed(() => {
-      return transactions.value.filter((t) => t.date === props.selectedDate);
-    });
-
-    const getCategoryName = (categoryId) => {
-      const category = categories.value.find(
-        (c) => c.categoryId === categoryId,
+const filteredTransactions = computed(() => {
+  return props.transactions
+    .filter((t) => t.date === props.selectedDate)
+    .map((t) => {
+      const category = props.categoryData.find(
+        (c) => String(c.categoryId) === String(t.categoryId),
       );
-      return category ? category.name : 'Unknown';
-    };
 
-    return {
-      filteredTransactions,
-      getCategoryName,
-    };
-  },
-};
+      return {
+        ...t,
+        categoryName: category ? category.name : "기타",
+        iconType: category ? category.iconType : "coin",
+        color: category ? category.color : "#d9d9d9",
+      };
+    });
+});
 </script>
 
 <style scoped>
@@ -112,13 +107,9 @@ export default {
 }
 
 .transaction-info {
-  flex: 1;
-}
-
-.category-name {
-  font-size: 12px;
-  font-weight: normal;
-  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .memo {
@@ -138,5 +129,25 @@ export default {
   text-align: center;
   color: #999;
   font-style: italic;
+}
+
+.category-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* 왼쪽 (아이콘 + 카테고리 세로) */
+.left-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
 }
 </style>
