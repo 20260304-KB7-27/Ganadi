@@ -9,14 +9,20 @@
         v-for="transaction in filteredTransactions"
         :key="transaction.id"
         class="transaction-item"
-        :class="{ 'income': transaction.type === 'income', 'expense': transaction.type === 'expense' }"
+        :class="{
+          income: transaction.type === 'income',
+          expense: transaction.type === 'expense',
+        }"
       >
         <div class="transaction-info">
-          <div class="category-name">{{ getCategoryName(transaction.categoryId) }}</div>
+          <div class="category-name">
+            {{ getCategoryName(transaction.categoryId) }}
+          </div>
           <div class="memo">{{ transaction.memo }}</div>
         </div>
         <div class="amount">
-          {{ transaction.type === 'income' ? '+' : '-' }}{{ Number(transaction.amount).toLocaleString() }}
+          {{ transaction.type === 'income' ? '+' : '-'
+          }}{{ Number(transaction.amount).toLocaleString() }}
         </div>
       </div>
     </div>
@@ -32,8 +38,8 @@ export default {
   props: {
     selectedDate: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const transactions = ref([]);
@@ -43,7 +49,7 @@ export default {
       try {
         const [transRes, catRes] = await Promise.all([
           axios.get('/api/transactions'),
-          axios.get('/api/category')
+          axios.get('/api/category'),
         ]);
         transactions.value = transRes.data;
         categories.value = catRes.data;
@@ -53,19 +59,21 @@ export default {
     });
 
     const filteredTransactions = computed(() => {
-      return transactions.value.filter(t => t.date === props.selectedDate);
+      return transactions.value.filter((t) => t.date === props.selectedDate);
     });
 
     const getCategoryName = (categoryId) => {
-      const category = categories.value.find(c => c.categoryId === categoryId);
+      const category = categories.value.find(
+        (c) => c.categoryId === categoryId,
+      );
       return category ? category.name : 'Unknown';
     };
 
     return {
       filteredTransactions,
-      getCategoryName
+      getCategoryName,
     };
-  }
+  },
 };
 </script>
 
@@ -95,12 +103,12 @@ export default {
 
 .transaction-item.income {
   border-left: 4px solid green;
-  color:green;
+  color: green;
 }
 
 .transaction-item.expense {
   border-left: 4px solid red;
-  color:red;
+  color: red;
 }
 
 .transaction-info {
@@ -110,7 +118,7 @@ export default {
 .category-name {
   font-size: 12px;
   font-weight: normal;
-  color:#666;
+  color: #666;
 }
 
 .memo {
