@@ -82,41 +82,39 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import categories from '@/data/category.json';
-import presets from '@/data/preset_options.json';
 import db from '/db.json';
+import axios from 'axios';
 
 const categoryList = ref([]);
 const categoryName = ref('');
 const iconList = ref([]);
 const colorList = ref([]);
 const activeTab = ref('color'); //color or icon
+const BASE_URL = 'http://localhost:3000';
 
 const isModalOpen = ref(false);
 
 const selectedColor = ref('');
 const selectedIcon = ref('');
 
-const loadCategory = () => {
+const loadCategory = async () => {
   try {
-    // const [resCategory, resPreset] = await Promise.all([
-    //   axios.get('@/src/model/data/category.json'),
-    //   axios.get('@/src/model/data/preset_options.json'),
-    // ]);
+    const [resCats, resIcons, resColors] = await Promise.all([
+      axios.get(`${BASE_URL}/category`),
+      axios.get(`${BASE_URL}/icons`),
+      axios.get(`${BASE_URL}/colors`)
+    ]);
 
-    // const categories = resCategory.data;
-    // console.log(categories);
-    // const icons = resPreset.data.icons;  // 이렇게 하는거 맞나?
-    // const colors = resPreset.data.colors;
-    iconList.value = db.icons;
-    colorList.value = db.colors;
+    const fetchedCategories = resCats.data;
+    iconList.value = resIcons.data;
+    colorList.value = resColors.data;
 
-    categoryList.value = db.category.map((cat) => {
+    categoryList.value = fetchedCategories.map((cat) => {
       const matchedIcon = iconList.value.find(
-        (icon) => icon.iconId === cat.iconId,
+        (icon) => String(icon.iconId) === String(cat.iconId),
       );
       const matchedColor = colorList.value.find(
-        (color) => color.colorId === cat.colorId,
+        (color) => String(color.colorId) === String(cat.colorId),
       );
 
       return {
@@ -130,8 +128,9 @@ const loadCategory = () => {
   }
 };
 
-const addCategory = () => {
-  isModalOpen.value = false;
+const addCategory = async () => {
+  try {
+    isModalOpen.value = false;
   if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
     alert('이름, 색상, 아이콘을 모두 선택해주세요!');
     return;
@@ -147,10 +146,19 @@ const addCategory = () => {
 
   categoryList.value.push(newCategory);
 
+  await axios.post(`${BASE_URL}/category`, newCategory);
+  await loadCategory();
   //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
+
   closeModal();
+  } catch (e) {
+    console.error("카테고리 추가 실패 : ", e);
+  }
+  
 };
+
+c
 
 const closeModal = () => {
   isModalOpen.value = false;

@@ -69,6 +69,14 @@
       "iconId": "99",
       "colorId": "7",
       "id": "Y5BotAZKMMU"
+    },
+    {
+      "categoryId": 8,
+      "name": "식사",
+      "iconId": "5",
+      "colorId": "7",
+      "type": "expense",
+      "id": "XPjSR5U"
     }
   ],
   "fixed-cost": [
