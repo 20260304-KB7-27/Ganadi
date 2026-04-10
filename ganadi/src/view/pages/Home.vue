@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
@@ -66,10 +66,12 @@ export default {
     const balance = computed(() => {
       return income.value - expense.value;
     });
-    const goal_money = ref(100000);
+    const goal_money = ref(0);
+    const budgetList = ref([]);
     //달성률
     const completed_rate = computed(() => {
-      return (expense.value / goal_money.value) * 100;
+      if (goal_money.value === 0) return 0;
+      return Math.round((expense.value / goal_money.value) * 100);
     });
 
     const showDate = ref(new Date());
@@ -81,10 +83,32 @@ export default {
     const selectDate = (date) => {
       selectedDate.value = date;
     };
+
+      const getTargetMonth = (dateObj) => {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+      };
+      const updateGoalMoney = () => {
+        const currentTargetMonth = getTargetMonth(showDate.value);
+        const currentBudget = budgetList.value.find(
+            (item) => item.targetMonth === currentTargetMonth
+        );
+        goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
+      };
+
     onMounted(async () => {
       try {
-        const response = await axios.get('/api/transactions');
-        const transactions = response.data;
+         const [transRes, budRes] = await Promise.all([
+          axios.get('/api/transactions'),
+          axios.get('/api/budget')
+        ]);
+      
+        const transactions = transRes.data;
+        const budgetData = budRes.data;
+        budgetList.value = budgetData;
+        
+        updateGoalMoney();
 
         const grouped = {};
 
@@ -135,6 +159,9 @@ export default {
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
+    });
+     watch(showDate, () => {
+      updateGoalMoney();
     });
 
     const currentMonth = computed(() => {
