@@ -91,7 +91,7 @@ const chartOptions = computed(() => ({
 .chart-wrapper {
     display: flex;
     justify-content: center;
-    margin-bottom: 28px;
+    margin-top: 15px;
 }
 
 .chart-box {
@@ -104,11 +104,28 @@ const chartOptions = computed(() => ({
     position: absolute;
     inset: 0;
     z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     pointer-events: none;
 }
 
 .chart-layer {
     position: relative;
     z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width: 1024px) {
+    .chart-wrapper {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .chart-box {
+        width: 430px;
+        height: 430px;
+    }
 }
 </style>

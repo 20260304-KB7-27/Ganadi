@@ -107,7 +107,7 @@
 
         <div class="category-selection-grid">
           <button
-            v-for="cat in categories"
+            v-for="cat in state.categories"
             :key="cat.categoryId"
             class="popup-cat-item"
             @click="
@@ -130,18 +130,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
 const isMemoActive = ref(false);
-
-// 서버에서 받아올 데이터를 담을 반응형 변수
-const categories = ref([]);
-const icons = ref([]);
-const colors = ref([]);
 
 const transactionType = ref('expense');
 const today = new Date().toISOString().split('T')[0];
@@ -152,24 +147,37 @@ const isTyping = ref(false);
 const selectedCategoryId = ref(null);
 const isCategoryPopupOpen = ref(false);
 
+const state = reactive({
+  categories: [],
+  icons: [],
+  colors: [],
+});
+
 // 서버 데이터 로드 함수
 const fetchInitialData = async () => {
   try {
     const [resCat, resIcon, resColor] = await Promise.all([
-      axios.get('http://localhost:3000/category'),
-      axios.get('http://localhost:3000/icons'),
-      axios.get('http://localhost:3000/colors'),
+      axios.get(`/api/category`),
+      axios.get(`/api/icons`),
+      axios.get(`/api/colors`),
     ]);
-    categories.value = resCat.data;
-    icons.value = resIcon.data;
-    colors.value = resColor.data;
+
+    if (
+      resCat.status === 200 &&
+      resIcon.status === 200 &&
+      resColor.status === 200
+    ) {
+      state.categories = resCat.data;
+      state.icons = resIcon.data;
+      state.colors = resColor.data;
+    }
   } catch (err) {
     console.error('데이터 로드 실패:', err);
   }
 };
 
 const filteredCategories = computed(() => {
-  return categories.value.filter((cat) => cat.type === transactionType.value);
+  return state.categories.filter((cat) => cat.type === transactionType.value);
 });
 
 const formattedAmount = computed(() => {
@@ -179,14 +187,14 @@ const formattedAmount = computed(() => {
 
 // db.json의 icons 배열을 참조하여 부트스트랩 클래스로 변환
 const getIcon = (iconId) => {
-  const iconObj = icons.value.find((i) => i.iconId === String(iconId));
+  const iconObj = state.icons.find((i) => i.iconId === String(iconId));
   return iconObj ? `bi-${iconObj.value}` : 'bi-question-circle';
 };
 
 // db.json의 colors 배열에서 색상값 찾기
 const getColor = (colorId) => {
   return (
-    colors.value.find((c) => c.colorId === String(colorId))?.value || '#ccc'
+    state.colors.find((c) => c.colorId === String(colorId))?.value || '#ccc'
   );
 };
 
@@ -209,9 +217,16 @@ const handleKeyClick = (key) => {
 };
 
 const handleKeyDown = (event) => {
-  if (/^[0-9]$/.test(event.key)) handleKeyClick(event.key);
-  else if (event.key === 'Backspace') handleKeyClick('BACK');
-  else if (event.key === 'Enter') handleSave();
+  if (event.isComposing) return;
+
+  if (/^[0-9]$/.test(event.key)) {
+    handleKeyClick(event.key);
+  } else if (event.key === 'Backspace') {
+    handleKeyClick('BACK');
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    handleSave();
+  }
 };
 
 const handleCancel = () => {
@@ -235,7 +250,7 @@ const handleSave = async () => {
   };
 
   try {
-    await axios.post('http://localhost:3000/transactions', newTransaction);
+    await axios.post('/api/transactions', newTransaction);
     alert('저장완료!');
     router.push('/'); // 메인으로 이동
   } catch (err) {
@@ -246,6 +261,10 @@ const handleSave = async () => {
 onMounted(() => {
   fetchInitialData(); // 시작 시 서버 데이터 가져오기
   window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
 });
 </script>
 

@@ -133,7 +133,7 @@
     "colors": [
         {
             "colorId": "1",
-            "value": "#FF9E9E",
+            "value": "#FFB8B8",
             "id": "dpw5sSB8dhU"
         },
         {
@@ -148,22 +148,22 @@
         },
         {
             "colorId": "4",
-            "value": "#FFF3CC",
+            "value": "#FFF79E",
             "id": "No82q9nTDg0"
         },
         {
             "colorId": "5",
-            "value": "#F5AAFF",
+            "value": "#F5CBFF",
             "id": "LFZeo8Aagrs"
         },
         {
             "colorId": "6",
-            "value": "#CCEEFF",
+            "value": "#CBFCFF",
             "id": "ftZ5Mqf6M_g"
         },
         {
             "colorId": "7",
-            "value": "#FFC99F",
+            "value": "#FFDABF",
             "id": "ftZ5Mqf6M_g"
         }
     ],
@@ -214,7 +214,6 @@
             "id": "zQ-1TLsL0_b"
         }
     ],
-
     "character": [
         {
             "id": "1",

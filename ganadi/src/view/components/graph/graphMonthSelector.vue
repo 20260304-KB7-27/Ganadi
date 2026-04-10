@@ -40,8 +40,8 @@ defineEmits(['prev-month', 'next-month']);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 18px;
+    margin-bottom: 4px;
 }
 
 .nav-btn {
@@ -50,7 +50,15 @@ defineEmits(['prev-month', 'next-month']);
     border: none;
     border-radius: 50%;
     background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    color: #111;
+}
+
+.nav-btn i {
+    font-size: 24px;
 }
 
 .nav-btn:disabled {
@@ -61,5 +69,21 @@ defineEmits(['prev-month', 'next-month']);
 .month-text {
     font-size: 20px;
     font-weight: 700;
+    min-width: 150px;
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    .month-selector {
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 12px;
+    }
+
+    .month-text {
+        min-width: auto;
+        text-align: left;
+        font-size: 24px;
+    }
 }
 </style>

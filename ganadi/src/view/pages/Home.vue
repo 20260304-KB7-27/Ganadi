@@ -27,7 +27,11 @@
       </template>
     </CalendarView>
     <!-- 상세내역 -->
-    <DailyDetail :selectedDate="selectedDate" />
+    <DailyDetail
+      :selectedDate="selectedDate"
+      :transactions="transactions"
+      :categoryData="categoryData"
+    />
     <RouterLink
       :to="{ path: '/input', query: { date: selectedDate } }"
       class="add-button"
@@ -42,17 +46,21 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from 'vue';
-import { CalendarView } from 'vue-simple-calendar';
-import 'vue-simple-calendar/dist/vue-simple-calendar.css';
-import ProgressBar from '../components/ProgressBar.vue';
-import Header from '../components/Header.vue';
-import DailyDetail from '../components/DailyDetail.vue';
-import axios from 'axios';
-import  { getMonthlyExpense, getMonthlyIncome } from '@/utils/graphAdapter';
+import { ref, computed, onMounted, watch } from "vue";
+import { CalendarView } from "vue-simple-calendar";
+import "vue-simple-calendar/dist/vue-simple-calendar.css";
+import ProgressBar from "../components/ProgressBar.vue";
+import Header from "../components/Header.vue";
+import DailyDetail from "../components/DailyDetail.vue";
+import axios from "axios";
+import {
+  getMonthlyExpense,
+  getMonthlyIncome,
+  getCategory,
+} from "@/utils/graphAdapter";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     CalendarView,
     ProgressBar,
@@ -61,42 +69,49 @@ export default {
   },
 
   setup() {
-
     const showDate = ref(new Date());
 
     const items = ref([]);
 
     // 기본 선택 날짜: 오늘
-    const selectedDate = ref(new Date().toISOString().split('T')[0]);
+    const selectedDate = ref(new Date().toISOString().split("T")[0]);
     const selectDate = (date) => {
       selectedDate.value = date;
     };
 
-      const getTargetMonth = (dateObj) => {
-        const year = dateObj.getFullYear();
-        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        return `${year}-${month}`;
-      };
-      const updateGoalMoney = () => {
-        const currentTargetMonth = getTargetMonth(showDate.value);
-        const currentBudget = budgetList.value.find(
-            (item) => item.targetMonth === currentTargetMonth
-        );
-        goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
-      };
+    const getTargetMonth = (dateObj) => {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      return `${year}-${month}`;
+    };
+    const updateGoalMoney = () => {
+      const currentTargetMonth = getTargetMonth(showDate.value);
+      const currentBudget = budgetList.value.find(
+        (item) => item.targetMonth === currentTargetMonth,
+      );
+      goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
+    };
     const transactions = ref([]);
+    const categoryData = ref([]);
     onMounted(async () => {
       try {
-         const [transRes, budRes] = await Promise.all([
-          axios.get('/api/transactions'),
-          axios.get('/api/budget')
-        ]);
-      
-       transactions.value = transRes.data;
-
+        const [transRes, budRes, categoryRes, iconsRes, colorsRes] =
+          await Promise.all([
+            axios.get("/api/transactions"),
+            axios.get("/api/budget"),
+            axios.get("/api/category"),
+            axios.get("/api/icons"),
+            axios.get("/api/colors"),
+          ]);
+        transactions.value = transRes.data;
+        categoryData.value = getCategory(
+          categoryRes.data,
+          iconsRes.data,
+          colorsRes.data,
+        );
         const budgetData = budRes.data;
         budgetList.value = budgetData;
-        
+
         updateGoalMoney();
 
         const grouped = {};
@@ -111,9 +126,9 @@ export default {
             };
           }
 
-          if (transaction.type === 'income') {
+          if (transaction.type === "income") {
             grouped[date].income += Number(transaction.amount);
-          } else if (transaction.type === 'expense') {
+          } else if (transaction.type === "expense") {
             grouped[date].expense += Number(transaction.amount);
           }
         });
@@ -128,8 +143,8 @@ export default {
               id: Date.now(),
               startDate: date,
               endDate: date,
-              title: '+' + dayData.income.toLocaleString(),
-              classes: ['income-item'],
+              title: "+" + dayData.income.toLocaleString(),
+              classes: ["income-item"],
             });
           }
 
@@ -138,30 +153,30 @@ export default {
               id: Date.now(),
               startDate: date,
               endDate: date,
-              title: '-' + dayData.expense.toLocaleString(),
-              classes: ['expense-item'],
+              title: "-" + dayData.expense.toLocaleString(),
+              classes: ["expense-item"],
             });
           }
         });
 
         items.value = transactionItems;
       } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error("Error fetching transactions:", error);
       }
     });
-     //입금,소비,잔액,목표금액
+    //입금,소비,잔액,목표금액
     const expense = computed(() => {
       return getMonthlyExpense(
         transactions.value,
         showDate.value.getFullYear(),
-        showDate.value.getMonth() + 1
+        showDate.value.getMonth() + 1,
       );
     });
     const income = computed(() => {
       return getMonthlyIncome(
         transactions.value,
         showDate.value.getFullYear(),
-        showDate.value.getMonth() + 1
+        showDate.value.getMonth() + 1,
       );
     });
     const balance = computed(() => {
@@ -174,7 +189,7 @@ export default {
       if (goal_money.value === 0) return 0;
       return Math.round((expense.value / goal_money.value) * 100);
     });
-     watch(showDate, () => {
+    watch(showDate, () => {
       updateGoalMoney();
     });
 
@@ -196,8 +211,8 @@ export default {
 
     const formatDate = (dateObj) => {
       const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     };
     return {
@@ -214,6 +229,8 @@ export default {
       selectedDate,
       selectDate,
       formatDate,
+      transactions,
+      categoryData,
     };
   },
 };
