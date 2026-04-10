@@ -94,6 +94,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import db from '/db.json';
+import axios from 'axios';
+
+// 서버 주소 (예: json-server 사용 시)
+const BASE_URL = 'http://localhost:3000';
 
 const fixedCosts = ref([]);
 const categories = ref([]);  //db에서 가져온 파일
@@ -125,46 +129,75 @@ const openModal = () => {
     };
   });
 };
-
-const fetchFixedCosts = () => {
-  const initialData = db['fixed-cost'];
-  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]')
-
-  fixedCosts.value = [...initialData, ...userAddedData];
-  categories.value = db['category'];
-  icons.value = db['icons'];
-  colors.value = db['colors'];
+const selectDay = (day) => {
+  selectedDay.value = day;
+  isDateListOpen.value = false; // 선택 후 닫기
 };
 
-const saveDefault = () => {
-  if (!amount.value || !selectedCategory || !selectedDay) {
+const fetchFixedCosts = async () => {
+  try {
+    // 1. 서버에서 고정 지출 목록과 카테고리 정보를 동시에 가져옵니다.
+    // 백엔드의 GET 요청과 같습니다.
+    const [resCosts, resCats, resIcons, resColors] = await Promise.all([
+      axios.get(`${BASE_URL}/fixed-cost`),
+      axios.get(`${BASE_URL}/category`),
+      axios.get(`${BASE_URL}/icons`),
+      axios.get(`${BASE_URL}/colors`)
+    ]);
+
+    fixedCosts.value = resCosts.data;
+    categories.value = resCats.data;
+    icons.value = resIcons.data;
+    colors.value = resColors.data;
+  } catch (e) {
+    console.error("데이터 로딩 실패:", e);
+  }
+};
+
+const saveDefault = async () => {
+  if (!amount.value || !selectedCategory.value || !selectedDay.value) {
     alert('모든 항목을 입력하세요.');
     return;
   }
 
   const newCost = {
-    fixedCostId: `user-${Date.now()}`,
-    type: 'expanse', //selectedType.value,
-    amount: amount.value,
-    memo: categories.value.find((c)=>c.categoryId===selectedCategory.value.categoryId).name,
+    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나 
+    // json-server 규칙에 맞춰 전달합니다.
+    type: 'expense', 
+    amount: Number(amount.value),
+    memo: categories.value.find((c) => c.categoryId === selectedCategory.value.categoryId)?.name || '미지정',
     cycle: 'monthly',
     day: selectedDay.value,
     categoryId: selectedCategory.value.categoryId,
+  };
+
+  try {
+    // 2. 서버에 POST 요청을 보냅니다. (Insert)
+    await axios.post(`${BASE_URL}/fixed-cost`, newCost);
+    
+    // 3. 저장이 성공하면 목록을 다시 불러오고 모달을 닫습니다.
+    await fetchFixedCosts();
+    closeModal();
+  } catch (e) {
+    alert("서버 저장에 실패했습니다.");
+    console.error(e);
   }
+};
 
-  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]');
-  userAddedData.push(newCost);
+const removeItem = async (id) => {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
 
-  localStorage.setItem('userFixedCosts', JSON.stringify(userAddedData));
-
-  fetchFixedCosts();
-  
-  closeModal();
-}
-
-const selectDay = (day) => {
-  selectedDay.value = day;
-  isDateListOpen.value = false; // 선택 후 닫기
+  try {
+    // 4. 서버에 DELETE 요청을 보냅니다. 
+    // URL 뒤에 /ID를 붙이는 건 REST API의 정석이죠!
+    await axios.delete(`${BASE_URL}/fixed-cost/${id}`);
+    
+    // 5. 삭제 성공 후 목록 갱신
+    await fetchFixedCosts();
+  } catch (e) {
+    alert("삭제 중 오류가 발생했습니다.");
+    console.error(e);
+  }
 };
 
 // 모달 닫기 및 초기화
@@ -204,13 +237,6 @@ const displayList = computed(() => {
   });
 });
 
-const removeItem = (id) => {
-  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]');
-  const filteredData = userAddedData.filter((item)=>item.fixedCostId !== id);
-
-  localStorage.setItem('userFixedCosts', JSON.stringify(filteredData));
-  fetchFixedCosts();
-};
 
 const format = (num) => {
   return new Intl.NumberFormat().format(num);
