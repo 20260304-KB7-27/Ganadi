@@ -4,13 +4,13 @@
       "budgetId": "1",
       "amount": "450000",
       "targetMonth": "2026-03",
-      "id": "ZkbMAKH-rrg"
+      "id": "ZkbMAKH-rrgq"
     },
     {
       "budgetId": "2",
       "amount": "500000",
       "targetMonth": "2026-04",
-      "id": "yz9UKTii9xA"
+      "id": "yz9UKTii9xAw"
     }
   ],
   "category": [
@@ -20,7 +20,7 @@
       "type": "expense",
       "iconId": "1",
       "colorId": "1",
-      "id": "2A7Kl2pQdNs"
+      "id": "2A7Kl2pQdNse"
     },
     {
       "categoryId": "2",
@@ -28,7 +28,7 @@
       "type": "expense",
       "iconId": "2",
       "colorId": "2",
-      "id": "qveIErcv3V4"
+      "id": "qveIErcv3V4r"
     },
     {
       "categoryId": "3",
@@ -36,7 +36,7 @@
       "type": "expense",
       "iconId": "3",
       "colorId": "3",
-      "id": "lu3t65Ema54"
+      "id": "lu3t65Ema54t"
     },
     {
       "categoryId": "4",
@@ -44,7 +44,7 @@
       "type": "expense",
       "iconId": "4",
       "colorId": "4",
-      "id": "Y4BotAZKMMU"
+      "id": "Y4BotAZKMMyU"
     },
     {
       "categoryId": "5",
@@ -52,7 +52,7 @@
       "type": "expense",
       "iconId": "5",
       "colorId": "5",
-      "id": "Y4BotZZKMMU"
+      "id": "Y4BotZZthuKMMU"
     },
     {
       "categoryId": "6",
@@ -60,7 +60,7 @@
       "type": "expense",
       "iconId": "6",
       "colorId": "6",
-      "id": "Y4BotAZKMMU"
+      "id": "Y4BotAZKMixvMU"
     },
     {
       "categoryId": "99",
@@ -68,120 +68,82 @@
       "type": "income",
       "iconId": "99",
       "colorId": "7",
-      "id": "Y5BotAZKMMU"
-    },
-    {
-      "categoryId": 8,
-      "name": "식사",
-      "iconId": "5",
-      "colorId": "7",
-      "type": "expense",
-      "id": "XPjSR5U"
+      "id": "Y5BotAZKaosdMMU"
     }
   ],
-  "fixed-cost": [
-    {
-      "fixedCostId": "1",
-      "type": "income",
-      "amount": "500000",
-      "memo": "월급",
-      "cycle": "monthly",
-      "day": "4",
-      "categoryId": "7",
-      "id": "X0kHXTqRL5M"
-    },
-    {
-      "fixedCostId": "2",
-      "type": "expense",
-      "amount": "22000",
-      "memo": "통신요금",
-      "cycle": "monthly",
-      "day": "6",
-      "categoryId": "8",
-      "id": "I8vek5_JWsw"
-    },
-    {
-      "type": "expense",
-      "amount": 120000,
-      "memo": "병원",
-      "cycle": "monthly",
-      "day": 17,
-      "categoryId": "4",
-      "id": "mshR4KK"
-    }
-  ],
+  "fixed-cost": [],
   "icons": [
     {
       "iconId": "1",
       "value": "bus-front",
-      "id": "BBcBZBMeVOa"
+      "id": "BBcBZjBMeVOaads"
     },
     {
       "iconId": "2",
       "value": "cup-hot",
-      "id": "BBfBZBMeVOa"
+      "id": "BBfBZBhMeVOaxcv"
     },
     {
       "iconId": "3",
       "value": "egg-fried",
-      "id": "BBfBZBMeVOs"
+      "id": "BBfBZBgMeVOsa"
     },
     {
       "iconId": "4",
       "value": "hospital",
-      "id": "x5Tt21DfGlI"
+      "id": "x5Tt21DffGlIytr"
     },
     {
       "iconId": "5",
       "value": "fork-knife",
-      "id": "x5Tt21DfGlZ"
+      "id": "x5Tt21fDfGlvbnZ"
     },
     {
       "iconId": "6",
       "value": "youtube",
-      "id": "x5Tt21DfGEI"
+      "id": "x5Tt21DfGdEjk,I"
     },
     {
       "iconId": "99",
       "value": "coin",
-      "id": "x5Tt21DfGEI"
+      "id": "x5Tt21DfsiopGEI"
     }
   ],
   "colors": [
     {
       "colorId": "1",
-      "value": "#FFB8B8",
-      "id": "dpw5sSB8dhU"
+      "value": "#FF9E9E",
+      "id": "dpw5sSB8adhU"
     },
     {
       "colorId": "2",
       "value": "#A7FFCF",
-      "id": "AmbT46yuSpo"
+      "id": "AmbT46yzuSpo"
     },
     {
       "colorId": "3",
       "value": "#9EABFF",
-      "id": "L1I4uz9oX_4"
+      "id": "L1I4uz9xoX_4"
     },
     {
       "colorId": "4",
-      "value": "#FFF79E",
-      "id": "No82q9nTDg0"
+      "value": "#FFF3CC",
+      "id": "No82q9ncTDg0"
     },
     {
       "colorId": "5",
-      "value": "#F5CBFF",
-      "id": "LFZeo8Aagrs"
+      "value": "#F5AAFF",
+      "id": "LFZeov8Aagrs"
     },
     {
       "colorId": "6",
-      "value": "#CBFCFF",
-      "id": "ftZ5Mqf6M_g"
+      "value": "#CCEEFF",
+      "id": "ftZ5Mqfb6M_g"
     },
     {
       "colorId": "7",
-      "value": "#FFDABF",
-      "id": "ftZ5Mqf6M_g"
+      "value": "#FFC99F",
+      "id": "ftZ5Mqnf6M_g"
     }
   ],
   "transactions": [
@@ -192,7 +154,7 @@
       "type": "expense",
       "categoryId": "5",
       "memo": "치킨",
-      "id": "ZSR68FZl8TU"
+      "id": "ZSR68FmZl8TU"
     },
     {
       "transactionId": "2",
@@ -201,7 +163,7 @@
       "type": "expense",
       "categoryId": "4",
       "memo": "병원비",
-      "id": "B_lZTfr4ciM"
+      "id": "B_lZTfqer4ciM"
     },
     {
       "transactionId": "3",
@@ -210,7 +172,7 @@
       "type": "income",
       "categoryId": "5",
       "memo": "칼국수",
-      "id": "zQ-1TLsL0_c"
+      "id": "zQ-1TLsqwL0_c"
     },
     {
       "transactionId": "4",
@@ -219,7 +181,7 @@
       "type": "expense",
       "categoryId": "5",
       "memo": "파스타",
-      "id": "zQ-1TLsL0_a"
+      "id": "zQ-1TLwersL0_a"
     },
     {
       "transactionId": "5",
@@ -228,7 +190,7 @@
       "type": "expense",
       "categoryId": "1",
       "memo": "버스",
-      "id": "zQ-1TLsL0_b"
+      "id": "zQ-1TLstertL0_b"
     }
   ],
   "character": [

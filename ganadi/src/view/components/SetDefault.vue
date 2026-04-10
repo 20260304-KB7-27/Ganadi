@@ -68,11 +68,7 @@
   </div>
 
   <ul class="fixed-list">
-    <li
-      v-for="item in displayList"
-      :key="item.fixedCostId"
-      class="fixed-item-card"
-    >
+    <li v-for="item in displayList" :key="item.id" class="fixed-item-card">
       <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
       </div>
@@ -84,27 +80,23 @@
 
       <div class="date-text">매월 {{ item.day }}일</div>
 
-      <button class="remove-btn" @click="removeItem(item.fixedCostId)">
-        -
-      </button>
+      <button class="remove-btn" @click="removeItem(item.id)">-</button>
     </li>
   </ul>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import db from '/db.json';
 import axios from 'axios';
 
 // 서버 주소 (예: json-server 사용 시)
 const BASE_URL = 'http://localhost:3000';
 
 const fixedCosts = ref([]);
-const categories = ref([]);  //db에서 가져온 파일
+const categories = ref([]); //db에서 가져온 파일
 const categoryList = ref([]);
 const icons = ref([]);
 const colors = ref([]);
-
 
 const isModalOpen = ref(false);
 const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
@@ -116,16 +108,19 @@ const selectedType = ref(null);
 
 const openModal = () => {
   isModalOpen.value = true;
-  categoryList.value = categories.value.map(cat => {
-    
-    const matchedIcon = icons.value.find(i => String(i.iconId) === String(cat.iconId));
-    
-    const matchedColor = colors.value.find(c => String(c.colorId) === String(cat.colorId));
+  categoryList.value = categories.value.map((cat) => {
+    const matchedIcon = icons.value.find(
+      (i) => String(i.iconId) === String(cat.iconId),
+    );
+
+    const matchedColor = colors.value.find(
+      (c) => String(c.colorId) === String(cat.colorId),
+    );
 
     return {
       ...cat,
-      iconType: matchedIcon ? matchedIcon.value : 'question', 
-      iconColor: matchedColor ? matchedColor.value : '#cccccc' 
+      iconType: matchedIcon ? matchedIcon.value : 'question',
+      iconColor: matchedColor ? matchedColor.value : '#cccccc',
     };
   });
 };
@@ -142,7 +137,7 @@ const fetchFixedCosts = async () => {
       axios.get(`${BASE_URL}/fixed-cost`),
       axios.get(`${BASE_URL}/category`),
       axios.get(`${BASE_URL}/icons`),
-      axios.get(`${BASE_URL}/colors`)
+      axios.get(`${BASE_URL}/colors`),
     ]);
 
     fixedCosts.value = resCosts.data;
@@ -150,7 +145,7 @@ const fetchFixedCosts = async () => {
     icons.value = resIcons.data;
     colors.value = resColors.data;
   } catch (e) {
-    console.error("데이터 로딩 실패:", e);
+    console.error('데이터 로딩 실패:', e);
   }
 };
 
@@ -161,11 +156,14 @@ const saveDefault = async () => {
   }
 
   const newCost = {
-    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나 
+    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나
     // json-server 규칙에 맞춰 전달합니다.
-    type: 'expense', 
+    type: 'expense',
     amount: Number(amount.value),
-    memo: categories.value.find((c) => c.categoryId === selectedCategory.value.categoryId)?.name || '미지정',
+    memo:
+      categories.value.find(
+        (c) => c.categoryId === selectedCategory.value.categoryId,
+      )?.name || '미지정',
     cycle: 'monthly',
     day: selectedDay.value,
     categoryId: selectedCategory.value.categoryId,
@@ -174,12 +172,12 @@ const saveDefault = async () => {
   try {
     // 2. 서버에 POST 요청을 보냅니다. (Insert)
     await axios.post(`${BASE_URL}/fixed-cost`, newCost);
-    
+
     // 3. 저장이 성공하면 목록을 다시 불러오고 모달을 닫습니다.
     await fetchFixedCosts();
     closeModal();
   } catch (e) {
-    alert("서버 저장에 실패했습니다.");
+    alert('서버 저장에 실패했습니다.');
     console.error(e);
   }
 };
@@ -188,14 +186,14 @@ const removeItem = async (id) => {
   if (!confirm('정말 삭제하시겠습니까?')) return;
 
   try {
-    // 4. 서버에 DELETE 요청을 보냅니다. 
+    // 4. 서버에 DELETE 요청을 보냅니다.
     // URL 뒤에 /ID를 붙이는 건 REST API의 정석이죠!
     await axios.delete(`${BASE_URL}/fixed-cost/${id}`);
-    
+
     // 5. 삭제 성공 후 목록 갱신
     await fetchFixedCosts();
   } catch (e) {
-    alert("삭제 중 오류가 발생했습니다.");
+    alert('삭제 중 오류가 발생했습니다.');
     console.error(e);
   }
 };
@@ -210,33 +208,29 @@ const closeModal = () => {
 };
 
 const displayList = computed(() => {
+  // categories나 fixedCosts가 없으면 빈 배열 반환하고 종료
+  if (!categories.value.length || !fixedCosts.value.length) return [];
+
   return fixedCosts.value.map((item) => {
     const matchedCategory = categories.value.find(
-      (c) => c.categoryId === item.categoryId,
+      (c) => String(c.categoryId) === String(item.categoryId),
     );
-    console.log(matchedCategory);
-    console.log(categories.value);
 
-    let matchedIcon = null;
-    let matchedColor = null;
-
-    if (matchedCategory) {
-      matchedIcon = icons.value?.find(
-        (i) => i.iconId === matchedCategory.iconId,
-      );
-      matchedColor = colors.value?.find(
-        (c) => c.colorId === matchedCategory.colorId,
-      );
-    }
+    // 매칭되는 카테고리가 없을 때의 기본값 설정 (매우 중요)
+    const iconId = matchedCategory?.iconId;
+    const colorId = matchedCategory?.colorId;
 
     return {
       ...item,
-      iconType: matchedIcon ? matchedIcon.value : 'bag',
-      iconColor: matchedColor ? matchedColor.value : '#e0e0e0',
+      iconType:
+        icons.value.find((i) => String(i.iconId) === String(iconId))?.value ||
+        'question',
+      iconColor:
+        colors.value.find((c) => String(c.colorId) === String(colorId))
+          ?.value || '#eeeeee',
     };
   });
 });
-
 
 const format = (num) => {
   return new Intl.NumberFormat().format(num);
@@ -274,8 +268,8 @@ onMounted(fetchFixedCosts);
 
 .modal-header {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;           
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -286,13 +280,13 @@ onMounted(fetchFixedCosts);
 }
 
 .close-btn {
-  background: none;              /* 배경 제거 */
-  border: none;                  /* 테두리 제거 */
-  font-size: 28px;               /* 크기 키우기 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 28px; /* 크기 키우기 */
   font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
-  font-weight: 300;              /* 선 두께 조절 */
+  font-weight: 300; /* 선 두께 조절 */
   cursor: pointer;
-  line-height: 1;                /* 높이 조절 */
+  line-height: 1; /* 높이 조절 */
   padding: 0;
 }
 .close-btn:hover {
@@ -385,9 +379,9 @@ onMounted(fetchFixedCosts);
 }
 
 .modal-tag {
-  background-color: #e0e0e0;     /* 목업과 같은 연한 회색 */
-  padding: 5px 15px;             /* 안쪽 여백 */
-  border-radius: 20px;           /* 알약 모양으로 둥글게 */
+  background-color: #e0e0e0; /* 목업과 같은 연한 회색 */
+  padding: 5px 15px; /* 안쪽 여백 */
+  border-radius: 20px; /* 알약 모양으로 둥글게 */
   font-size: 14px;
   font-weight: bold;
   color: #333;
@@ -398,7 +392,7 @@ onMounted(fetchFixedCosts);
 }
 
 .date-selector-wrapper {
-  position: relative; 
+  position: relative;
   width: 100%;
 }
 
