@@ -148,7 +148,6 @@ const addCategory = async () => {
 
   await axios.post(`${BASE_URL}/category`, newCategory);
   await loadCategory();
-  //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
 
   closeModal();
@@ -158,7 +157,7 @@ const addCategory = async () => {
   
 };
 
-c
+
 
 const closeModal = () => {
   isModalOpen.value = false;
