@@ -131,6 +131,7 @@ const loadCategory = async () => {
 const addCategory = async () => {
   try {
     isModalOpen.value = false;
+<<<<<<< Updated upstream
   if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
     alert('이름, 색상, 아이콘을 모두 선택해주세요!');
     return;
@@ -143,6 +144,20 @@ const addCategory = async () => {
     colorId: selectedColor.value.colorId,
     type: 'expense',
   };
+=======
+    if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
+      alert('이름, 색상, 아이콘을 모두 선택해주세요!');
+      return;
+    }
+
+    const newCategory = {
+      categoryId: categoryList.value.length + 1,
+      name: categoryName.value,
+      iconId: selectedIcon.value.iconId,
+      colorId: selectedColor.value.colorId,
+      type: 'expense',
+    };
+>>>>>>> Stashed changes
 
   categoryList.value.push(newCategory);
 
@@ -153,7 +168,7 @@ const addCategory = async () => {
 
   closeModal();
   } catch (e) {
-    console.error("카테고리 추가 실패 : ", e);
+    console.error('카테고리 추가 실패 : ', e);
   }
   
 };

@@ -100,11 +100,10 @@ import axios from 'axios';
 const BASE_URL = 'http://localhost:3000';
 
 const fixedCosts = ref([]);
-const categories = ref([]);  //db에서 가져온 파일
+const categories = ref([]); //db에서 가져온 파일
 const categoryList = ref([]);
 const icons = ref([]);
 const colors = ref([]);
-
 
 const isModalOpen = ref(false);
 const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
@@ -116,16 +115,19 @@ const selectedType = ref(null);
 
 const openModal = () => {
   isModalOpen.value = true;
-  categoryList.value = categories.value.map(cat => {
-    
-    const matchedIcon = icons.value.find(i => String(i.iconId) === String(cat.iconId));
-    
-    const matchedColor = colors.value.find(c => String(c.colorId) === String(cat.colorId));
+  categoryList.value = categories.value.map((cat) => {
+    const matchedIcon = icons.value.find(
+      (i) => String(i.iconId) === String(cat.iconId),
+    );
+
+    const matchedColor = colors.value.find(
+      (c) => String(c.colorId) === String(cat.colorId),
+    );
 
     return {
       ...cat,
-      iconType: matchedIcon ? matchedIcon.value : 'question', 
-      iconColor: matchedColor ? matchedColor.value : '#cccccc' 
+      iconType: matchedIcon ? matchedIcon.value : 'question',
+      iconColor: matchedColor ? matchedColor.value : '#cccccc',
     };
   });
 };
@@ -142,7 +144,7 @@ const fetchFixedCosts = async () => {
       axios.get(`${BASE_URL}/fixed-cost`),
       axios.get(`${BASE_URL}/category`),
       axios.get(`${BASE_URL}/icons`),
-      axios.get(`${BASE_URL}/colors`)
+      axios.get(`${BASE_URL}/colors`),
     ]);
 
     fixedCosts.value = resCosts.data;
@@ -150,7 +152,7 @@ const fetchFixedCosts = async () => {
     icons.value = resIcons.data;
     colors.value = resColors.data;
   } catch (e) {
-    console.error("데이터 로딩 실패:", e);
+    console.error('데이터 로딩 실패:', e);
   }
 };
 
@@ -161,11 +163,14 @@ const saveDefault = async () => {
   }
 
   const newCost = {
-    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나 
+    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나
     // json-server 규칙에 맞춰 전달합니다.
-    type: 'expense', 
+    type: 'expense',
     amount: Number(amount.value),
-    memo: categories.value.find((c) => c.categoryId === selectedCategory.value.categoryId)?.name || '미지정',
+    memo:
+      categories.value.find(
+        (c) => c.categoryId === selectedCategory.value.categoryId,
+      )?.name || '미지정',
     cycle: 'monthly',
     day: selectedDay.value,
     categoryId: selectedCategory.value.categoryId,
@@ -174,12 +179,12 @@ const saveDefault = async () => {
   try {
     // 2. 서버에 POST 요청을 보냅니다. (Insert)
     await axios.post(`${BASE_URL}/fixed-cost`, newCost);
-    
+
     // 3. 저장이 성공하면 목록을 다시 불러오고 모달을 닫습니다.
     await fetchFixedCosts();
     closeModal();
   } catch (e) {
-    alert("서버 저장에 실패했습니다.");
+    alert('서버 저장에 실패했습니다.');
     console.error(e);
   }
 };
@@ -188,14 +193,14 @@ const removeItem = async (id) => {
   if (!confirm('정말 삭제하시겠습니까?')) return;
 
   try {
-    // 4. 서버에 DELETE 요청을 보냅니다. 
+    // 4. 서버에 DELETE 요청을 보냅니다.
     // URL 뒤에 /ID를 붙이는 건 REST API의 정석이죠!
     await axios.delete(`${BASE_URL}/fixed-cost/${id}`);
-    
+
     // 5. 삭제 성공 후 목록 갱신
     await fetchFixedCosts();
   } catch (e) {
-    alert("삭제 중 오류가 발생했습니다.");
+    alert('삭제 중 오류가 발생했습니다.');
     console.error(e);
   }
 };
@@ -237,7 +242,6 @@ const displayList = computed(() => {
   });
 });
 
-
 const format = (num) => {
   return new Intl.NumberFormat().format(num);
 };
@@ -274,8 +278,8 @@ onMounted(fetchFixedCosts);
 
 .modal-header {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;           
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -286,13 +290,13 @@ onMounted(fetchFixedCosts);
 }
 
 .close-btn {
-  background: none;              /* 배경 제거 */
-  border: none;                  /* 테두리 제거 */
-  font-size: 28px;               /* 크기 키우기 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 28px; /* 크기 키우기 */
   font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
-  font-weight: 300;              /* 선 두께 조절 */
+  font-weight: 300; /* 선 두께 조절 */
   cursor: pointer;
-  line-height: 1;                /* 높이 조절 */
+  line-height: 1; /* 높이 조절 */
   padding: 0;
 }
 .close-btn:hover {
@@ -377,29 +381,52 @@ onMounted(fetchFixedCosts);
 /* 실제 팝업 박스 */
 .modal-content {
   background: white;
-  padding: 20px;
-  border-radius: 15px;
-  width: 85%;
-  max-width: 400px;
-  border: 1px solid #000;
+  padding: 30px 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 420px;
+  border: 2px solid #000;
 }
 
 .modal-tag {
-  background-color: #e0e0e0;     /* 목업과 같은 연한 회색 */
-  padding: 5px 15px;             /* 안쪽 여백 */
-  border-radius: 20px;           /* 알약 모양으로 둥글게 */
+  background-color: #e0e0e0; /* 목업과 같은 연한 회색 */
+  padding: 5px 15px; /* 안쪽 여백 */
+  border-radius: 20px; /* 알약 모양으로 둥글게 */
   font-size: 14px;
   font-weight: bold;
   color: #333;
 }
 
 .complete-btn {
-  border-radius: 15px;
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px; /* 마지막 섹션과의 간격 */
+  background-color: #e0e0e0 !important;
+  border: 1px solid #000 !important;
+  color: #000 !important;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  opacity: 1 !important;
+}
+.complete-btn:hover {
+  background-color: #d0d0d0 !important;
 }
 
 .date-selector-wrapper {
-  position: relative; 
+  position: relative;
   width: 100%;
+}
+
+.input-box {
+  border-radius: 8px;
+
+  border: 1px solid #d1d5db;
+
+  padding: 10px 15px;
+
+  outline: none;
 }
 
 .date-display {
@@ -439,25 +466,25 @@ onMounted(fetchFixedCosts);
 }
 
 .cat-item {
-  flex: 0 0 auto; /* 크기가 줄어들거나 늘어나지 않게 고정 */
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 .category-scroll-container {
-  display: flex; /* 가로로 나열 */
-  gap: 15px; /* 아이템 사이 간격 */
-  overflow-x: auto; /* 가로로 넘치면 스크롤 생성 */
-  padding: 10px 5px; /* 선택 효과가 잘리지 않게 여백 */
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 10px;
 
-  /* 스크롤바 디자인 (선택 사항) */
-  scrollbar-width: thin; /* 파이어폭스 */
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 /* 스크롤바 커스텀 (Chrome, Safari) */
 .category-scroll-container::-webkit-scrollbar {
-  height: 4px;
+  width: 6px;
 }
 .category-scroll-container::-webkit-scrollbar-thumb {
   background: #ccc;
@@ -468,10 +495,30 @@ onMounted(fetchFixedCosts);
   margin-top: 5px;
   color: #666;
 }
+.icon-circle {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 1px solid #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
 /* 카테고리 선택 시 파란색 테두리 하이라이트 */
 .cat-item.selected .icon-circle {
-  border: 3px solid #007bff; /* 파란색 테두리 */
-  transform: scale(1.05); /* 살짝 커지는 효과 */
-  transition: all 0.2s;
+  border: 3px solid #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  transform: scale(1.1);
+}
+.selection-section {
+  margin-bottom: 30px; /* 섹션 간의 여백을 확실히 띄움 */
+}
+.section-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 15px; /* 라벨과 컨텐츠 사이 간격 */
+  font-size: 16px;
 }
 </style>
