@@ -18,7 +18,11 @@
       <template #day-content="{ day }">
         <div
           class="day-cell"
-          :class="{ selected: selectedDate === formatDate(day) }"
+          :class="{
+            selected: selectedDate === formatDate(day),
+            'other-month': !isCurrentMonth(day),
+            sunday: isSunday(day),
+          }"
           @click="selectDate(formatDate(day))"
         >
           <!-- 날짜 숫자 -->
@@ -217,6 +221,18 @@ export default {
       const day = String(dateObj.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     };
+
+    //다른 달의 날짜 회색처리를 위한
+    const isCurrentMonth = (dateObj) => {
+      return (
+        dateObj.getFullYear() === showDate.value.getFullYear() &&
+        dateObj.getMonth() === showDate.value.getMonth()
+      );
+    };
+    //일요일 판별
+    const isSunday = (dateObj) => {
+      return dateObj.getDay() === 0;
+    };
     return {
       showDate,
       items,
@@ -233,6 +249,8 @@ export default {
       formatDate,
       transactions,
       categoryData,
+      isCurrentMonth,
+      isSunday,
     };
   },
 };
@@ -330,5 +348,21 @@ export default {
 }
 .account-calendar .cv-day-number {
   display: none;
+}
+
+/* 현재 화면에서 다른 달의 날짜를 회색처리 */
+.day-cell.other-month {
+  color: #bdbdbd;
+  opacity: 0.5;
+}
+/* 일요일 빨간색 */
+.day-cell.sunday .day-number {
+  color: red;
+  font-weight: bold;
+}
+/* 다른 달 + 일요일 (덮어쓰기) */
+.day-cell.other-month.sunday .day-number {
+  color: #bdbdbd !important;
+  font-weight: normal;
 }
 </style>
