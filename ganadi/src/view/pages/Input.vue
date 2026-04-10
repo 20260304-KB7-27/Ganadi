@@ -130,23 +130,42 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import { ref, computed, onMounted, onUnmounted, reactive } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import axios from "axios";
 
 const router = useRouter();
 const route = useRoute();
 const isMemoActive = ref(false);
 
-const transactionType = ref('expense');
-const today = new Date().toISOString().split('T')[0];
+const transactionType = ref("expense");
+const today = new Date().toISOString().split("T")[0];
 const date = ref(route.query.date || today);
-const memo = ref('');
-const amount = ref('0');
+const memo = ref("");
+const amount = ref("0");
 const isTyping = ref(false);
 const selectedCategoryId = ref(null);
 const isCategoryPopupOpen = ref(false);
+// 수정모드
+const isEditMode = computed(() => route.query.mode === "edit");
+const editId = computed(() => route.query.id || null);
+const fetchTransactionDetail = async () => {
+  if (!isEditMode.value || !editId.value) return;
 
+  try {
+    const res = await axios.get(`/api/transactions/${editId.value}`);
+    const data = res.data;
+
+    transactionType.value = data.type;
+    date.value = data.date;
+    memo.value = data.memo || "";
+    amount.value = String(data.amount || "0");
+    selectedCategoryId.value = data.categoryId;
+  } catch (err) {
+    console.error("거래 상세 불러오기 실패:", err);
+    alert("수정할 거래 정보를 불러오지 못했습니다.");
+  }
+};
 const state = reactive({
   categories: [],
   icons: [],
@@ -172,7 +191,7 @@ const fetchInitialData = async () => {
       state.colors = resColor.data;
     }
   } catch (err) {
-    console.error('데이터 로드 실패:', err);
+    console.error("데이터 로드 실패:", err);
   }
 };
 
@@ -181,20 +200,20 @@ const filteredCategories = computed(() => {
 });
 
 const formattedAmount = computed(() => {
-  if (!amount.value || amount.value === '0') return '0';
+  if (!amount.value || amount.value === "0") return "0";
   return Number(amount.value).toLocaleString();
 });
 
 // db.json의 icons 배열을 참조하여 부트스트랩 클래스로 변환
 const getIcon = (iconId) => {
   const iconObj = state.icons.find((i) => i.iconId === String(iconId));
-  return iconObj ? `bi-${iconObj.value}` : 'bi-question-circle';
+  return iconObj ? `bi-${iconObj.value}` : "bi-question-circle";
 };
 
 // db.json의 colors 배열에서 색상값 찾기
 const getColor = (colorId) => {
   return (
-    state.colors.find((c) => c.colorId === String(colorId))?.value || '#ccc'
+    state.colors.find((c) => c.colorId === String(colorId))?.value || "#ccc"
   );
 };
 
@@ -204,12 +223,12 @@ const selectCategory = (categoryId) => {
 
 const handleKeyClick = (key) => {
   if (isMemoActive.value) return;
-  if (key === 'BACK') {
-    amount.value = amount.value.length > 1 ? amount.value.slice(0, -1) : '0';
+  if (key === "BACK") {
+    amount.value = amount.value.length > 1 ? amount.value.slice(0, -1) : "0";
     return;
   }
-  if (amount.value === '0') {
-    if (key === '0' || key === '00') return;
+  if (amount.value === "0") {
+    if (key === "0" || key === "00") return;
     amount.value = key;
   } else if (amount.value.length < 11) {
     amount.value += key;
@@ -221,27 +240,27 @@ const handleKeyDown = (event) => {
 
   if (/^[0-9]$/.test(event.key)) {
     handleKeyClick(event.key);
-  } else if (event.key === 'Backspace') {
-    handleKeyClick('BACK');
-  } else if (event.key === 'Enter') {
+  } else if (event.key === "Backspace") {
+    handleKeyClick("BACK");
+  } else if (event.key === "Enter") {
     event.preventDefault();
     handleSave();
   }
 };
 
 const handleCancel = () => {
-  if (confirm('작성을 취소하고 메인 화면으로 돌아가시겠습니까?')) {
-    router.push('/');
+  if (confirm("작성을 취소하고 메인 화면으로 돌아가시겠습니까?")) {
+    router.push("/");
   }
 };
 
 const handleSave = async () => {
-  if (amount.value === '0') {
-    alert('금액을 입력해주세요!');
+  if (amount.value === "0") {
+    alert("금액을 입력해주세요!");
     return;
   }
 
-  const newTransaction = {
+  const transactionData = {
     amount: String(amount.value),
     date: date.value,
     type: transactionType.value,
@@ -250,21 +269,28 @@ const handleSave = async () => {
   };
 
   try {
-    await axios.post('/api/transactions', newTransaction);
-    alert('저장완료!');
-    router.push('/'); // 메인으로 이동
+    if (isEditMode.value && editId.value) {
+      await axios.put(`/api/transactions/${editId.value}`, transactionData);
+      alert("수정완료!");
+    } else {
+      await axios.post("/api/transactions", transactionData);
+      alert("저장완료!");
+    }
+
+    router.push("/"); // 메인으로 이동
   } catch (err) {
-    alert('저장 실패!');
+    alert("저장 실패!");
   }
 };
 
-onMounted(() => {
-  fetchInitialData(); // 시작 시 서버 데이터 가져오기
-  window.addEventListener('keydown', handleKeyDown);
+onMounted(async () => {
+  await fetchInitialData();
+  await fetchTransactionDetail();
+  window.addEventListener("keydown", handleKeyDown);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener("keydown", handleKeyDown);
 });
 </script>
 

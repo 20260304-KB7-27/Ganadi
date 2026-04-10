@@ -13,6 +13,7 @@
           income: transaction.type === 'income',
           expense: transaction.type === 'expense',
         }"
+        @click="goEdit(transaction.id)"
       >
         <div class="transaction-info">
           <div class="left-area">
@@ -37,7 +38,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps({
   selectedDate: {
@@ -70,6 +74,16 @@ const filteredTransactions = computed(() => {
       };
     });
 });
+
+const goEdit = (id) => {
+  router.push({
+    path: "/input",
+    query: {
+      id,
+      mode: "edit",
+    },
+  });
+};
 </script>
 
 <style scoped>
@@ -94,6 +108,7 @@ const filteredTransactions = computed(() => {
   margin-bottom: 8px;
   border-radius: 4px;
   background-color: white;
+  cursor: pointer;
 }
 
 .transaction-item.income {
