@@ -84,3 +84,15 @@ export const adaptGraphData = (
         categorySummary,
     };
 };
+//월 별 총 소비액만 가져오기
+export const getMonthlyExpense = (transactions, year, month) => {
+  const targetMonth = getTargetMonthString(year, month);
+
+  return transactions
+    .filter((item) => {
+      return item.type === 'expense' && item.date.startsWith(targetMonth);
+    })
+    .reduce((sum, item) => {
+      return sum + Number(item.amount);
+    }, 0);
+};

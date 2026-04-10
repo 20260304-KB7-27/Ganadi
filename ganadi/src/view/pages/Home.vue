@@ -49,6 +49,7 @@ import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
 import DailyDetail from '../components/DailyDetail.vue';
 import axios from 'axios';
+import { getMonthlyExpense } from '@/utils/graphAdapter';
 
 export default {
   name: 'Home',
@@ -60,19 +61,6 @@ export default {
   },
 
   setup() {
-    //입금,소비,잔액,목표금액
-    const expense = ref(2000000);
-    const income = ref(500000);
-    const balance = computed(() => {
-      return income.value - expense.value;
-    });
-    const goal_money = ref(0);
-    const budgetList = ref([]);
-    //달성률
-    const completed_rate = computed(() => {
-      if (goal_money.value === 0) return 0;
-      return Math.round((expense.value / goal_money.value) * 100);
-    });
 
     const showDate = ref(new Date());
 
@@ -96,7 +84,7 @@ export default {
         );
         goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
       };
-
+    const transactions = ref([]);
     onMounted(async () => {
       try {
          const [transRes, budRes] = await Promise.all([
@@ -104,7 +92,8 @@ export default {
           axios.get('/api/budget')
         ]);
       
-        const transactions = transRes.data;
+       transactions.value = transRes.data;
+
         const budgetData = budRes.data;
         budgetList.value = budgetData;
         
@@ -112,7 +101,7 @@ export default {
 
         const grouped = {};
 
-        transactions.forEach((transaction) => {
+        transactions.value.forEach((transaction) => {
           const date = transaction.date;
 
           if (!grouped[date]) {
@@ -159,6 +148,25 @@ export default {
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
+    });
+     //입금,소비,잔액,목표금액
+    const expense = computed(() => {
+      return getMonthlyExpense(
+        transactions.value,
+        showDate.value.getFullYear(),
+        showDate.value.getMonth() + 1
+      );
+    });
+    const income = ref(500000);
+    const balance = computed(() => {
+      return income.value - expense.value;
+    });
+    const goal_money = ref(0);
+    const budgetList = ref([]);
+    //달성률
+    const completed_rate = computed(() => {
+      if (goal_money.value === 0) return 0;
+      return Math.round((expense.value / goal_money.value) * 100);
     });
      watch(showDate, () => {
       updateGoalMoney();
