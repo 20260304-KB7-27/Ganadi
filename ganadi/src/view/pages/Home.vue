@@ -53,6 +53,7 @@
 
 <script>
 import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import { CalendarView } from "vue-simple-calendar";
 import "vue-simple-calendar/dist/vue-simple-calendar.css";
 import ProgressBar from "../components/ProgressBar.vue";
@@ -64,6 +65,7 @@ import {
   getMonthlyIncome,
   getCategory,
 } from "@/utils/graphAdapter";
+import { useCalendarStore } from "@/stores/calendarStore";
 
 export default {
   name: "Home",
@@ -75,12 +77,28 @@ export default {
   },
 
   setup() {
-    const showDate = ref(new Date());
+    const calendarStore = useCalendarStore();
+    const route = useRoute();
+
+    const now = new Date();
+
+    const initialYear = route.query.year
+      ? Number(route.query.year)
+      : now.getFullYear();
+    const initialMonth = route.query.month
+      ? Number(route.query.month)
+      : now.getMonth() + 1;
+
+    const showDate = ref(new Date(initialYear, initialMonth - 1, 1));
 
     const items = ref([]);
 
     // 기본 선택 날짜: 오늘
     const selectedDate = ref(new Date().toISOString().split("T")[0]);
+
+    // 처음 페이지 진입 시 현재 보고 있는 달 store에 저장
+    calendarStore.setDate(showDate.value);
+
     const selectDate = (date) => {
       selectedDate.value = date;
     };
@@ -195,8 +213,11 @@ export default {
       if (goal_money.value === 0) return 0;
       return Math.round((expense.value / goal_money.value) * 100);
     });
-    watch(showDate, () => {
+
+    // showDate 바뀔 때마다 store 갱신
+    watch(showDate, (newDate) => {
       updateGoalMoney();
+      calendarStore.setDate(newDate);
     });
 
     const currentMonth = computed(() => {
