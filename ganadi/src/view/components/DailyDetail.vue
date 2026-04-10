@@ -22,9 +22,6 @@
             >
               <i :class="`bi bi-${transaction.iconType}`"></i>
             </div>
-            <div class="category-name">
-              {{ transaction.categoryName }}
-            </div>
           </div>
           <div class="memo">
             {{ transaction.memo }}
@@ -113,12 +110,6 @@ const filteredTransactions = computed(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.category-name {
-  font-size: 12px;
-  font-weight: normal;
-  color: #666;
 }
 
 .memo {
