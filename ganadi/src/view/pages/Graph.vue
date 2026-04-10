@@ -26,6 +26,7 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { useCharacterStore } from '@/stores/characterStore';
 
 import GraphMonthSelector from '../components/graph/graphMonthSelector.vue';
@@ -36,17 +37,25 @@ import GraphChart from '../components/graph/graphChart.vue';
 import { getGraphRawData } from '@/api/graphService';
 import { evaluateCharacterLevelIfNeeded } from '@/api/characterService';
 import { adaptGraphData } from '@/utils/graphAdapter';
-// import { graphMockData } from '@/model/mock/graphMockData';
+import { useCalendarStore } from '@/stores/calendarStore';
 
-// const graphData = graphMockData;
-
+const route = useRoute();
 const characterStore = useCharacterStore();
+const calendarStore = useCalendarStore();
+
 const now = new Date();
 const currentYear = now.getFullYear();
 const currentMonth = now.getMonth() + 1;
 
-const selectedYear = ref(now.getFullYear());
-const selectedMonth = ref(now.getMonth() + 1);
+const initialYear = route.query.year ? Number(route.query.year) : currentYear;
+const initialMonth = route.query.month
+    ? Number(route.query.month)
+    : currentMonth;
+
+const selectedYear = ref(initialYear);
+const selectedMonth = ref(initialMonth);
+
+calendarStore.setDate(new Date(initialYear, initialMonth - 1, 1));
 
 const rawData = ref(null);
 
@@ -118,6 +127,9 @@ onMounted(async () => {
 });
 
 watch([selectedYear, selectedMonth], () => {
+    calendarStore.setDate(
+        new Date(selectedYear.value, selectedMonth.value - 1, 1),
+    );
     updateGraphData();
 });
 </script>
