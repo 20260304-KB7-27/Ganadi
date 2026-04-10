@@ -84,3 +84,23 @@ export const adaptGraphData = (
         categorySummary,
     };
 };
+//월 별 총 소비액 OR 총 수입액 가져오기
+const getMonthlyAmountByType = (transactions, year, month, type) => {
+  const targetMonth = `${year}-${String(month).padStart(2, '0')}`;
+
+  return transactions
+    .filter((item) => {
+      return item.type === type && item.date.startsWith(targetMonth);
+    })
+    .reduce((sum, item) => {
+      return sum + Number(item.amount);
+    }, 0);
+};
+
+export const getMonthlyExpense = (transactions, year, month) => {
+  return getMonthlyAmountByType(transactions, year, month, 'expense');
+};
+
+export const getMonthlyIncome = (transactions, year, month) => {
+  return getMonthlyAmountByType(transactions, year, month, 'income');
+};

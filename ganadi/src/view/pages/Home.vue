@@ -42,13 +42,14 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { CalendarView } from 'vue-simple-calendar';
 import 'vue-simple-calendar/dist/vue-simple-calendar.css';
 import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
 import DailyDetail from '../components/DailyDetail.vue';
 import axios from 'axios';
+import  { getMonthlyExpense, getMonthlyIncome } from '@/utils/graphAdapter';
 
 export default {
   name: 'Home',
@@ -60,17 +61,6 @@ export default {
   },
 
   setup() {
-    //입금,소비,잔액,목표금액
-    const expense = ref(2000000);
-    const income = ref(500000);
-    const balance = computed(() => {
-      return income.value - expense.value;
-    });
-    const goal_money = ref(100000);
-    //달성률
-    const completed_rate = computed(() => {
-      return (expense.value / goal_money.value) * 100;
-    });
 
     const showDate = ref(new Date());
 
@@ -81,14 +71,37 @@ export default {
     const selectDate = (date) => {
       selectedDate.value = date;
     };
+
+      const getTargetMonth = (dateObj) => {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+      };
+      const updateGoalMoney = () => {
+        const currentTargetMonth = getTargetMonth(showDate.value);
+        const currentBudget = budgetList.value.find(
+            (item) => item.targetMonth === currentTargetMonth
+        );
+        goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
+      };
+    const transactions = ref([]);
     onMounted(async () => {
       try {
-        const response = await axios.get('/api/transactions');
-        const transactions = response.data;
+         const [transRes, budRes] = await Promise.all([
+          axios.get('/api/transactions'),
+          axios.get('/api/budget')
+        ]);
+      
+       transactions.value = transRes.data;
+
+        const budgetData = budRes.data;
+        budgetList.value = budgetData;
+        
+        updateGoalMoney();
 
         const grouped = {};
 
-        transactions.forEach((transaction) => {
+        transactions.value.forEach((transaction) => {
           const date = transaction.date;
 
           if (!grouped[date]) {
@@ -135,6 +148,34 @@ export default {
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
+    });
+     //입금,소비,잔액,목표금액
+    const expense = computed(() => {
+      return getMonthlyExpense(
+        transactions.value,
+        showDate.value.getFullYear(),
+        showDate.value.getMonth() + 1
+      );
+    });
+    const income = computed(() => {
+      return getMonthlyIncome(
+        transactions.value,
+        showDate.value.getFullYear(),
+        showDate.value.getMonth() + 1
+      );
+    });
+    const balance = computed(() => {
+      return income.value - expense.value;
+    });
+    const goal_money = ref(0);
+    const budgetList = ref([]);
+    //달성률
+    const completed_rate = computed(() => {
+      if (goal_money.value === 0) return 0;
+      return Math.round((expense.value / goal_money.value) * 100);
+    });
+     watch(showDate, () => {
+      updateGoalMoney();
     });
 
     const currentMonth = computed(() => {
