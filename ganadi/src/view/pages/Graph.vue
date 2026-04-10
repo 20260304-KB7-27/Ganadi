@@ -128,6 +128,7 @@ watch([selectedYear, selectedMonth], () => {
     padding: 16px 16px 90px;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .graph-content {
@@ -148,9 +149,10 @@ watch([selectedYear, selectedMonth], () => {
 
     .graph-content {
         flex-direction: row;
-        align-items: flex-start;
+        align-items: stretch;
         justify-content: space-between;
         gap: 40px;
+        min-height: 78vh;
     }
 
     .graph-left {
@@ -165,7 +167,10 @@ watch([selectedYear, selectedMonth], () => {
         flex: 1 1 48%;
         min-width: 360px;
         max-width: 520px;
-        align-self: stretch;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
 </style>

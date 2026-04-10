@@ -32,6 +32,7 @@ defineProps({
     border-radius: 8px;
     padding: 14px 12px;
     min-height: 180px;
+    max-height: 285px;
 }
 
 .category-list {
@@ -49,9 +50,12 @@ defineProps({
 
 @media (min-width: 1024px) {
     .category-list-wrapper {
-        min-height: 700px;
+        min-height: 100px;
+        max-height: 600px;
+        overflow-y: auto;
         padding: 18px 18px;
         border-radius: 18px;
+        margin-top: 100px;
     }
 
     .category-list {
