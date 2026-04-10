@@ -102,7 +102,7 @@ const loadCategory = async () => {
     const [resCats, resIcons, resColors] = await Promise.all([
       axios.get(`${BASE_URL}/category`),
       axios.get(`${BASE_URL}/icons`),
-      axios.get(`${BASE_URL}/colors`)
+      axios.get(`${BASE_URL}/colors`),
     ]);
 
     const fetchedCategories = resCats.data;
@@ -131,20 +131,6 @@ const loadCategory = async () => {
 const addCategory = async () => {
   try {
     isModalOpen.value = false;
-<<<<<<< Updated upstream
-  if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
-    alert('이름, 색상, 아이콘을 모두 선택해주세요!');
-    return;
-  }
-
-  const newCategory = {
-    categoryId: categoryList.value.length + 1,
-    name: categoryName.value,
-    iconId: selectedIcon.value.iconId,
-    colorId: selectedColor.value.colorId,
-    type: 'expense',
-  };
-=======
     if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
       alert('이름, 색상, 아이콘을 모두 선택해주세요!');
       return;
@@ -157,23 +143,18 @@ const addCategory = async () => {
       colorId: selectedColor.value.colorId,
       type: 'expense',
     };
->>>>>>> Stashed changes
 
-  categoryList.value.push(newCategory);
+    categoryList.value.push(newCategory);
 
-  await axios.post(`${BASE_URL}/category`, newCategory);
-  await loadCategory();
-  //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
+    await axios.post(`${BASE_URL}/category`, newCategory);
+    await loadCategory();
+    //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
-
-  closeModal();
+    closeModal();
   } catch (e) {
     console.error('카테고리 추가 실패 : ', e);
   }
-  
 };
-
-c
 
 const closeModal = () => {
   isModalOpen.value = false;
