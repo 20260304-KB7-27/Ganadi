@@ -27,7 +27,11 @@
       </template>
     </CalendarView>
     <!-- 상세내역 -->
-    <DailyDetail :selectedDate="selectedDate" />
+    <DailyDetail
+      :selectedDate="selectedDate"
+      :transactions="transactions"
+      :categoryData="categoryData"
+    />
     <RouterLink
       :to="{ path: '/input', query: { date: selectedDate } }"
       class="add-button"
@@ -49,7 +53,11 @@ import ProgressBar from "../components/ProgressBar.vue";
 import Header from "../components/Header.vue";
 import DailyDetail from "../components/DailyDetail.vue";
 import axios from "axios";
-import { getMonthlyExpense, getMonthlyIncome } from "@/utils/graphAdapter";
+import {
+  getMonthlyExpense,
+  getMonthlyIncome,
+  getCategory,
+} from "@/utils/graphAdapter";
 
 export default {
   name: "Home",
@@ -84,14 +92,23 @@ export default {
       goal_money.value = currentBudget ? Number(currentBudget.amount) : 0;
     };
     const transactions = ref([]);
+    const categoryData = ref([]);
     onMounted(async () => {
       try {
-        const [transRes, budRes] = await Promise.all([
-          axios.get("/api/transactions"),
-          axios.get("/api/budget"),
-        ]);
+        const [transRes, budRes, categoryRes, iconsRes, colorsRes] =
+          await Promise.all([
+            axios.get("/api/transactions"),
+            axios.get("/api/budget"),
+            axios.get("/api/category"),
+            axios.get("/api/icons"),
+            axios.get("/api/colors"),
+          ]);
         transactions.value = transRes.data;
-
+        categoryData.value = getCategory(
+          categoryRes.data,
+          iconsRes.data,
+          colorsRes.data,
+        );
         const budgetData = budRes.data;
         budgetList.value = budgetData;
 
@@ -212,6 +229,8 @@ export default {
       selectedDate,
       selectDate,
       formatDate,
+      transactions,
+      categoryData,
     };
   },
 };
