@@ -108,6 +108,7 @@ const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
 const amount = ref('');
 const selectedCategory = ref(null);
 const selectedDay = ref(null);
+const selectedType = ref(null);
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -126,11 +127,40 @@ const openModal = () => {
 };
 
 const fetchFixedCosts = () => {
-  fixedCosts.value = db['fixed-cost'];
+  const initialData = db['fixed-cost'];
+  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]')
+
+  fixedCosts.value = [...initialData, ...userAddedData];
   categories.value = db['category'];
   icons.value = db['icons'];
   colors.value = db['colors'];
 };
+
+const saveDefault = () => {
+  if (!amount.value || !selectedCategory || !selectedDay) {
+    alert('모든 항목을 입력하세요.');
+    return;
+  }
+
+  const newCost = {
+    fixedCostId: `user-${Date.now()}`,
+    type: 'expanse', //selectedType.value,
+    amount: amount.value,
+    memo: categories.value.find((c)=>c.categoryId===selectedCategory.value.categoryId).name,
+    cycle: 'monthly',
+    day: selectedDay.value,
+    categoryId: selectedCategory.value.categoryId,
+  }
+
+  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]');
+  userAddedData.push(newCost);
+
+  localStorage.setItem('userFixedCosts', JSON.stringify(userAddedData));
+
+  fetchFixedCosts();
+  
+  closeModal();
+}
 
 const selectDay = (day) => {
   selectedDay.value = day;
@@ -175,7 +205,11 @@ const displayList = computed(() => {
 });
 
 const removeItem = (id) => {
-  fixedCosts.value = fixedCosts.value.filter((item) => item.fixedCostId !== id);
+  const userAddedData = JSON.parse(localStorage.getItem('userFixedCosts') || '[]');
+  const filteredData = userAddedData.filter((item)=>item.fixedCostId !== id);
+
+  localStorage.setItem('userFixedCosts', JSON.stringify(filteredData));
+  fetchFixedCosts();
 };
 
 const format = (num) => {
