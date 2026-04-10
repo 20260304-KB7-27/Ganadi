@@ -1,6 +1,9 @@
 <template>
   <div class="set-group header-box">
-    <h5>카테고리 추가</h5>
+    <h5>카테고리 선택</h5>
+    <div @click="isRemoveCategory = !isRemoveCategory">
+      <i :class="`bi bi-gear-fill`"></i>
+    </div>
   </div>
   <div class="category-container">
     <div
@@ -11,6 +14,13 @@
     >
       <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
+      </div>
+      <div
+        v-if="isRemoveCategory"
+        class="delete-badge"
+        @click.stop="deleteCategory(item.id)"
+      >
+        <i class="bi bi-x"></i>
       </div>
     </div>
     <div class="category-item add-btn" @click="isModalOpen = true">
@@ -93,6 +103,7 @@ const activeTab = ref('color'); //color or icon
 const BASE_URL = 'http://localhost:3000';
 
 const isModalOpen = ref(false);
+const isRemoveCategory = ref(false);
 
 const selectedColor = ref('');
 const selectedIcon = ref('');
@@ -102,7 +113,7 @@ const loadCategory = async () => {
     const [resCats, resIcons, resColors] = await Promise.all([
       axios.get(`${BASE_URL}/category`),
       axios.get(`${BASE_URL}/icons`),
-      axios.get(`${BASE_URL}/colors`)
+      axios.get(`${BASE_URL}/colors`),
     ]);
 
     const fetchedCategories = resCats.data;
@@ -131,33 +142,40 @@ const loadCategory = async () => {
 const addCategory = async () => {
   try {
     isModalOpen.value = false;
-  if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
-    alert('이름, 색상, 아이콘을 모두 선택해주세요!');
-    return;
-  }
+    if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
+      alert('이름, 색상, 아이콘을 모두 선택해주세요!');
+      return;
+    }
 
-  const newCategory = {
-    categoryId: categoryList.value.length + 1,
-    name: categoryName.value,
-    iconId: selectedIcon.value.iconId,
-    colorId: selectedColor.value.colorId,
-    type: 'expense',
-  };
+    const newCategory = {
+      categoryId: categoryList.value.length + 1,
+      name: categoryName.value,
+      iconId: selectedIcon.value.iconId,
+      colorId: selectedColor.value.colorId,
+      type: 'expense',
+    };
 
-  categoryList.value.push(newCategory);
+    categoryList.value.push(newCategory);
 
-  await axios.post(`${BASE_URL}/category`, newCategory);
-  await loadCategory();
+    await axios.post(`${BASE_URL}/category`, newCategory);
+    await loadCategory();
 
-
-  closeModal();
+    closeModal();
   } catch (e) {
-    console.error("카테고리 추가 실패 : ", e);
+    console.error('카테고리 추가 실패 : ', e);
   }
-  
 };
 
-
+const deleteCategory = async (id) => {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+  try {
+    await axios.delete(`{BASE_URL}/category/${id}`);
+    await loadCategory();
+  } catch (e) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(e);
+  }
+};
 
 const closeModal = () => {
   isModalOpen.value = false;
@@ -346,5 +364,40 @@ onMounted(() => {
   background: none;
   color: #999;
   cursor: pointer;
+}
+
+.category-card {
+  position: relative; /* 자식인 delete-badge의 기준점 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 삭제 X 버튼 디자인 */
+.delete-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background-color: #ff4d4d; /* 빨간색 */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* 톱니바퀴 아이콘 애니메이션 (선택사항) */
+.bi-gear-fill {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.bi-gear-fill:hover {
+  transform: rotate(90deg);
 }
 </style>

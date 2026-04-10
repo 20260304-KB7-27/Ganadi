@@ -70,7 +70,7 @@
   <ul class="fixed-list">
     <li
       v-for="item in displayList"
-      :key="item.fixedCostId"
+      :key="item.id"
       class="fixed-item-card"
     >
       <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
@@ -84,7 +84,7 @@
 
       <div class="date-text">매월 {{ item.day }}일</div>
 
-      <button class="remove-btn" @click="removeItem(item.fixedCostId)">
+      <button class="remove-btn" @click="removeItem(item.id)">
         -
       </button>
     </li>
@@ -93,7 +93,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import db from '/db.json';
 import axios from 'axios';
 
 // 서버 주소 (예: json-server 사용 시)
@@ -210,29 +209,20 @@ const closeModal = () => {
 };
 
 const displayList = computed(() => {
+  // categories나 fixedCosts가 없으면 빈 배열 반환하고 종료
+  if (!categories.value.length || !fixedCosts.value.length) return [];
+
   return fixedCosts.value.map((item) => {
-    const matchedCategory = categories.value.find(
-      (c) => c.categoryId === item.categoryId,
-    );
-    console.log(matchedCategory);
-    console.log(categories.value);
-
-    let matchedIcon = null;
-    let matchedColor = null;
-
-    if (matchedCategory) {
-      matchedIcon = icons.value?.find(
-        (i) => i.iconId === matchedCategory.iconId,
-      );
-      matchedColor = colors.value?.find(
-        (c) => c.colorId === matchedCategory.colorId,
-      );
-    }
+    const matchedCategory = categories.value.find(c => String(c.categoryId) === String(item.categoryId));
+    
+    // 매칭되는 카테고리가 없을 때의 기본값 설정 (매우 중요)
+    const iconId = matchedCategory?.iconId;
+    const colorId = matchedCategory?.colorId;
 
     return {
       ...item,
-      iconType: matchedIcon ? matchedIcon.value : 'bag',
-      iconColor: matchedColor ? matchedColor.value : '#e0e0e0',
+      iconType: icons.value.find(i => String(i.iconId) === String(iconId))?.value || 'question',
+      iconColor: colors.value.find(c => String(c.colorId) === String(colorId))?.value || '#eeeeee',
     };
   });
 });
