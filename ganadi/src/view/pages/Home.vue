@@ -49,7 +49,7 @@ import ProgressBar from '../components/ProgressBar.vue';
 import Header from '../components/Header.vue';
 import DailyDetail from '../components/DailyDetail.vue';
 import axios from 'axios';
-import { getMonthlyExpense } from '@/utils/graphAdapter';
+import  { getMonthlyExpense, getMonthlyIncome } from '@/utils/graphAdapter';
 
 export default {
   name: 'Home',
@@ -157,7 +157,13 @@ export default {
         showDate.value.getMonth() + 1
       );
     });
-    const income = ref(500000);
+    const income = computed(() => {
+      return getMonthlyIncome(
+        transactions.value,
+        showDate.value.getFullYear(),
+        showDate.value.getMonth() + 1
+      );
+    });
     const balance = computed(() => {
       return income.value - expense.value;
     });
