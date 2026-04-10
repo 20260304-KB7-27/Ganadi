@@ -84,6 +84,7 @@
 import { ref, onMounted } from 'vue';
 import categories from '@/data/category.json';
 import presets from '@/data/preset_options.json';
+import db from '/db.json';
 
 const categoryList = ref([]);
 const categoryName = ref('');
@@ -96,7 +97,7 @@ const isModalOpen = ref(false);
 const selectedColor = ref('');
 const selectedIcon = ref('');
 
-const loadCategory = async () => {
+const loadCategory = () => {
   try {
     // const [resCategory, resPreset] = await Promise.all([
     //   axios.get('@/src/model/data/category.json'),
@@ -107,10 +108,10 @@ const loadCategory = async () => {
     // console.log(categories);
     // const icons = resPreset.data.icons;  // 이렇게 하는거 맞나?
     // const colors = resPreset.data.colors;
-    iconList.value = presets.icons;
-    colorList.value = presets.colors;
+    iconList.value = db.icons;
+    colorList.value = db.colors;
 
-    categoryList.value = categories.category.map((cat) => {
+    categoryList.value = db.category.map((cat) => {
       const matchedIcon = iconList.value.find(
         (icon) => icon.iconId === cat.iconId,
       );
