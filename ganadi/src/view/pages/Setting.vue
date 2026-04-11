@@ -13,7 +13,7 @@ import SetDefault from '../components/SetDefault.vue';
 
 <style scoped>
 .card {
-    background: #f5f5f5;
+    /* background: #f5f5f5; */
     padding: 20px;
     border-radius: 16px;
     /* width: 320px; */
