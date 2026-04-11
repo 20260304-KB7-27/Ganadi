@@ -14,22 +14,56 @@
       :completedRate="completed_rate"
       :goalMoney="goal_money"
     />
-    <CalendarView :items="items" :show-date="showDate" class="account-calendar">
-      <template #day-content="{ day }">
-        <div
-          class="day-cell"
-          :class="{
-            selected: selectedDate === formatDate(day),
-            'other-month': !isCurrentMonth(day),
-            sunday: isSunday(day),
-          }"
-          @click="selectDate(formatDate(day))"
-        >
-          <!-- 날짜 숫자 -->
-          <div class="day-number">{{ day.getDate() }}</div>
-        </div>
-      </template>
-    </CalendarView>
+    <div class="calendar-wrapper">
+      <CalendarView
+        :items="items"
+        :show-date="showDate"
+        class="account-calendar"
+      >
+        <template #day-content="{ day }">
+          <div
+            class="day-cell"
+            :class="{
+              selected: selectedDate === formatDate(day),
+              'other-month': !isCurrentMonth(day),
+              sunday: isSunday(day),
+            }"
+            @click="selectDate(formatDate(day))"
+          >
+            <!-- 날짜 숫자 -->
+            <div class="day-number">{{ day.getDate() }}</div>
+          </div>
+        </template>
+      </CalendarView>
+      <!-- 장식 이미지 레이어 -->
+      <div class="calendar-deco-layer">
+        <img
+          src="@/assets/images/calendar/ganadi_cat.png"
+          class="deco-img deco-top-left"
+          :style="{ width: '60px', height: '70px' }"
+        />
+        <img
+          src="@/assets/images/calendar/ganadi_hart.png"
+          class="deco-img deco-top-right"
+          :style="{ width: '80px', height: '120px' }"
+        />
+        <img
+          src="@/assets/images/calendar/ganadi_shy.png"
+          class="deco-img deco-middle"
+          :style="{ width: '80px', height: '80px' }"
+        />
+        <img
+          src="@/assets/images/calendar/ganadi_with_cat.png"
+          class="deco-img deco-bottom-left"
+          :style="{ width: '120px', height: '100px' }"
+        />
+        <img
+          src="@/assets/images/calendar/gnadi_fight.png"
+          class="deco-img deco-bottom-right"
+          :style="{ width: '80px', height: '100px' }"
+        />
+      </div>
+    </div>
     <div class="detail-section">
       <RouterLink
         :to="{ path: '/input', query: { date: selectedDate } }"
@@ -385,5 +419,49 @@ export default {
 .day-cell.other-month.sunday .day-number {
   color: #bdbdbd !important;
   font-weight: normal;
+}
+
+.calendar-wrapper {
+  position: relative;
+}
+
+.calendar-deco-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.deco-img {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* 원하는 위치에 배치 */
+.deco-top-left {
+  top: 18%;
+  left: 23%;
+}
+
+.deco-top-right {
+  top: -5px;
+  right: -40px;
+}
+
+.deco-middle {
+  top: 50%;
+  left: 45%;
+  transform: translateX(-50%);
+}
+
+.deco-bottom-left {
+  bottom: -50px;
+  left: -30px;
+}
+
+.deco-bottom-right {
+  bottom: 45px;
+  right: 50px;
 }
 </style>
