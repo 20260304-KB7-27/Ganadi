@@ -1,16 +1,26 @@
 <template>
   <div class="set-group header-box">
-    <h5>카테고리 추가</h5>
+    <h5>카테고리 선택</h5>
+    <div @click="isRemoveCategory = !isRemoveCategory">
+      <i :class="`bi bi-gear-fill`"></i>
+    </div>
   </div>
   <div class="category-container">
     <div
       v-for="item in categoryList"
-      :key="item.categoryId"
+      :key="item.id"
       class="category-card"
       :style="{ borderColor: item.iconColor }"
     >
       <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
         <i :class="`bi bi-${item.iconType}`"></i>
+      </div>
+      <div
+        v-if="isRemoveCategory"
+        class="delete-badge"
+        @click.stop="deleteCategory(item.id)"
+      >
+        <i class="bi bi-x"></i>
       </div>
     </div>
     <div class="category-item add-btn" @click="isModalOpen = true">
@@ -81,21 +91,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import db from "/db.json";
-import axios from "axios";
+import { ref, onMounted } from 'vue';
+import db from '/db.json';
+import axios from 'axios';
 
 const categoryList = ref([]);
-const categoryName = ref("");
+const categoryName = ref('');
 const iconList = ref([]);
 const colorList = ref([]);
-const activeTab = ref("color"); //color or icon
-const BASE_URL = "http://localhost:3000";
+const activeTab = ref('color'); //color or icon
+const BASE_URL = 'http://localhost:3000';
 
 const isModalOpen = ref(false);
+const isRemoveCategory = ref(false);
 
-const selectedColor = ref("");
-const selectedIcon = ref("");
+const selectedColor = ref('');
+const selectedIcon = ref('');
 
 const loadCategory = async () => {
   try {
@@ -119,12 +130,12 @@ const loadCategory = async () => {
 
       return {
         ...cat,
-        iconType: matchedIcon ? matchedIcon.value : "circle", //해당되는 icon없을시 디폴트 아이콘으로
-        iconColor: matchedColor ? matchedColor.value : "#000000",
+        iconType: matchedIcon ? matchedIcon.value : 'circle', //해당되는 icon없을시 디폴트 아이콘으로
+        iconColor: matchedColor ? matchedColor.value : '#000000',
       };
     });
   } catch (e) {
-    console.error("카테고리 불러오기 실패 : ", e);
+    console.error('카테고리 불러오기 실패 : ', e);
   }
 };
 
@@ -132,7 +143,7 @@ const addCategory = async () => {
   try {
     isModalOpen.value = false;
     if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
-      alert("이름, 색상, 아이콘을 모두 선택해주세요!");
+      alert('이름, 색상, 아이콘을 모두 선택해주세요!');
       return;
     }
 
@@ -141,14 +152,13 @@ const addCategory = async () => {
       name: categoryName.value,
       iconId: selectedIcon.value.iconId,
       colorId: selectedColor.value.colorId,
-      type: "expense",
+      type: 'expense',
     };
 
     categoryList.value.push(newCategory);
 
     await axios.post(`${BASE_URL}/category`, newCategory);
     await loadCategory();
-    //   저장은 아직 안되서 추후 보완해야함!!!!!!!!!!!!
 
     closeModal();
   } catch (e) {
@@ -156,12 +166,23 @@ const addCategory = async () => {
   }
 };
 
+const deleteCategory = async (id) => {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+  try {
+    await axios.delete(`${BASE_URL}/category/${id}`);
+    await loadCategory();
+  } catch (e) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(e);
+  }
+};
+
 const closeModal = () => {
   isModalOpen.value = false;
-  categoryName.value = "";
-  selectedColor.value = "";
-  selectedIcon.value = "";
-  activeTab.value = "color";
+  categoryName.value = '';
+  selectedColor.value = '';
+  selectedIcon.value = '';
+  activeTab.value = 'color';
 };
 
 onMounted(() => {
@@ -187,7 +208,7 @@ onMounted(() => {
   background: none; /* 배경 제거 */
   border: none; /* 테두리 제거 */
   font-size: 28px; /* 크기 키우기 */
-  font-family: "Arial", sans-serif; /* 폰트 설정 (X 모양을 위해) */
+  font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
   font-weight: 300; /* 선 두께 조절 */
   cursor: pointer;
   line-height: 1; /* 높이 조절 */
@@ -343,5 +364,40 @@ onMounted(() => {
   background: none;
   color: #999;
   cursor: pointer;
+}
+
+.category-card {
+  position: relative; /* 자식인 delete-badge의 기준점 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 삭제 X 버튼 디자인 */
+.delete-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background-color: #ff4d4d; /* 빨간색 */
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* 톱니바퀴 아이콘 애니메이션 (선택사항) */
+.bi-gear-fill {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.bi-gear-fill:hover {
+  transform: rotate(90deg);
 }
 </style>
