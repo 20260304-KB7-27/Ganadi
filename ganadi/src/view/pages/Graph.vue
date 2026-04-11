@@ -47,10 +47,15 @@ const now = new Date();
 const currentYear = now.getFullYear();
 const currentMonth = now.getMonth() + 1;
 
-const initialYear = route.query.year ? Number(route.query.year) : currentYear;
-const initialMonth = route.query.month
-    ? Number(route.query.month)
-    : currentMonth;
+const routeYear = route.query.year ? Number(route.query.year) : currentYear;
+const routeMonth = route.query.month ? Number(route.query.month) : currentMonth;
+
+const isFutureOrCurrentMonth =
+    routeYear > currentYear ||
+    (routeYear === currentYear && routeMonth >= currentMonth);
+
+const initialYear = isFutureOrCurrentMonth ? currentYear : routeYear;
+const initialMonth = isFutureOrCurrentMonth ? currentMonth : routeMonth;
 
 const selectedYear = ref(initialYear);
 const selectedMonth = ref(initialMonth);
