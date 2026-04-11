@@ -152,7 +152,7 @@ const addCategory = async () => {
 
     closeModal();
   } catch (e) {
-    console.error("카테고리 추가 실패 : ", e);
+    console.error('카테고리 추가 실패 : ', e);
   }
 };
 
