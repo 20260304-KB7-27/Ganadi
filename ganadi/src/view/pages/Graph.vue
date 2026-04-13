@@ -1,6 +1,7 @@
 <template>
     <div class="card card -body">
         <div class="graph-page">
+            <MainHeader />
             <GraphMonthSelector
                 :selected-year="selectedYear"
                 :selected-month="selectedMonth"
@@ -38,6 +39,7 @@ import { getGraphRawData } from '@/api/graphService';
 import { evaluateCharacterLevelIfNeeded } from '@/api/characterService';
 import { adaptGraphData } from '@/utils/graphAdapter';
 import { useCalendarStore } from '@/stores/calendarStore';
+import MainHeader from '../components/MainHeader.vue';
 
 const route = useRoute();
 const characterStore = useCharacterStore();

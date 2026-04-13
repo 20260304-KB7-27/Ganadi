@@ -1,6 +1,6 @@
 <template>
     <div class="set-group header-box">
-        <h5>카테고리 선택</h5>
+        <h5>카테고리 추가</h5>
         <div @click="isRemoveCategory = !isRemoveCategory">
             <i :class="`bi bi-gear-fill`"></i>
         </div>
@@ -72,22 +72,6 @@
                         @click="selectedColor = color"
                     ></div>
                 </div>
-
-                <div v-if="activeTab === 'icon'" class="selection-grid">
-                    <div
-                        v-for="icon in iconList"
-                        :key="icon.iconId"
-                        class="icon-item"
-                        :class="{ selected: selectedIcon === icon }"
-                        @click="selectedIcon = icon"
-                    >
-                        <i :class="`bi bi-${icon.value}`"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="complete-btn" @click="addCategory">완료</button>
             </div>
         </div>
     </div>

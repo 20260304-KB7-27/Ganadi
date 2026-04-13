@@ -1,7 +1,75 @@
 <template>
     <div class="set-group header-box">
-        <h5>default값 설정</h5>
+        <h5>기본값 설정</h5>
         <button class="add-btn" @click="openModal">+</button>
+    </div>
+
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="tag">고정 지출 추가</span>
+                <button class="close-btn" @click="closeModal">X</button>
+            </div>
+
+            <div class="selection-section">
+                <label class="section-label">카테고리 선택</label>
+                <div class="category-scroll-container">
+                    <div
+                        v-for="cat in categoryList"
+                        :key="cat.categoryId"
+                        class="cat-item"
+                        :class="{
+                            selected:
+                                selectedCategory?.categoryId === cat.categoryId,
+                        }"
+                        @click="selectedCategory = cat"
+                    >
+                        <div
+                            class="icon-circle"
+                            :style="{ backgroundColor: cat.iconColor }"
+                        >
+                            <i :class="`bi bi-${cat.iconType}`"></i>
+                        </div>
+                        <span class="cat-name">{{ cat.categoryName }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="selection-section">
+                <label class="section-label">가격</label>
+                <div class="input-box">
+                    <input type="number" v-model="amount" placeholder="0" />
+                    <span class="unit">원</span>
+                    <i class="bi bi-pencil"></i>
+                </div>
+            </div>
+
+            <div class="selection-section">
+                <label class="section-label">지정 날짜</label>
+                <div class="date-selector-wrapper">
+                    <div
+                        class="date-display"
+                        @click="isDateListOpen = !isDateListOpen"
+                    >
+                        매월
+                        <span>{{ selectedDay ? selectedDay : '   ' }}</span> 일
+                    </div>
+
+                    <div v-if="isDateListOpen" class="date-list-popup">
+                        <div
+                            v-for="day in 31"
+                            :key="day"
+                            class="date-option"
+                            @click="selectDay(day)"
+                        >
+                            {{ day }}일
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="complete-btn" @click="saveDefault">완료</button>
+        </div>
     </div>
 
     <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
@@ -336,12 +404,12 @@ onMounted(fetchFixedCosts);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background-color: #ffcce0; /* 목업과 비슷한 핑크색 (필요시 변경) */
     border-radius: 50%;
     border: 1px solid #111; /* 원형 테두리 */
-    font-size: 20px;
+    font-size: 24px;
     margin-right: 15px;
 }
 
@@ -500,17 +568,6 @@ onMounted(fetchFixedCosts);
     font-size: 12px;
     margin-top: 5px;
     color: #666;
-}
-.icon-circle {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: 1px solid #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    margin-bottom: 8px;
 }
 /* 카테고리 선택 시 파란색 테두리 하이라이트 */
 .cat-item.selected .icon-circle {
