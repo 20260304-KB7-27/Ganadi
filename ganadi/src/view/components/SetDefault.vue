@@ -1,6 +1,6 @@
 <template>
   <div class="set-group header-box">
-    <h5>default값 설정</h5>
+    <h5>기본값 설정</h5>
     <button class="add-btn" @click="openModal">+</button>
   </div>
 

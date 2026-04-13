@@ -1,6 +1,6 @@
 <template>
   <div class="set-group header-box">
-    <h5>카테고리 선택</h5>
+    <h5>카테고리 추가</h5>
     <div @click="isRemoveCategory = !isRemoveCategory">
       <i :class="`bi bi-gear-fill`"></i>
     </div>
