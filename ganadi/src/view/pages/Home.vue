@@ -450,8 +450,8 @@ export default {
 }
 
 .deco-middle {
-  top: 50%;
-  left: 45%;
+  top: 55%;
+  left: 42%;
   transform: translateX(-50%);
 }
 
