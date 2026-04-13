@@ -42,6 +42,7 @@ npm install axios -> http 라이브러리 사용
 npm install bootstrap-icons
 npm i vue-chartjs chart.js
 npm i --save vue-simple-calendar
+npm install vite-plugin-pwa --save-dev
 npm install  
 npm run dev
 
