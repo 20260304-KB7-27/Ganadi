@@ -98,7 +98,7 @@ const categoryName = ref('');
 const iconList = ref([]);
 const colorList = ref([]);
 const activeTab = ref('color'); //color or icon
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://railway-production-eae7.up.railway.app';
 
 const isModalOpen = ref(false);
 const isRemoveCategory = ref(false);
