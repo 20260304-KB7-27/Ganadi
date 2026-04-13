@@ -1,76 +1,75 @@
 <template>
-<<<<<<< HEAD
     <div class="set-group header-box">
-        <h5>default값 설정</h5>
+        <h5>기본값 설정</h5>
         <button class="add-btn" @click="openModal">+</button>
-=======
-  <div class="set-group header-box">
-    <h5>기본값 설정</h5>
-    <button class="add-btn" @click="openModal">+</button>
-  </div>
+    </div>
 
-  <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="tag">고정 지출 추가</span>
-        <button class="close-btn" @click="closeModal">X</button>
-      </div>
-
-      <div class="selection-section">
-        <label class="section-label">카테고리 선택</label>
-        <div class="category-scroll-container">
-          <div
-            v-for="cat in categoryList"
-            :key="cat.categoryId"
-            class="cat-item"
-            :class="{
-              selected: selectedCategory?.categoryId === cat.categoryId,
-            }"
-            @click="selectedCategory = cat"
-          >
-            <div
-              class="icon-circle"
-              :style="{ backgroundColor: cat.iconColor }"
-            >
-              <i :class="`bi bi-${cat.iconType}`"></i>
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="tag">고정 지출 추가</span>
+                <button class="close-btn" @click="closeModal">X</button>
             </div>
-            <span class="cat-name">{{ cat.categoryName }}</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="selection-section">
-        <label class="section-label">가격</label>
-        <div class="input-box">
-          <input type="number" v-model="amount" placeholder="0" />
-          <span class="unit">원</span>
-          <i class="bi bi-pencil"></i>
-        </div>
-      </div>
-
-      <div class="selection-section">
-        <label class="section-label">지정 날짜</label>
-        <div class="date-selector-wrapper">
-          <div class="date-display" @click="isDateListOpen = !isDateListOpen">
-            매월
-            <span>{{ selectedDay ? selectedDay : "   " }}</span> 일
-          </div>
-
-          <div v-if="isDateListOpen" class="date-list-popup">
-            <div
-              v-for="day in 31"
-              :key="day"
-              class="date-option"
-              @click="selectDay(day)"
-            >
-              {{ day }}일
+            <div class="selection-section">
+                <label class="section-label">카테고리 선택</label>
+                <div class="category-scroll-container">
+                    <div
+                        v-for="cat in categoryList"
+                        :key="cat.categoryId"
+                        class="cat-item"
+                        :class="{
+                            selected:
+                                selectedCategory?.categoryId === cat.categoryId,
+                        }"
+                        @click="selectedCategory = cat"
+                    >
+                        <div
+                            class="icon-circle"
+                            :style="{ backgroundColor: cat.iconColor }"
+                        >
+                            <i :class="`bi bi-${cat.iconType}`"></i>
+                        </div>
+                        <span class="cat-name">{{ cat.categoryName }}</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <button class="complete-btn" @click="saveDefault">완료</button>
->>>>>>> 9ae2a095e23232f61e5a30b7a48a524d0213484c
+            <div class="selection-section">
+                <label class="section-label">가격</label>
+                <div class="input-box">
+                    <input type="number" v-model="amount" placeholder="0" />
+                    <span class="unit">원</span>
+                    <i class="bi bi-pencil"></i>
+                </div>
+            </div>
+
+            <div class="selection-section">
+                <label class="section-label">지정 날짜</label>
+                <div class="date-selector-wrapper">
+                    <div
+                        class="date-display"
+                        @click="isDateListOpen = !isDateListOpen"
+                    >
+                        매월
+                        <span>{{ selectedDay ? selectedDay : '   ' }}</span> 일
+                    </div>
+
+                    <div v-if="isDateListOpen" class="date-list-popup">
+                        <div
+                            v-for="day in 31"
+                            :key="day"
+                            class="date-option"
+                            @click="selectDay(day)"
+                        >
+                            {{ day }}일
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="complete-btn" @click="saveDefault">완료</button>
+        </div>
     </div>
 
     <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
@@ -165,11 +164,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import axios from "axios";
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
 
 // 서버 주소 (예: json-server 사용 시)
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = 'http://localhost:3000';
 
 const fixedCosts = ref([]);
 const categories = ref([]); //db에서 가져온 파일
@@ -180,7 +179,7 @@ const colors = ref([]);
 const isModalOpen = ref(false);
 const isDateListOpen = ref(false); // 날짜 리스트 열림 여부
 
-const amount = ref("");
+const amount = ref('');
 const selectedCategory = ref(null);
 const selectedDay = ref(null);
 const selectedType = ref(null);
@@ -196,12 +195,12 @@ const openModal = () => {
             (c) => String(c.colorId) === String(cat.colorId),
         );
 
-    return {
-      ...cat,
-      iconType: matchedIcon ? matchedIcon.value : "question",
-      iconColor: matchedColor ? matchedColor.value : "#cccccc",
-    };
-  });
+        return {
+            ...cat,
+            iconType: matchedIcon ? matchedIcon.value : 'question',
+            iconColor: matchedColor ? matchedColor.value : '#cccccc',
+        };
+    });
 };
 const selectDay = (day) => {
     selectedDay.value = day;
@@ -219,71 +218,71 @@ const fetchFixedCosts = async () => {
             axios.get(`${BASE_URL}/colors`),
         ]);
 
-    fixedCosts.value = resCosts.data;
-    categories.value = resCats.data;
-    icons.value = resIcons.data;
-    colors.value = resColors.data;
-  } catch (e) {
-    console.error("데이터 로딩 실패:", e);
-  }
+        fixedCosts.value = resCosts.data;
+        categories.value = resCats.data;
+        icons.value = resIcons.data;
+        colors.value = resColors.data;
+    } catch (e) {
+        console.error('데이터 로딩 실패:', e);
+    }
 };
 
 const saveDefault = async () => {
-  if (!amount.value || !selectedCategory.value || !selectedDay.value) {
-    alert("모든 항목을 입력하세요.");
-    return;
-  }
+    if (!amount.value || !selectedCategory.value || !selectedDay.value) {
+        alert('모든 항목을 입력하세요.');
+        return;
+    }
 
-  const newCost = {
-    // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나
-    // json-server 규칙에 맞춰 전달합니다.
-    type: "expense",
-    amount: Number(amount.value),
-    memo:
-      categories.value.find(
-        (c) => c.categoryId === selectedCategory.value.categoryId,
-      )?.name || "미지정",
-    cycle: "monthly",
-    day: selectedDay.value,
-    categoryId: selectedCategory.value.categoryId,
-  };
+    const newCost = {
+        // ID는 보통 DB(Auto Increment)나 서버에서 생성하므로 생략하거나
+        // json-server 규칙에 맞춰 전달합니다.
+        type: 'expense',
+        amount: Number(amount.value),
+        memo:
+            categories.value.find(
+                (c) => c.categoryId === selectedCategory.value.categoryId,
+            )?.name || '미지정',
+        cycle: 'monthly',
+        day: selectedDay.value,
+        categoryId: selectedCategory.value.categoryId,
+    };
 
     try {
         // 2. 서버에 POST 요청을 보냅니다. (Insert)
         await axios.post(`${BASE_URL}/fixed-cost`, newCost);
 
-    // 3. 저장이 성공하면 목록을 다시 불러오고 모달을 닫습니다.
-    await fetchFixedCosts();
-    closeModal();
-  } catch (e) {
-    alert("서버 저장에 실패했습니다.");
-    console.error(e);
-  }
+        // 3. 저장이 성공하면 목록을 다시 불러오고 모달을 닫습니다.
+        await fetchFixedCosts();
+        closeModal();
+    } catch (e) {
+        alert('서버 저장에 실패했습니다.');
+        console.error(e);
+    }
 };
 
 const removeItem = async (id) => {
-  if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!confirm('정말 삭제하시겠습니까?')) return;
 
     try {
         // 4. 서버에 DELETE 요청을 보냅니다.
         // URL 뒤에 /ID를 붙이는 건 REST API의 정석이죠!
         await axios.delete(`${BASE_URL}/fixed-cost/${id}`);
 
-    // 5. 삭제 성공 후 목록 갱신
-    await fetchFixedCosts();
-  } catch (e) {
-    alert("삭제 중 오류가 발생했습니다.");
-    console.error(e);
-  }
+        // 5. 삭제 성공 후 목록 갱신
+        await fetchFixedCosts();
+    } catch (e) {
+        alert('삭제 중 오류가 발생했습니다.');
+        console.error(e);
+    }
 };
 
 // 모달 닫기 및 초기화
 const closeModal = () => {
-  isModalOpen.value = false;
-  amount.value = "";
-  selectedCategory.value = null;
-  selectedDay.value = null;
-  isDateListOpen.value = false;
+    isModalOpen.value = false;
+    amount.value = '';
+    selectedCategory.value = null;
+    selectedDay.value = null;
+    isDateListOpen.value = false;
 };
 
 const displayList = computed(() => {
@@ -299,16 +298,16 @@ const displayList = computed(() => {
         const iconId = matchedCategory?.iconId;
         const colorId = matchedCategory?.colorId;
 
-    return {
-      ...item,
-      iconType:
-        icons.value.find((i) => String(i.iconId) === String(iconId))?.value ||
-        "question",
-      iconColor:
-        colors.value.find((c) => String(c.colorId) === String(colorId))
-          ?.value || "#eeeeee",
-    };
-  });
+        return {
+            ...item,
+            iconType:
+                icons.value.find((i) => String(i.iconId) === String(iconId))
+                    ?.value || 'question',
+            iconColor:
+                colors.value.find((c) => String(c.colorId) === String(colorId))
+                    ?.value || '#eeeeee',
+        };
+    });
 });
 
 const format = (num) => {
@@ -328,21 +327,21 @@ onMounted(fetchFixedCosts);
 
 /* --- 헤더 박스 디자인 --- */
 .header-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* background-color: #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: #e0e0e0;
   border: 1px solid #111; */
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .header-box h5 {
-  margin: 0;
+    margin: 0;
 }
 
 .header-title {
@@ -365,27 +364,27 @@ onMounted(fetchFixedCosts);
 }
 
 .close-btn {
-  background: none; /* 배경 제거 */
-  border: none; /* 테두리 제거 */
-  font-size: 28px; /* 크기 키우기 */
-  font-family: "Arial", sans-serif; /* 폰트 설정 (X 모양을 위해) */
-  font-weight: 300; /* 선 두께 조절 */
-  cursor: pointer;
-  line-height: 1; /* 높이 조절 */
-  padding: 0;
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    font-size: 28px; /* 크기 키우기 */
+    font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
+    font-weight: 300; /* 선 두께 조절 */
+    cursor: pointer;
+    line-height: 1; /* 높이 조절 */
+    padding: 0;
 }
 .close-btn:hover {
     color: #888;
 }
 
 .add-btn {
-  background: none;
-  border: none;
-  font-size: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  line-height: 1;
-  /* padding: 0 5px; */
+    background: none;
+    border: none;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    /* padding: 0 5px; */
 }
 
 /* --- 리스트 아이템 카드 디자인 --- */
@@ -402,16 +401,16 @@ onMounted(fetchFixedCosts);
 
 /* 왼쪽 아이콘 원형 배경 */
 .icon-circle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  background-color: #ffcce0; /* 목업과 비슷한 핑크색 (필요시 변경) */
-  border-radius: 50%;
-  border: 1px solid #111; /* 원형 테두리 */
-  font-size: 24px;
-  margin-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #ffcce0; /* 목업과 비슷한 핑크색 (필요시 변경) */
+    border-radius: 50%;
+    border: 1px solid #111; /* 원형 테두리 */
+    font-size: 24px;
+    margin-right: 15px;
 }
 
 /* 금액 텍스트 (flex-grow: 1을 줘서 우측 요소들을 밀어냅니다) */
@@ -570,21 +569,6 @@ onMounted(fetchFixedCosts);
     margin-top: 5px;
     color: #666;
 }
-<<<<<<< HEAD
-.icon-circle {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: 1px solid #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    margin-bottom: 8px;
-}
-=======
-
->>>>>>> 9ae2a095e23232f61e5a30b7a48a524d0213484c
 /* 카테고리 선택 시 파란색 테두리 하이라이트 */
 .cat-item.selected .icon-circle {
     border: 3px solid #007bff;
