@@ -79,7 +79,7 @@
       <!-- 상세내역 -->
       <DailyDetail
         :selectedDate="selectedDate"
-        :transactions="transactions"
+        :transactions="mergedTransactions"
         :categoryData="categoryData"
       />
     </div>
@@ -87,24 +87,24 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { CalendarView } from 'vue-simple-calendar';
-import 'vue-simple-calendar/dist/vue-simple-calendar.css';
-import ProgressBar from '../components/ProgressBar.vue';
-import Header from '../components/Header.vue';
-import DailyDetail from '../components/DailyDetail.vue';
-import axios from 'axios';
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { CalendarView } from "vue-simple-calendar";
+import "vue-simple-calendar/dist/vue-simple-calendar.css";
+import ProgressBar from "../components/ProgressBar.vue";
+import Header from "../components/Header.vue";
+import DailyDetail from "../components/DailyDetail.vue";
+import axios from "axios";
 import {
   getMonthlyExpense,
   getMonthlyIncome,
   getCategory,
-} from '@/utils/graphAdapter';
-import { useCalendarStore } from '@/stores/calendarStore';
-import MainHeader from '../components/MainHeader.vue';
+} from "@/utils/graphAdapter";
+import { useCalendarStore } from "@/stores/calendarStore";
+import MainHeader from "../components/MainHeader.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     CalendarView,
     ProgressBar,
@@ -128,10 +128,57 @@ export default {
 
     const showDate = ref(new Date(initialYear, initialMonth - 1, 1));
 
-    const items = ref([]);
+    const items = computed(() => {
+      const grouped = {};
+
+      mergedTransactions.value.forEach((transaction) => {
+        const date = transaction.date;
+
+        if (!grouped[date]) {
+          grouped[date] = {
+            income: 0,
+            expense: 0,
+          };
+        }
+
+        if (transaction.type === "income") {
+          grouped[date].income += Number(transaction.amount);
+        } else if (transaction.type === "expense") {
+          grouped[date].expense += Number(transaction.amount);
+        }
+      });
+
+      const transactionItems = [];
+
+      Object.keys(grouped).forEach((date) => {
+        const dayData = grouped[date];
+
+        if (dayData.income > 0) {
+          transactionItems.push({
+            id: `income-${date}`,
+            startDate: date,
+            endDate: date,
+            title: "+" + dayData.income.toLocaleString(),
+            classes: ["income-item"],
+          });
+        }
+
+        if (dayData.expense > 0) {
+          transactionItems.push({
+            id: `expense-${date}`,
+            startDate: date,
+            endDate: date,
+            title: "-" + dayData.expense.toLocaleString(),
+            classes: ["expense-item"],
+          });
+        }
+      });
+
+      return transactionItems;
+    });
 
     // 기본 선택 날짜: 오늘
-    const selectedDate = ref(new Date().toISOString().split('T')[0]);
+    const selectedDate = ref(new Date().toISOString().split("T")[0]);
 
     // 처음 페이지 진입 시 현재 보고 있는 달 store에 저장
     calendarStore.setDate(showDate.value);
@@ -142,7 +189,7 @@ export default {
 
     const getTargetMonth = (dateObj) => {
       const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
       return `${year}-${month}`;
     };
     const updateGoalMoney = () => {
@@ -154,21 +201,58 @@ export default {
     };
     const transactions = ref([]);
     const categoryData = ref([]);
+    const fixedCosts = ref([]);
+
+    const makeFixedCostTransactions = (fixedCosts, targetDate) => {
+      const year = targetDate.getFullYear();
+      const month = targetDate.getMonth() + 1;
+      const lastDay = new Date(year, month, 0).getDate();
+
+      return fixedCosts
+        .filter((item) => item.cycle === "monthly")
+        .map((item) => {
+          const day = Math.min(Number(item.day), lastDay);
+          const date = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+          return {
+            transactionId: `fixed-${item.fixedCostId}-${year}-${month}`,
+            amount: item.amount,
+            date,
+            type: item.type,
+            categoryId: String(item.categoryId),
+            memo: item.memo,
+            isFixed: true,
+          };
+        });
+    };
+
+    const mergedTransactions = computed(() => {
+      const fixedTransactionList = makeFixedCostTransactions(
+        fixedCosts.value,
+        showDate.value,
+      );
+      return [...transactions.value, ...fixedTransactionList];
+    });
     onMounted(async () => {
       try {
-        const [transRes, budRes, categoryRes, iconsRes, colorsRes] =
+        const [transRes, budRes, categoryRes, iconsRes, colorsRes, fixedRes] =
           await Promise.all([
             axios.get(
-              'https://railway-production-eae7.up.railway.app/transactions',
+              "https://railway-production-eae7.up.railway.app/transactions",
             ),
-            axios.get('https://railway-production-eae7.up.railway.app/budget'),
+            axios.get("https://railway-production-eae7.up.railway.app/budget"),
             axios.get(
-              'https://railway-production-eae7.up.railway.app/category',
+              "https://railway-production-eae7.up.railway.app/category",
             ),
-            axios.get('https://railway-production-eae7.up.railway.app/icons'),
-            axios.get('https://railway-production-eae7.up.railway.app/colors'),
+            axios.get("https://railway-production-eae7.up.railway.app/icons"),
+            axios.get("https://railway-production-eae7.up.railway.app/colors"),
+            axios.get(
+              "https://railway-production-eae7.up.railway.app/fixed-cost",
+            ),
+            ,
           ]);
         transactions.value = transRes.data;
+        fixedCosts.value = fixedRes.data;
         categoryData.value = getCategory(
           categoryRes.data,
           iconsRes.data,
@@ -178,68 +262,22 @@ export default {
         budgetList.value = budgetData;
 
         updateGoalMoney();
-
-        const grouped = {};
-
-        transactions.value.forEach((transaction) => {
-          const date = transaction.date;
-
-          if (!grouped[date]) {
-            grouped[date] = {
-              income: 0,
-              expense: 0,
-            };
-          }
-
-          if (transaction.type === 'income') {
-            grouped[date].income += Number(transaction.amount);
-          } else if (transaction.type === 'expense') {
-            grouped[date].expense += Number(transaction.amount);
-          }
-        });
-
-        const transactionItems = [];
-
-        Object.keys(grouped).forEach((date) => {
-          const dayData = grouped[date];
-
-          if (dayData.income > 0) {
-            transactionItems.push({
-              id: Date.now(),
-              startDate: date,
-              endDate: date,
-              title: '+' + dayData.income.toLocaleString(),
-              classes: ['income-item'],
-            });
-          }
-
-          if (dayData.expense > 0) {
-            transactionItems.push({
-              id: Date.now(),
-              startDate: date,
-              endDate: date,
-              title: '-' + dayData.expense.toLocaleString(),
-              classes: ['expense-item'],
-            });
-          }
-        });
-
-        items.value = transactionItems;
       } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error("Error fetching transactions:", error);
       }
     });
     //입금,소비,잔액,목표금액
     const expense = computed(() => {
       return getMonthlyExpense(
-        transactions.value,
+        mergedTransactions.value,
         showDate.value.getFullYear(),
         showDate.value.getMonth() + 1,
       );
     });
+
     const income = computed(() => {
       return getMonthlyIncome(
-        transactions.value,
+        mergedTransactions.value,
         showDate.value.getFullYear(),
         showDate.value.getMonth() + 1,
       );
@@ -279,8 +317,8 @@ export default {
 
     const formatDate = (dateObj) => {
       const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     };
 
@@ -313,6 +351,8 @@ export default {
       categoryData,
       isCurrentMonth,
       isSunday,
+      fixedCosts,
+      mergedTransactions,
     };
   },
 };
