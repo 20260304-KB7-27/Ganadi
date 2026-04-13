@@ -332,7 +332,7 @@ onMounted(fetchFixedCosts);
   background-color: #ffcce0; /* 목업과 비슷한 핑크색 (필요시 변경) */
   border-radius: 50%;
   border: 1px solid #111; /* 원형 테두리 */
-  font-size: 20px;
+  font-size: 24px;
   margin-right: 15px;
 }
 
