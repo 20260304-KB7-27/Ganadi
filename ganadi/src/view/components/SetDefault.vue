@@ -327,8 +327,8 @@ onMounted(fetchFixedCosts);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   background-color: #ffcce0; /* 목업과 비슷한 핑크색 (필요시 변경) */
   border-radius: 50%;
   border: 1px solid #111; /* 원형 테두리 */
@@ -492,17 +492,7 @@ onMounted(fetchFixedCosts);
   margin-top: 5px;
   color: #666;
 }
-.icon-circle {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 1px solid #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  margin-bottom: 8px;
-}
+
 /* 카테고리 선택 시 파란색 테두리 하이라이트 */
 .cat-item.selected .icon-circle {
   border: 3px solid #007bff;
