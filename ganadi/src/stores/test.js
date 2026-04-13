@@ -1,6 +1,11 @@
 // src/stores/todoStore.js
 import { defineStore } from 'pinia';
-import { fetchTodos, createTodo, updateTodo, deleteTodoApi } from '@/api/test';
+import {
+  fetchTodos,
+  createTodo,
+  updateTodo,
+  deleteTodoApi,
+} from '@https://railway-production-eae7.up.railway.app/test';
 
 export const useTodoStore = defineStore('todo', {
   state: () => ({
