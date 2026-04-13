@@ -1,18 +1,4 @@
 <template>
-    <<<<<<< HEAD
-    <div class="set-group header-box">
-        <h5>{{ targetMonth }}월 목표 지출 설정</h5>
-    </div>
-
-    <div class="budget-row">
-        <input
-            type="number"
-            v-model="goalAmount"
-            placeholder="금액을 입력하세요"
-        />
-        <button @click="updateBudget">수정</button>
-    </div>
-    =======
     <div class="set-group header-box">
         <h5>{{ targetMonth }}월 목표 지출 설정</h5>
     </div>
@@ -31,7 +17,6 @@
 
         <button @click="updateBudget">수정</button>
     </div>
-    >>>>>>> 9ae2a095e23232f61e5a30b7a48a524d0213484c
 </template>
 
 <script setup>
