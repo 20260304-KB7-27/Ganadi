@@ -33,11 +33,9 @@ defineProps({
 });
 
 const emit = defineEmits(['prev-month', 'next-month']);
-
-
 </script>
 
-<style>
+<style scoped>
 .header-row {
   display: flex;
   align-items: center;
@@ -46,7 +44,7 @@ const emit = defineEmits(['prev-month', 'next-month']);
 
 .navbar-brand {
   font-weight: bold;
-  font-size: large
+  font-size: large;
 }
 
 .header-money {
