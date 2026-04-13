@@ -1,4 +1,5 @@
 <template>
+    <<<<<<< HEAD
     <div class="set-group header-box">
         <h5>{{ targetMonth }}월 목표 지출 설정</h5>
     </div>
@@ -11,6 +12,26 @@
         />
         <button @click="updateBudget">수정</button>
     </div>
+    =======
+    <div class="set-group header-box">
+        <h5>{{ targetMonth }}월 목표 지출 설정</h5>
+    </div>
+
+    <div class="budget-row">
+        <img src="@/assets/images/setting.png" class="setting_img" />
+        <div class="box">
+            <div class="pull">
+                <input
+                    type="number"
+                    v-model="goalAmount"
+                    placeholder="금액을 입력하세요"
+                />
+            </div>
+        </div>
+
+        <button @click="updateBudget">수정</button>
+    </div>
+    >>>>>>> 9ae2a095e23232f61e5a30b7a48a524d0213484c
 </template>
 
 <script setup>
@@ -121,10 +142,10 @@ onMounted(() => {
 }
 
 input {
-    width: 400px;
+    width: 100%;
     font-size: 18px;
     border: none;
-    border-bottom: 1px solid #aaa;
+    /* border-bottom: 1px solid #aaa; */
     background: transparent;
 }
 
@@ -137,5 +158,34 @@ button {
     /* background: #ddd; */
     background-color: #f9f9f9;
     border: 1px solid #ddd;
+}
+
+/* 말풍선 */
+.pull {
+    position: relative;
+    margin: 20px;
+    padding: 20px;
+    width: 400px;
+    height: 60px;
+    color: #fff;
+    border-radius: 20px;
+    background-color: #fff3c9;
+    display: flex;
+    align-items: center;
+}
+.pull:after {
+    content: '';
+    position: absolute;
+    top: 21px;
+    left: -30px;
+    border-right: 30px solid #fff3c9;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+.setting_img {
+    width: 70px;
+    height: 70px;
+    margin-right: 10px;
 }
 </style>

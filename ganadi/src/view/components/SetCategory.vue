@@ -1,115 +1,94 @@
 <template>
-    <div class="set-group header-box">
-        <h5>카테고리 선택</h5>
-        <div @click="isRemoveCategory = !isRemoveCategory">
-            <i :class="`bi bi-gear-fill`"></i>
-        </div>
+  <div class="set-group header-box">
+    <h5>카테고리 추가</h5>
+    <div @click="isRemoveCategory = !isRemoveCategory">
+      <i :class="`bi bi-gear-fill`"></i>
     </div>
-    <div class="category-container">
-        <div
-            v-for="item in categoryList"
-            :key="item.id"
-            class="category-card"
-            :style="{ borderColor: item.iconColor }"
+  </div>
+  <div class="category-container">
+    <div
+      v-for="item in categoryList"
+      :key="item.id"
+      class="category-card"
+      :style="{ borderColor: item.iconColor }"
+    >
+      <div class="icon-circle" :style="{ backgroundColor: item.iconColor }">
+        <i :class="`bi bi-${item.iconType}`"></i>
+      </div>
+      <div
+        v-if="isRemoveCategory"
+        class="delete-badge"
+        @click.stop="deleteCategory(item.id)"
+      >
+        <i class="bi bi-x"></i>
+      </div>
+    </div>
+    <div class="category-item add-btn" @click="isModalOpen = true">
+      <div class="icon-circle plus-design">
+        <span>+</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-screen-overlay" v-if="isModalOpen">
+    <div class="overlay-modal">
+      <div class="modal-header">
+        <span class="tag">카테고리 추가</span>
+        <button class="close-btn" @click="closeModal">X</button>
+      </div>
+
+      <div class="input-section">
+        <label>이름 :</label>
+        <input type="text" v-model="categoryName" />
+      </div>
+
+      <div class="tab-buttons">
+        <button
+          :class="{ active: activeTab === 'color' }"
+          @click="activeTab = 'color'"
         >
-            <div
-                class="icon-circle"
-                :style="{ backgroundColor: item.iconColor }"
-            >
-                <i :class="`bi bi-${item.iconType}`"></i>
-            </div>
-            <div
-                v-if="isRemoveCategory"
-                class="delete-badge"
-                @click.stop="deleteCategory(item.id)"
-            >
-                <i class="bi bi-x"></i>
-            </div>
-        </div>
-        <div class="category-item add-btn" @click="isModalOpen = true">
-            <div class="icon-circle plus-design">
-                <span>+</span>
-            </div>
-        </div>
-    </div>
+          색상
+        </button>
+        <div class="v-divider"></div>
+        <button
+          :class="{ active: activeTab === 'icon' }"
+          @click="activeTab = 'icon'"
+        >
+          아이콘
+        </button>
+      </div>
 
-    <div class="main-screen-overlay" v-if="isModalOpen">
-        <div class="overlay-modal">
-            <div class="modal-header">
-                <span class="tag">카테고리 추가</span>
-                <button class="close-btn" @click="closeModal">X</button>
-            </div>
-
-            <div class="input-section">
-                <label>이름 :</label>
-                <input type="text" v-model="categoryName" />
-            </div>
-
-            <div class="tab-buttons">
-                <button
-                    :class="{ active: activeTab === 'color' }"
-                    @click="activeTab = 'color'"
-                >
-                    색상
-                </button>
-                <div class="v-divider"></div>
-                <button
-                    :class="{ active: activeTab === 'icon' }"
-                    @click="activeTab = 'icon'"
-                >
-                    아이콘
-                </button>
-            </div>
-
-            <div class="grid-content-area">
-                <div v-if="activeTab === 'color'" class="selection-grid">
-                    <div
-                        v-for="color in colorList"
-                        :key="color.colorId"
-                        class="color-circle"
-                        :style="{ backgroundColor: color.value }"
-                        :class="{ selected: selectedColor === color }"
-                        @click="selectedColor = color"
-                    ></div>
-                </div>
-
-                <div v-if="activeTab === 'icon'" class="selection-grid">
-                    <div
-                        v-for="icon in iconList"
-                        :key="icon.iconId"
-                        class="icon-item"
-                        :class="{ selected: selectedIcon === icon }"
-                        @click="selectedIcon = icon"
-                    >
-                        <i :class="`bi bi-${icon.value}`"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="complete-btn" @click="addCategory">완료</button>
-            </div>
+      <div class="grid-content-area">
+        <div v-if="activeTab === 'color'" class="selection-grid">
+          <div
+            v-for="color in colorList"
+            :key="color.colorId"
+            class="color-circle"
+            :style="{ backgroundColor: color.value }"
+            :class="{ selected: selectedColor === color }"
+            @click="selectedColor = color"
+          ></div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import db from '/db.json';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import db from "/db.json";
+import axios from "axios";
 
 const categoryList = ref([]);
-const categoryName = ref('');
+const categoryName = ref("");
 const iconList = ref([]);
 const colorList = ref([]);
-const activeTab = ref('color'); //color or icon
-const BASE_URL = 'http://localhost:3000';
+const activeTab = ref("color"); //color or icon
+const BASE_URL = "http://localhost:3000";
 
 const isModalOpen = ref(false);
 const isRemoveCategory = ref(false);
 
-const selectedColor = ref('');
-const selectedIcon = ref('');
+const selectedColor = ref("");
+const selectedIcon = ref("");
 
 const loadCategory = async () => {
     try {
@@ -131,65 +110,61 @@ const loadCategory = async () => {
                 (color) => String(color.colorId) === String(cat.colorId),
             );
 
-            return {
-                ...cat,
-                iconType: matchedIcon ? matchedIcon.value : 'circle', //해당되는 icon없을시 디폴트 아이콘으로
-                iconColor: matchedColor ? matchedColor.value : '#000000',
-            };
-        });
-    } catch (e) {
-        console.error('카테고리 불러오기 실패 : ', e);
-    }
+      return {
+        ...cat,
+        iconType: matchedIcon ? matchedIcon.value : "circle", //해당되는 icon없을시 디폴트 아이콘으로
+        iconColor: matchedColor ? matchedColor.value : "#000000",
+      };
+    });
+  } catch (e) {
+    console.error("카테고리 불러오기 실패 : ", e);
+  }
 };
 
 const addCategory = async () => {
-    try {
-        isModalOpen.value = false;
-        if (
-            !categoryName.value ||
-            !selectedColor.value ||
-            !selectedIcon.value
-        ) {
-            alert('이름, 색상, 아이콘을 모두 선택해주세요!');
-            return;
-        }
-
-        const newCategory = {
-            categoryId: categoryList.value.length + 1,
-            name: categoryName.value,
-            iconId: selectedIcon.value.iconId,
-            colorId: selectedColor.value.colorId,
-            type: 'expense',
-        };
-
-        categoryList.value.push(newCategory);
-
-        await axios.post(`${BASE_URL}/category`, newCategory);
-        await loadCategory();
-
-        closeModal();
-    } catch (e) {
-        console.error('카테고리 추가 실패 : ', e);
+  try {
+    isModalOpen.value = false;
+    if (!categoryName.value || !selectedColor.value || !selectedIcon.value) {
+      alert("이름, 색상, 아이콘을 모두 선택해주세요!");
+      return;
     }
+
+    const newCategory = {
+      categoryId: categoryList.value.length + 1,
+      name: categoryName.value,
+      iconId: selectedIcon.value.iconId,
+      colorId: selectedColor.value.colorId,
+      type: "expense",
+    };
+
+    categoryList.value.push(newCategory);
+
+    await axios.post(`${BASE_URL}/category`, newCategory);
+    await loadCategory();
+
+    closeModal();
+  } catch (e) {
+    console.error("카테고리 추가 실패 : ", e);
+  }
 };
 
 const deleteCategory = async (id) => {
-    if (!confirm('정말 삭제하시겠습니까?')) return;
-    try {
-        await axios.delete(`${BASE_URL}/category/${id}`);
-        await loadCategory();
-    } catch (e) {
-        alert('삭제 중 오류가 발생했습니다.');
-        console.error(e);
-    }
+  if (!confirm("정말 삭제하시겠습니까?")) return;
+  try {
+    await axios.delete(`${BASE_URL}/category/${id}`);
+    await loadCategory();
+  } catch (e) {
+    alert("삭제 중 오류가 발생했습니다.");
+    console.error(e);
+  }
 };
 
 const closeModal = () => {
-    isModalOpen.value = false;
-    categoryName.value = '';
-    selectedColor.value = '';
-    selectedIcon.value = '';
-    activeTab.value = 'color';
+  isModalOpen.value = false;
+  categoryName.value = "";
+  selectedColor.value = "";
+  selectedIcon.value = "";
+  activeTab.value = "color";
 };
 
 onMounted(() => {
@@ -212,14 +187,14 @@ onMounted(() => {
     padding: 2px 10px;
 }
 .close-btn {
-    background: none; /* 배경 제거 */
-    border: none; /* 테두리 제거 */
-    font-size: 28px; /* 크기 키우기 */
-    font-family: 'Arial', sans-serif; /* 폰트 설정 (X 모양을 위해) */
-    font-weight: 300; /* 선 두께 조절 */
-    cursor: pointer;
-    line-height: 1; /* 높이 조절 */
-    padding: 0;
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 28px; /* 크기 키우기 */
+  font-family: "Arial", sans-serif; /* 폰트 설정 (X 모양을 위해) */
+  font-weight: 300; /* 선 두께 조절 */
+  cursor: pointer;
+  line-height: 1; /* 높이 조절 */
+  padding: 0;
 }
 .close-btn:hover {
     color: #888;
@@ -263,21 +238,21 @@ onMounted(() => {
 }
 
 .header-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* background-color: #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background-color: #e0e0e0;
   border: 1px solid #111; */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px 15px;
-    margin-top: 20px;
-    margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .header-box h5 {
-    margin: 0;
+  margin: 0;
 }
 
 .main-screen-overlay {
