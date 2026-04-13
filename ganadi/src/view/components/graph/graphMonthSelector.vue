@@ -1,8 +1,6 @@
 <template>
     <div class="month-selector">
-        <button class="nav-btn" @click="$emit('prev-month')">
-            <i class="bi bi-chevron-left"></i>
-        </button>
+        <button class="nav-btn" @click="$emit('prev-month')">◀</button>
 
         <div class="month-text">{{ selectedYear }}년 {{ selectedMonth }}월</div>
 
@@ -11,7 +9,7 @@
             @click="$emit('next-month')"
             :disabled="isCurrentMonth"
         >
-            <i class="bi bi-chevron-right"></i>
+            ▶
         </button>
     </div>
 </template>
@@ -55,9 +53,6 @@ defineEmits(['prev-month', 'next-month']);
     justify-content: center;
     cursor: pointer;
     color: #111;
-}
-
-.nav-btn i {
     font-size: 24px;
 }
 

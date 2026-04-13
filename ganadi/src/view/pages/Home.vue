@@ -429,6 +429,7 @@ export default {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 5;
 }
 
 .deco-img {

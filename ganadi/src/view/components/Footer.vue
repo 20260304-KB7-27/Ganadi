@@ -50,14 +50,34 @@ const menus = [
     // },
 ];
 
+const getSafeDate = (date) => {
+    const now = new Date();
+
+    const selectedYear = date.getFullYear();
+    const selectedMonth = date.getMonth() + 1;
+
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    if (
+        selectedYear > currentYear ||
+        (selectedYear === currentYear && selectedMonth >= currentMonth)
+    ) {
+        return new Date(currentYear, currentMonth - 1, 1);
+    }
+
+    return date;
+};
+
 const getMenuTarget = (menu) => {
-    const date = calendarStore.currentDate;
+    const safeDate = getSafeDate(calendarStore.currentDate);
+
     if (menu.path === '/graph' || menu.path === '/') {
         return {
             path: menu.path,
             query: {
-                year: date.getFullYear(),
-                month: date.getMonth() + 1,
+                year: safeDate.getFullYear(),
+                month: safeDate.getMonth() + 1,
             },
         };
     }
