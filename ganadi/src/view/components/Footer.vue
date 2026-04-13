@@ -93,8 +93,10 @@ const isActive = (path) => {
 
 <style scoped>
 .footer {
-    background: #dcdcdc;
+    /* background: #dcdcdc; */
+    background: #fff3c9;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+    /* border-radius: 25px; */
 }
 
 .menu {
