@@ -428,7 +428,7 @@ export default {
 .calendar-deco-layer {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  pointer-events: none;
 }
 
 .deco-img {
